@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: build
+        run: GOARCH=amd64 GOOS=linux go build -o bin/application .
       - name: Zip
         run: zip -r deploy.zip . -x '*.git*'
       - name: Deploy to EB
