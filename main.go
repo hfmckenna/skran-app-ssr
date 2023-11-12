@@ -60,7 +60,7 @@ func main() {
 		if err != nil {
 			panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
 		}
-		tmpl.Execute(w, item)
+		tmpl.Execute(w, item.test)
 	})
 
 	log.Printf("Listening on port %s\n\n", port)
