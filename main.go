@@ -9,7 +9,7 @@ import (
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "5000"
+		port = "8080"
 	}
 
 	f, _ := os.Create("/var/log/golang/golang-server.log")
@@ -22,5 +22,5 @@ func main() {
 	})
 
 	log.Printf("Listening on port %s\n\n", port)
-	http.ListenAndServe(":"+port, nil)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
