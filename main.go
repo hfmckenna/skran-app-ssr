@@ -12,7 +12,6 @@ import (
 	"os"
 )
 
-// Create struct to hold info about new item
 type Item struct {
 	pk   string
 	sk   string
@@ -38,7 +37,7 @@ func main() {
 			TableName: aws.String("skran-app"),
 			Key: map[string]*dynamodb.AttributeValue{
 				"pk": {
-					N: aws.String("test"),
+					S: aws.String("test"),
 				},
 				"sk": {
 					S: aws.String("test"),
@@ -47,6 +46,7 @@ func main() {
 		})
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
 
 		if result.Item == nil {
