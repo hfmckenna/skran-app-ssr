@@ -31,7 +31,7 @@ func main() {
 		}
 	}
 
-	f, _ := os.Create("/var/log/golang/golang-server.log")
+	f, _ := os.Create("/var/log/golang-server.log")
 	defer f.Close()
 	log.SetOutput(f)
 
