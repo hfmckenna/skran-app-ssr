@@ -10,7 +10,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"runtime"
 )
 
 // Create struct to hold info about new item
@@ -23,12 +22,7 @@ type Item struct {
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
-		// Apple listens on 5000, AWS needs 5000
-		if runtime.GOOS == "darwin" {
-			port = "8080"
-		} else {
-			port = "5000"
-		}
+		port = "5000"
 	}
 
 	f, _ := os.Create("/var/log/golang-server.log")
