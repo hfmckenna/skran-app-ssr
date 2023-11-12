@@ -1,20 +1,15 @@
-name: Deploy master
+name: Deploy main
 on:
   push:
     branches:
-      - master
-
+      - main
 jobs:
-  build:
+  Deployment:
     runs-on: ubuntu-latest
     steps:
-
-      - name: Checkout source code
-        uses: workflows/checkout@v2
-
-      - name: Generate deployment package
+      - uses: actions/checkout@v4
+      - name: Zip
         run: zip -r deploy.zip . -x '*.git*'
-
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v21
         with:
