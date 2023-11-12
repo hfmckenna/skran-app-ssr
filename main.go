@@ -25,10 +25,6 @@ func main() {
 		port = "5000"
 	}
 
-	f, _ := os.Create("/var/log/golang-server.log")
-	defer f.Close()
-	log.SetOutput(f)
-
 	// Initialize a session that the SDK will use to load
 	// credentials from the shared credentials file ~/.aws/credentials
 	// and region from the shared configuration file ~/.aws/config.
@@ -59,6 +55,7 @@ func main() {
 		}
 
 		if result.Item == nil {
+			log.Fatalf("No item")
 			return
 		}
 
@@ -72,5 +69,6 @@ func main() {
 	})
 
 	log.Printf("Listening on port %s\n\n", port)
-	http.ListenAndServe(":"+port, nil)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
+
 }
