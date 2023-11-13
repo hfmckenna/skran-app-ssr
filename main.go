@@ -15,7 +15,7 @@ import (
 type Item struct {
 	Pk   string `json:"pk"`
 	Sk   string `json:"sk"`
-	Test string `json:"test"`
+	Test string
 }
 
 func main() {
