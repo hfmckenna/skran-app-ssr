@@ -1,0 +1,11 @@
+{
+  "pk": {
+    "S": "test"
+  },
+  "sk": {
+    "S": "test"
+  },
+  "Test": {
+    "S": "Local value get!"
+  }
+}

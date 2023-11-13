@@ -24,7 +24,13 @@ func main() {
 		port = "5000"
 	}
 
-	sess := session.Must(session.NewSession(&aws.Config{Region: aws.String("eu-west-1")}))
+	endpoint := ""
+
+	if os.Getenv("LOCAL") != "" {
+		endpoint = "http://localhost:8000"
+	}
+
+	sess := session.Must(session.NewSession(&aws.Config{Endpoint: aws.String(endpoint), Region: aws.String("eu-west-1")}))
 
 	svc := dynamodb.New(sess)
 
@@ -60,7 +66,7 @@ func main() {
 		if err != nil {
 			panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
 		}
-		tmpl.Execute(w, item)
+		log.Fatal(tmpl.Execute(w, item))
 	})
 
 	log.Printf("Listening on port %s\n\n", port)
