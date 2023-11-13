@@ -13,9 +13,9 @@ import (
 )
 
 type Item struct {
-	pk   string
-	sk   string
-	test string
+	Pk   string `json:"pk"`
+	Sk   string `json:"sk"`
+	Test string `json:"test"`
 }
 
 func main() {
@@ -26,7 +26,6 @@ func main() {
 
 	sess := session.Must(session.NewSession(&aws.Config{Region: aws.String("eu-west-1")}))
 
-	// Create DynamoDB client
 	svc := dynamodb.New(sess)
 
 	const indexPage = "templates/index.html"
@@ -44,6 +43,7 @@ func main() {
 				},
 			},
 		})
+
 		if err != nil {
 			log.Fatal(err)
 			return
@@ -60,10 +60,9 @@ func main() {
 		if err != nil {
 			panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
 		}
-		tmpl.Execute(w, item.test)
+		tmpl.Execute(w, item)
 	})
 
 	log.Printf("Listening on port %s\n\n", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
-
 }
