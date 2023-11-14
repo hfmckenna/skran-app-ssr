@@ -24,11 +24,7 @@ func main() {
 		port = "5000"
 	}
 
-	endpoint := ""
-
-	if os.Getenv("LOCAL") != "" {
-		endpoint = "http://localhost:8000"
-	}
+	endpoint := os.Getenv("DYNAMO_ENDPOINT")
 
 	sess := session.Must(session.NewSession(&aws.Config{Endpoint: aws.String(endpoint), Region: aws.String("eu-west-1")}))
 
@@ -66,7 +62,7 @@ func main() {
 		if err != nil {
 			panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
 		}
-		log.Fatal(tmpl.Execute(w, item))
+		tmpl.Execute(w, item)
 	})
 
 	log.Printf("Listening on port %s\n\n", port)
