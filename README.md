@@ -17,32 +17,33 @@ Enables the following actions for Visitors to Skran.
 erDiagram
     RECIPE ||--o{ SEARCH : searches
     RECIPE {
-        string primary
-        string sort
-        string type
-        number id
-        string title
-        map components
-        int time
-        string instructions
+        string Primary
+        string Sort
+        string Type
+        number Id
+        string Title
+        map Components
+        string Instructions
+        string Type
     }
     SEARCH {
-        string primary
-        string secondary
-        string type
-        number id
-        string title
-        list ingredients
+        string Primary
+        string Secondary
+        string Type
+        number Id
+        string Title
+        list Ingredients
+        string Type
     }
 ```
 
 ## Table Design
 
-| pk                  | sk                                  | type   | attributes                                        |
-|---------------------|-------------------------------------|--------|---------------------------------------------------|
-| RECIPE#1234         | TITLE#SPAGHETTI_BOLOGNESE           | RECIPE | [Recipe Attributes](./models/recipeAttributes.ts) |
-| PRIMARY#BEEF_MINCE  | SECONDARY#SPAGHETTI_BOLOGNESE       | SEARCH | [Search Attributes](./models/searchAttributes.ts) |
-| PRIMARY#BEEF_MINCE  | SECONDARY#PASTA#SPAGHETTI_BOLOGNESE | SEARCH | [Search Attributes](./models/searchAttributes.ts) |
+| pk                  | sk                                  | type   | attributes                       |
+|---------------------|-------------------------------------|--------|----------------------------------|
+| RECIPE#1234         | TITLE#SPAGHETTI_BOLOGNESE           | RECIPE | [Recipe Attributes](./models.go) |
+| PRIMARY#BEEF_MINCE  | SECONDARY#SPAGHETTI_BOLOGNESE       | SEARCH | [Search Attributes](./models.go) |
+| PRIMARY#BEEF_MINCE  | SECONDARY#PASTA#SPAGHETTI_BOLOGNESE | SEARCH | [Search Attributes](./models.go) |
 
 ![Table](./docs/table/skran-visitor-bff.png)
 
