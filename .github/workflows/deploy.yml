@@ -11,7 +11,7 @@ jobs:
       - name: build
         run: GOARCH=amd64 GOOS=linux go build -o bin/application .
       - name: Zip
-        run: zip -r deploy.zip . -x '*.git*'
+        run: zip -r deploy.zip bin public templates
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v21
         with:

@@ -1,0 +1,735 @@
+{
+  "ModelName": "Skran Visitor BFF",
+  "ModelMetadata": {
+    "Author": "Hugh",
+    "DateCreated": "Jan 07, 2023, 04:29 PM",
+    "DateLastModified": "Jan 14, 2023, 03:32 PM",
+    "Description": "Table design backing REST API for Skran recipes site",
+    "AWSService": "Amazon DynamoDB",
+    "Version": "3.0"
+  },
+  "DataModel": [
+    {
+      "TableName": "DeployStage-SkranVisitorBff-SkranVisitorBffVisitorBffTable5DD409E6-10C5BXR759OQK",
+      "KeyAttributes": {
+        "PartitionKey": {
+          "AttributeName": "pk",
+          "AttributeType": "S"
+        },
+        "SortKey": {
+          "AttributeName": "sk",
+          "AttributeType": "S"
+        }
+      },
+      "NonKeyAttributes": [
+        {
+          "AttributeName": "type",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "components",
+          "AttributeType": "L"
+        },
+        {
+          "AttributeName": "time",
+          "AttributeType": "N"
+        },
+        {
+          "AttributeName": "instructions",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "ingredients",
+          "AttributeType": "L"
+        },
+        {
+          "AttributeName": "id",
+          "AttributeType": "N"
+        },
+        {
+          "AttributeName": "title",
+          "AttributeType": "S"
+        }
+      ],
+      "TableData": [
+        {
+          "pk": {
+            "S": "RECIPE#1234"
+          },
+          "sk": {
+            "S": "TITLE#SPAGHETTI_BOLOGNESE"
+          },
+          "type": {
+            "S": "RECIPE"
+          },
+          "id": {
+            "N": "1234"
+          },
+          "title": {
+            "S": "Spaghetti Bolognese"
+          },
+          "components": {
+            "L": [
+              {
+                "M": {
+                  "name": {
+                    "S": "Pasta"
+                  },
+                  "technique": {
+                    "S": "Boil"
+                  },
+                  "ingredients": {
+                    "L": [
+                      {
+                        "M": {
+                          "name": {
+                            "S": "Pasta"
+                          },
+                          "value": {
+                            "N": "500"
+                          },
+                          "measurement": {
+                            "S": "grams"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "M": {
+                  "name": {
+                    "S": "Sauce"
+                  },
+                  "technique": {
+                    "S": "Fry"
+                  },
+                  "ingredients": {
+                    "L": [
+                      {
+                        "M": {
+                          "name": {
+                            "S": "Beef Mince"
+                          },
+                          "value": {
+                            "N": "250"
+                          },
+                          "measurement": {
+                            "S": "grams"
+                          }
+                        }
+                      },
+                      {
+                        "M": {
+                          "name": {
+                            "S": "Tinned Tomatoes"
+                          },
+                          "value": {
+                            "N": "500"
+                          },
+                          "measurement": {
+                            "S": "grams"
+                          }
+                        }
+                      },
+                      {
+                        "M": {
+                          "name": {
+                            "S": "Garlic"
+                          },
+                          "value": {
+                            "N": "50"
+                          },
+                          "measurement": {
+                            "S": "grams"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "time": {
+            "N": "30"
+          },
+          "instructions": {
+            "S": "Cook pasta for 15 minutes."
+          }
+        },
+        {
+          "pk": {
+            "S": "PRIMARY#BEEF_MINCE"
+          },
+          "sk": {
+            "S": "SECONDARY#SPAGHETTI_BOLOGNESE"
+          },
+          "type": {
+            "S": "SEARCH"
+          },
+          "id": {
+            "N": "1234"
+          },
+          "title": {
+            "S": "Spaghetti Bolognese"
+          },
+          "ingredients": {
+            "L": [
+              {
+                "S": "BEEF_MINCE"
+              },
+              {
+                "S": "GARLIC"
+              },
+              {
+                "S": "ONIONS"
+              },
+              {
+                "S": "PASTA"
+              },
+              {
+                "S": "TINNED_TOMATOES"
+              }
+            ]
+          }
+        },
+        {
+          "pk": {
+            "S": "PRIMARY#GARLIC"
+          },
+          "sk": {
+            "S": "SECONDARY#SPAGHETTI_BOLOGNESE"
+          },
+          "type": {
+            "S": "SEARCH"
+          },
+          "id": {
+            "N": "1234"
+          },
+          "title": {
+            "S": "Spaghetti Bolognese"
+          },
+          "ingredients": {
+            "L": [
+              {
+                "S": "BEEF_MINCE"
+              },
+              {
+                "S": "GARLIC"
+              },
+              {
+                "S": "ONIONS"
+              },
+              {
+                "S": "PASTA"
+              },
+              {
+                "S": "TINNED_TOMATOES"
+              }
+            ]
+          }
+        },
+        {
+          "pk": {
+            "S": "PRIMARY#ONIONS"
+          },
+          "sk": {
+            "S": "SECONDARY#SPAGHETTI_BOLOGNESE"
+          },
+          "type": {
+            "S": "SEARCH"
+          },
+          "id": {
+            "N": "1234"
+          },
+          "title": {
+            "S": "Spaghetti Bolognese"
+          },
+          "ingredients": {
+            "L": [
+              {
+                "S": "BEEF_MINCE"
+              },
+              {
+                "S": "GARLIC"
+              },
+              {
+                "S": "ONIONS"
+              },
+              {
+                "S": "PASTA"
+              },
+              {
+                "S": "TINNED_TOMATOES"
+              }
+            ]
+          }
+        },
+        {
+          "pk": {
+            "S": "PRIMARY#PASTA"
+          },
+          "sk": {
+            "S": "SECONDARY#SPAGHETTI_BOLOGNESE"
+          },
+          "type": {
+            "S": "SEARCH"
+          },
+          "id": {
+            "N": "1234"
+          },
+          "title": {
+            "S": "Spaghetti Bolognese"
+          },
+          "ingredients": {
+            "L": [
+              {
+                "S": "BEEF_MINCE"
+              },
+              {
+                "S": "GARLIC"
+              },
+              {
+                "S": "ONIONS"
+              },
+              {
+                "S": "PASTA"
+              },
+              {
+                "S": "TINNED_TOMATOES"
+              }
+            ]
+          }
+        },
+        {
+          "pk": {
+            "S": "PRIMARY#TINNED_TOMATOES"
+          },
+          "sk": {
+            "S": "SECONDARY#SPAGHETTI_BOLOGNESE"
+          },
+          "type": {
+            "S": "SEARCH"
+          },
+          "id": {
+            "N": "1234"
+          },
+          "title": {
+            "S": "Spaghetti Bolognese"
+          },
+          "ingredients": {
+            "L": [
+              {
+                "S": "BEEF_MINCE"
+              },
+              {
+                "S": "GARLIC"
+              },
+              {
+                "S": "ONIONS"
+              },
+              {
+                "S": "PASTA"
+              },
+              {
+                "S": "TINNED_TOMATOES"
+              }
+            ]
+          }
+        },
+        {
+          "pk": {
+            "S": "PRIMARY#BEEF_MINCE"
+          },
+          "sk": {
+            "S": "SECONDARY#GARLIC#SPAGHETTI_BOLOGNESE"
+          },
+          "type": {
+            "S": "SEARCH"
+          },
+          "id": {
+            "N": "1234"
+          },
+          "title": {
+            "S": "Spaghetti Bolognese"
+          },
+          "ingredients": {
+            "L": [
+              {
+                "S": "BEEF_MINCE"
+              },
+              {
+                "S": "GARLIC"
+              },
+              {
+                "S": "ONIONS"
+              },
+              {
+                "S": "PASTA"
+              },
+              {
+                "S": "TINNED_TOMATOES"
+              }
+            ]
+          }
+        },
+        {
+          "pk": {
+            "S": "PRIMARY#BEEF_MINCE"
+          },
+          "sk": {
+            "S": "SECONDARY#ONIONS#SPAGHETTI_BOLOGNESE"
+          },
+          "type": {
+            "S": "SEARCH"
+          },
+          "id": {
+            "N": "1234"
+          },
+          "title": {
+            "S": "Spaghetti Bolognese"
+          },
+          "ingredients": {
+            "L": [
+              {
+                "S": "BEEF_MINCE"
+              },
+              {
+                "S": "GARLIC"
+              },
+              {
+                "S": "ONIONS"
+              },
+              {
+                "S": "PASTA"
+              },
+              {
+                "S": "TINNED_TOMATOES"
+              }
+            ]
+          }
+        },
+        {
+          "pk": {
+            "S": "PRIMARY#BEEF_MINCE"
+          },
+          "sk": {
+            "S": "SECONDARY#PASTA#SPAGHETTI_BOLOGNESE"
+          },
+          "type": {
+            "S": "SEARCH"
+          },
+          "id": {
+            "N": "1234"
+          },
+          "title": {
+            "S": "Spaghetti Bolognese"
+          },
+          "ingredients": {
+            "L": [
+              {
+                "S": "BEEF_MINCE"
+              },
+              {
+                "S": "GARLIC"
+              },
+              {
+                "S": "ONIONS"
+              },
+              {
+                "S": "PASTA"
+              },
+              {
+                "S": "TINNED_TOMATOES"
+              }
+            ]
+          }
+        },
+        {
+          "pk": {
+            "S": "PRIMARY#BEEF_MINCE"
+          },
+          "sk": {
+            "S": "SECONDARY#TINNED_TOMATOES#SPAGHETTI_BOLOGNESE"
+          },
+          "type": {
+            "S": "SEARCH"
+          },
+          "id": {
+            "N": "1234"
+          },
+          "title": {
+            "S": "Spaghetti Bolognese"
+          },
+          "ingredients": {
+            "L": [
+              {
+                "S": "BEEF_MINCE"
+              },
+              {
+                "S": "GARLIC"
+              },
+              {
+                "S": "ONIONS"
+              },
+              {
+                "S": "PASTA"
+              },
+              {
+                "S": "TINNED_TOMATOES"
+              }
+            ]
+          }
+        },
+        {
+          "pk": {
+            "S": "PRIMARY#GARLIC"
+          },
+          "sk": {
+            "S": "SECONDARY#ONIONS#SPAGHETTI_BOLOGNESE"
+          },
+          "type": {
+            "S": "SEARCH"
+          },
+          "id": {
+            "N": "1234"
+          },
+          "title": {
+            "S": "Spaghetti Bolognese"
+          },
+          "ingredients": {
+            "L": [
+              {
+                "S": "BEEF_MINCE"
+              },
+              {
+                "S": "GARLIC"
+              },
+              {
+                "S": "ONIONS"
+              },
+              {
+                "S": "PASTA"
+              },
+              {
+                "S": "TINNED_TOMATOES"
+              }
+            ]
+          }
+        },
+        {
+          "pk": {
+            "S": "PRIMARY#GARLIC"
+          },
+          "sk": {
+            "S": "SECONDARY#PASTA#SPAGHETTI_BOLOGNESE"
+          },
+          "type": {
+            "S": "SEARCH"
+          },
+          "id": {
+            "N": "1234"
+          },
+          "title": {
+            "S": "Spaghetti Bolognese"
+          },
+          "ingredients": {
+            "L": [
+              {
+                "S": "BEEF_MINCE"
+              },
+              {
+                "S": "GARLIC"
+              },
+              {
+                "S": "ONIONS"
+              },
+              {
+                "S": "PASTA"
+              },
+              {
+                "S": "TINNED_TOMATOES"
+              }
+            ]
+          }
+        },
+        {
+          "pk": {
+            "S": "PRIMARY#GARLIC"
+          },
+          "sk": {
+            "S": "SECONDARY#TINNED_TOMATOES#SPAGHETTI_BOLOGNESE"
+          },
+          "type": {
+            "S": "SEARCH"
+          },
+          "id": {
+            "N": "1234"
+          },
+          "title": {
+            "S": "Spaghetti Bolognese"
+          },
+          "ingredients": {
+            "L": [
+              {
+                "S": "BEEF_MINCE"
+              },
+              {
+                "S": "GARLIC"
+              },
+              {
+                "S": "ONIONS"
+              },
+              {
+                "S": "PASTA"
+              },
+              {
+                "S": "TINNED_TOMATOES"
+              }
+            ]
+          }
+        },
+        {
+          "pk": {
+            "S": "PRIMARY#ONIONS"
+          },
+          "sk": {
+            "S": "SECONDARY#PASTA#SPAGHETTI_BOLOGNESE"
+          },
+          "type": {
+            "S": "SEARCH"
+          },
+          "id": {
+            "N": "1234"
+          },
+          "title": {
+            "S": "Spaghetti Bolognese"
+          },
+          "ingredients": {
+            "L": [
+              {
+                "S": "BEEF_MINCE"
+              },
+              {
+                "S": "GARLIC"
+              },
+              {
+                "S": "ONIONS"
+              },
+              {
+                "S": "PASTA"
+              },
+              {
+                "S": "TINNED_TOMATOES"
+              }
+            ]
+          }
+        },
+        {
+          "pk": {
+            "S": "PRIMARY#ONIONS"
+          },
+          "sk": {
+            "S": "SECONDARY#TINNED_TOMATOES#SPAGHETTI_BOLOGNESE"
+          },
+          "type": {
+            "S": "SEARCH"
+          },
+          "id": {
+            "N": "1234"
+          },
+          "title": {
+            "S": "Spaghetti Bolognese"
+          },
+          "ingredients": {
+            "L": [
+              {
+                "S": "BEEF_MINCE"
+              },
+              {
+                "S": "GARLIC"
+              },
+              {
+                "S": "ONIONS"
+              },
+              {
+                "S": "PASTA"
+              },
+              {
+                "S": "TINNED_TOMATOES"
+              }
+            ]
+          }
+        },
+        {
+          "pk": {
+            "S": "PRIMARY#PASTA"
+          },
+          "sk": {
+            "S": "SECONDARY#TINNED_TOMATOES#SPAGHETTI_BOLOGNESE"
+          },
+          "type": {
+            "S": "SEARCH"
+          },
+          "id": {
+            "N": "1234"
+          },
+          "title": {
+            "S": "Spaghetti Bolognese"
+          },
+          "ingredients": {
+            "L": [
+              {
+                "S": "BEEF_MINCE"
+              },
+              {
+                "S": "GARLIC"
+              },
+              {
+                "S": "ONIONS"
+              },
+              {
+                "S": "PASTA"
+              },
+              {
+                "S": "TINNED_TOMATOES"
+              }
+            ]
+          }
+        }
+      ],
+      "DataAccess": {
+        "MySql": {}
+      },
+      "BillingMode": "PROVISIONED",
+      "ProvisionedCapacitySettings": {
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 5,
+          "WriteCapacityUnits": 5
+        },
+        "AutoScalingRead": {
+          "ScalableTargetRequest": {
+            "MinCapacity": 1,
+            "MaxCapacity": 25,
+            "ServiceRole": "AWSServiceRoleForApplicationAutoScaling_DynamoDBTable"
+          },
+          "ScalingPolicyConfiguration": {
+            "TargetValue": 75
+          }
+        },
+        "AutoScalingWrite": {
+          "ScalableTargetRequest": {
+            "MinCapacity": 1,
+            "MaxCapacity": 25,
+            "ServiceRole": "AWSServiceRoleForApplicationAutoScaling_DynamoDBTable"
+          },
+          "ScalingPolicyConfiguration": {
+            "TargetValue": 75
+          }
+        }
+      }
+    }
+  ]
+}
