@@ -53,42 +53,39 @@
       ],
       "TableData": [
         {
-          "pk": {
+          "Primary": {
             "S": "RECIPE#1234"
           },
-          "sk": {
+          "Sort": {
             "S": "TITLE#SPAGHETTI_BOLOGNESE"
           },
-          "type": {
+          "Type": {
             "S": "RECIPE"
           },
-          "id": {
+          "Id": {
             "N": "1234"
           },
-          "title": {
+          "Title": {
             "S": "Spaghetti Bolognese"
           },
-          "components": {
+          "Components": {
             "L": [
               {
                 "M": {
-                  "name": {
+                  "Title": {
                     "S": "Pasta"
                   },
-                  "technique": {
-                    "S": "Boil"
-                  },
-                  "ingredients": {
+                  "Ingredients": {
                     "L": [
                       {
                         "M": {
-                          "name": {
+                          "Title": {
                             "S": "Pasta"
                           },
-                          "value": {
+                          "Value": {
                             "N": "500"
                           },
-                          "measurement": {
+                          "Measurement": {
                             "S": "grams"
                           }
                         }
@@ -99,49 +96,46 @@
               },
               {
                 "M": {
-                  "name": {
+                  "Title": {
                     "S": "Sauce"
                   },
-                  "technique": {
-                    "S": "Fry"
-                  },
-                  "ingredients": {
+                  "Ingredients": {
                     "L": [
                       {
                         "M": {
-                          "name": {
+                          "Title": {
                             "S": "Beef Mince"
                           },
-                          "value": {
+                          "Value": {
                             "N": "250"
                           },
-                          "measurement": {
+                          "Measurement": {
                             "S": "grams"
                           }
                         }
                       },
                       {
                         "M": {
-                          "name": {
+                          "Title": {
                             "S": "Tinned Tomatoes"
                           },
-                          "value": {
+                          "Value": {
                             "N": "500"
                           },
-                          "measurement": {
+                          "Measurement": {
                             "S": "grams"
                           }
                         }
                       },
                       {
                         "M": {
-                          "name": {
+                          "Title": {
                             "S": "Garlic"
                           },
-                          "value": {
+                          "Value": {
                             "N": "50"
                           },
-                          "measurement": {
+                          "Measurement": {
                             "S": "grams"
                           }
                         }
@@ -152,10 +146,10 @@
               }
             ]
           },
-          "time": {
+          "Time": {
             "N": "30"
           },
-          "instructions": {
+          "Instructions": {
             "S": "Cook pasta for 15 minutes."
           }
         },

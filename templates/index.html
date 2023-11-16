@@ -7,7 +7,14 @@
 <body>
 <main>
     <h1>Skran App</h1>
-<div>{{.Test}}</div>
+    <div>{{.Title}}</div>
+    <div>
+        <ul>
+            {{ range .Components }}
+            <li>{{ .Title }}</li>
+            {{ end }}
+        </ul>
+    </div>
 </main>
 </body>
 </html>

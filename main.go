@@ -12,12 +12,6 @@ import (
 	"os"
 )
 
-type Item struct {
-	Pk   string `json:"pk"`
-	Sk   string `json:"sk"`
-	Test string
-}
-
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -35,13 +29,13 @@ func main() {
 		tmpl := template.Must(template.ParseFiles(indexPage))
 
 		result, err := svc.GetItem(&dynamodb.GetItemInput{
-			TableName: aws.String("skran-app"),
+			TableName: aws.String("SkranAppTable"),
 			Key: map[string]*dynamodb.AttributeValue{
-				"pk": {
-					S: aws.String("test"),
+				"Primary": {
+					S: aws.String("RECIPE#1234"),
 				},
-				"sk": {
-					S: aws.String("test"),
+				"Sort": {
+					S: aws.String("TITLE#SPAGHETTI_BOLOGNESE"),
 				},
 			},
 		})
@@ -56,7 +50,7 @@ func main() {
 			return
 		}
 
-		item := Item{}
+		item := RecipeItem{}
 
 		err = dynamodbattribute.UnmarshalMap(result.Item, &item)
 		if err != nil {

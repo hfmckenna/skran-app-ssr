@@ -3,14 +3,20 @@ package main
 type RecipeItem struct {
 	Primary      string
 	Sort         string
+	Type         string
 	Id           uint32
 	Title        string
-	Component    []Component
+	Components   []Component
 	Instructions string
-	Type         string
+	Time         int16
 }
 
 type Component struct {
+	Title       string
+	Ingredients []Ingredient
+}
+
+type Ingredient struct {
 	Title       string
 	Value       uint16
 	Measurement string
