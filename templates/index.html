@@ -4,13 +4,13 @@
 {{ template "head" . }}
 <body>
 <main>
-    <h1 class="w-0">{{ .PageTitle }}</h1>
-    <div>{{.Item.Title}}</div>
+    <h1 class="text-red-500">{{ .PageTitle }}</h1>
+    <div>{{ .Item.Title }}</div>
     <div>
         <ul>
-            {{range .Item.Components}}
-            <li>{{.Title}}</li>
-            {{end}}
+            {{ range .Item.Components }}
+            <li>{{ .Title }}</li>
+            {{ end }}
         </ul>
     </div>
 </main>
