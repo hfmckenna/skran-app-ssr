@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Skran</title>
-</head>
+{{ define "home" }}
+{{ template "head" . }}
 <body>
 <main>
-    <h1 class="w-0">Skran App</h1>
-    <div>{{.Title}}</div>
+    <h1 class="w-0">{{ .PageTitle }}</h1>
+    <div>{{.Item.Title}}</div>
     <div>
         <ul>
-            {{ range .Components }}
-            <li>{{ .Title }}</li>
-            {{ end }}
+            {{range .Item.Components}}
+            <li>{{.Title}}</li>
+            {{end}}
         </ul>
     </div>
 </main>
 </body>
 </html>
+{{ end }}

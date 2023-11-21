@@ -19,14 +19,19 @@ func main() {
 	}
 
 	endpoint := os.Getenv("DYNAMO_ENDPOINT")
+	assets := os.Getenv("ASSETS_DOMAIN")
+	if assets == "" {
+		http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
+	}
 
 	sess := session.Must(session.NewSession(&aws.Config{Endpoint: aws.String(endpoint), Region: aws.String("eu-west-1")}))
 
 	svc := dynamodb.New(sess)
 
 	const indexPage = "templates/index.html"
+	const headPartial = "templates/head.html"
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		tmpl := template.Must(template.ParseFiles(indexPage))
+		tmpl, _ := template.New("").ParseFiles([]string{indexPage, headPartial}...)
 
 		result, err := svc.GetItem(&dynamodb.GetItemInput{
 			TableName: aws.String("SkranAppTable"),
@@ -50,13 +55,22 @@ func main() {
 			return
 		}
 
-		item := RecipeItem{}
+		type Data struct {
+			Item      RecipeItem
+			Assets    string
+			PageTitle string
+		}
 
-		err = dynamodbattribute.UnmarshalMap(result.Item, &item)
+		data := Data{
+			Assets:    assets,
+			PageTitle: "Skran App",
+		}
+
+		err = dynamodbattribute.UnmarshalMap(result.Item, &data.Item)
 		if err != nil {
 			panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
 		}
-		err = tmpl.Execute(w, item)
+		err = tmpl.ExecuteTemplate(w, "home", &data)
 		if err != nil {
 			log.Fatal(err)
 		}
