@@ -37,10 +37,10 @@ func main() {
 			TableName: aws.String("SkranAppTable"),
 			Key: map[string]*dynamodb.AttributeValue{
 				"Primary": {
-					S: aws.String("RECIPE#1234"),
+					S: aws.String("RECIPE#5678"),
 				},
 				"Sort": {
-					S: aws.String("TITLE#SPAGHETTI_BOLOGNESE"),
+					S: aws.String("TITLE#CHICKEN_CURRY"),
 				},
 			},
 		})
@@ -71,6 +71,17 @@ func main() {
 			panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
 		}
 		err = tmpl.ExecuteTemplate(w, "home", &data)
+		if err != nil {
+			log.Fatal(err)
+		}
+	})
+
+	http.HandleFunc("/api", func(w http.ResponseWriter, r *http.Request) {
+		templ, err := template.New("").Parse("Hi there")
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = templ.Execute(w, "")
 		if err != nil {
 			log.Fatal(err)
 		}
