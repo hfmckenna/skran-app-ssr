@@ -19,7 +19,7 @@ jobs:
             curl -sLO https://unpkg.com/htmx.org@1.9.9/dist/htmx.min.js
             mv htmx.min.js public/htmx.min.js
       - name: Zip
-        run: zip -r deploy.zip bin templates
+        run: zip -r deploy.zip bin templates .ebextensions .platform
       - name: Upload
         uses: shallwefootball/s3-upload-action@master
         id: S3
