@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"fmt"
@@ -7,15 +7,15 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"html/template"
+	"io"
 	"log"
-	"net/http"
 	"os"
 )
 
-const indexPage = "templates/index.html"
-const headPartial = "templates/head.html"
+const indexPage = "../templates/index.html"
+const headPartial = "../templates/head.html"
 
-func home(w http.ResponseWriter, r *http.Request) {
+func Home(w io.Writer) {
 	endpoint := os.Getenv("DYNAMO_ENDPOINT")
 	assets := os.Getenv("ASSETS_DOMAIN")
 

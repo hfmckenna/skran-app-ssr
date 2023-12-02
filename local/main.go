@@ -1,9 +1,11 @@
 package main
 
 import (
+	"io"
 	"log"
 	"net/http"
 	"os"
+	"skran-app-ssr/api"
 )
 
 func main() {
@@ -17,8 +19,19 @@ func main() {
 		http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
 	}
 
-	http.HandleFunc("/", home)
+	homeHandler := wrap(api.Home)
+
+	http.HandleFunc("/", homeHandler)
 
 	log.Printf("Listening on port %s\n\n", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
+}
+
+type wrapper func(io.Writer)
+type httpHandler func(http.ResponseWriter, *http.Request)
+
+func wrap(function wrapper) httpHandler {
+	return func(w http.ResponseWriter, r *http.Request) {
+		function(w)
+	}
 }

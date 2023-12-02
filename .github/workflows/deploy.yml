@@ -9,9 +9,9 @@ jobs:
       - name: Deploy
         run: |
           aws sts assume-role --role-arn $DEPLOYMENT_ROLE --role-session-name cross-account-deploy --query Credentials.Expiration
-          npx cdk deploy HelloCdkStack
+          npx cdk deploy SkranAppSsrStack
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           DEPLOYMENT_ROLE: ${{ secrets.CROSS_ACCOUNT_DEPLOY_ROLE }}
-          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
+          AWS_DEFAULT_REGION: eu-west-1

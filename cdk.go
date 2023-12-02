@@ -1,4 +1,4 @@
-package cdk
+package main
 
 import (
 	"github.com/aws/aws-cdk-go/awscdk/v2"
@@ -9,26 +9,20 @@ import (
 	"github.com/aws/jsii-runtime-go"
 )
 
-type HelloCdkStackProps struct {
+type SkranAppSsrStackProps struct {
 	awscdk.StackProps
 }
 
-func NewHelloCdkStack(scope constructs.Construct, id string, props *HelloCdkStackProps) awscdk.Stack {
+func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrStackProps) awscdk.Stack {
 	var sprops awscdk.StackProps
 	if props != nil {
 		sprops = props.StackProps
 	}
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
-	// The code that defines your stack goes here
-
-	// example resource
-	// queue := awssqs.NewQueue(stack, jsii.String("HelloCdkQueue"), &awssqs.QueueProps{
-	// 	VisibilityTimeout: awscdk.Duration_Seconds(jsii.Number(300)),
-	// })
-	awscdklambdagoalpha.NewGoFunction(stack, jsii.String("myGoHandler"), &awscdklambdagoalpha.GoFunctionProps{
+	awscdklambdagoalpha.NewGoFunction(stack, jsii.String("skran-ssr-home"), &awscdklambdagoalpha.GoFunctionProps{
 		Runtime: awslambda.Runtime_GO_1_X(),
-		Entry:   jsii.String("./handler"),
+		Entry:   jsii.String("./src"),
 		Bundling: &awscdklambdagoalpha.BundlingOptions{
 			GoBuildFlags: jsii.Strings(`-ldflags "-s -w"`),
 		},
@@ -41,7 +35,7 @@ func main() {
 
 	app := awscdk.NewApp(nil)
 
-	NewHelloCdkStack(app, "HelloCdkStack", &HelloCdkStackProps{
+	SkranAppSsrStack(app, "SkranAppSsrStack", &SkranAppSsrStackProps{
 		awscdk.StackProps{
 			Env: env(),
 		},

@@ -1,4 +1,4 @@
-package main
+package api
 
 type RecipeItem struct {
 	Primary      string
