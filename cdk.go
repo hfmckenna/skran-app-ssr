@@ -87,7 +87,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		}
 
 		// Searches Route 53 for existing zone using hosted zone name
-		hostedZone := route53.HostedZone_FromLookup(stack, jsii.String("MyHostedZone"), &route53.HostedZoneProviderProps{
+		hostedZone := route53.HostedZone_FromLookup(stack, jsii.String("skran-app-ssr-hosted-zone"), &route53.HostedZoneProviderProps{
 			DomainName:  jsii.String(hostedZoneName),
 			PrivateZone: jsii.Bool(false),
 		})
@@ -95,13 +95,10 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		awscdk.Annotations_Of(hostedZone).AddInfo(jsii.String("Route 53 Hosted Zone is set"))
 
 		// Creates an SSL/TLS certificate
-		certificate := acm.NewCertificate(stack, jsii.String("StaticSiteCert"), &acm.CertificateProps{
-			DomainName: jsii.String(fullDomain),
-			Validation: acm.CertificateValidation_FromDns(hostedZone),
-		})
+		certificate := acm.Certificate_FromCertificateArn(stack, jsii.String("skran-app-ssr-cert"), jsii.String("arn:aws:acm:us-east-1:078577008688:certificate/338f23b9-ede8-4359-8a8f-f905510efb2c"))
 
 		// Creates a new CloudFront Distribution with a custom Route 53 domain and custom SSL/TLS Certificate
-		cloudfrontDistribution = cloudfront.NewDistribution(stack, jsii.String("SiteDistribution"), &cloudfront.DistributionProps{
+		cloudfrontDistribution = cloudfront.NewDistribution(stack, jsii.String("skran-app-ssr-assets-cloudfront"), &cloudfront.DistributionProps{
 			DefaultRootObject: jsii.String("index.html"),
 			DefaultBehavior:   cloudfrontDefaultBehavior,
 			ErrorResponses:    cloudfrontErrorResponses,
@@ -112,21 +109,21 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		})
 
 		// Creates Route 53 record to point to the CloudFront Distribution
-		publicEndpoint := route53.NewARecord(stack, jsii.String("Route53ToCloudFront"), &route53.ARecordProps{
+		publicEndpoint := route53.NewARecord(stack, jsii.String("skran-app-ssr-assets-cloudfront-public"), &route53.ARecordProps{
 			Zone:       hostedZone,
 			RecordName: jsii.String(subdomain),
 			Target:     route53.RecordTarget_FromAlias(route53targets.NewCloudFrontTarget(cloudfrontDistribution)),
 		})
 
 		// Outputs public Route 53 endpoint
-		awscdk.NewCfnOutput(stack, jsii.String("Route53Endpoint"), &awscdk.CfnOutputProps{
+		awscdk.NewCfnOutput(stack, jsii.String("skran-app-ssr-assets-public-endpoint"), &awscdk.CfnOutputProps{
 			Value: publicEndpoint.DomainName(),
 		})
 	} else {
 		awscdk.Annotations_Of(stack).AddInfo(jsii.String("Route 53 Hosted Zone is NOT set"))
 
 		// Creates a new CloudFront Distribution
-		cloudfrontDistribution = cloudfront.NewDistribution(stack, jsii.String("SiteDistribution"), &cloudfront.DistributionProps{
+		cloudfrontDistribution = cloudfront.NewDistribution(stack, jsii.String("skran-app-ssr-cloudfront"), &cloudfront.DistributionProps{
 			DefaultRootObject: jsii.String("index.html"),
 			DefaultBehavior:   cloudfrontDefaultBehavior,
 			ErrorResponses:    cloudfrontErrorResponses,
@@ -134,7 +131,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 	}
 
 	// Copies site assets from a local path to the S3 Bucket
-	s3deploy.NewBucketDeployment(stack, jsii.String("S3ContentDeployment"), &s3deploy.BucketDeploymentProps{
+	s3deploy.NewBucketDeployment(stack, jsii.String("skran-app-ssr-assets"), &s3deploy.BucketDeploymentProps{
 		DestinationBucket: siteBucket,
 		Sources: &[]s3deploy.ISource{
 			s3deploy.Source_Asset(jsii.String("./public"), &s3assets.AssetOptions{}),
@@ -146,12 +143,12 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 	})
 
 	// Outputs CloudFront endpoint
-	awscdk.NewCfnOutput(stack, jsii.String("CloudFrontEndpoint"), &awscdk.CfnOutputProps{
+	awscdk.NewCfnOutput(stack, jsii.String("skran-app-ssr-assets-cloudfront-endpoint"), &awscdk.CfnOutputProps{
 		Value: cloudfrontDistribution.DistributionDomainName(),
 	})
 
 	// Outputs S3 Bucket endpoint (to show that it's not public)
-	awscdk.NewCfnOutput(stack, jsii.String("S3BucketEndpoint"), &awscdk.CfnOutputProps{
+	awscdk.NewCfnOutput(stack, jsii.String("skran-app-ssr-assets-endpoint"), &awscdk.CfnOutputProps{
 		Value: siteBucket.BucketDomainName(),
 	})
 
