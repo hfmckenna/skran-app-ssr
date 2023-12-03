@@ -4,6 +4,8 @@ go 1.20
 
 require (
 	github.com/aws/aws-cdk-go/awscdk/v2 v2.113.0
+	github.com/aws/aws-cdk-go/awscdkapigatewayv2alpha/v2 v2.113.0-alpha.0
+	github.com/aws/aws-cdk-go/awscdkapigatewayv2integrationsalpha/v2 v2.113.0-alpha.0
 	github.com/aws/aws-cdk-go/awscdklambdagoalpha/v2 v2.113.0-alpha.0
 	github.com/aws/aws-lambda-go v1.41.0
 	github.com/aws/aws-sdk-go v1.47.9

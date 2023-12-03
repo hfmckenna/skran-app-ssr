@@ -3,6 +3,8 @@ package main
 import (
 	"github.com/aws/aws-cdk-go/awscdk/v2"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awslambda"
+	"github.com/aws/aws-cdk-go/awscdkapigatewayv2alpha/v2"
+	"github.com/aws/aws-cdk-go/awscdkapigatewayv2integrationsalpha/v2"
 	"github.com/aws/aws-cdk-go/awscdklambdagoalpha/v2"
 	"os"
 
@@ -22,13 +24,19 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 	}
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
-	awscdklambdagoalpha.NewGoFunction(stack, jsii.String("skran-ssr-home"), &awscdklambdagoalpha.GoFunctionProps{
-		Runtime: awslambda.Runtime_GO_1_X(),
-		Entry:   jsii.String("./src"),
+	homeHandler := awscdklambdagoalpha.NewGoFunction(stack, jsii.String("skran-ssr-home"), &awscdklambdagoalpha.GoFunctionProps{
+		FunctionName: jsii.String("skran-app-ssr-home"),
+		Runtime:      awslambda.Runtime_GO_1_X(),
+		Entry:        jsii.String("./src"),
 		Bundling: &awscdklambdagoalpha.BundlingOptions{
 			GoBuildFlags: jsii.Strings(`-ldflags "-s -w"`),
 		},
 	})
+
+	homeHttp := awscdkapigatewayv2alpha.NewHttpApi(stack, jsii.String("home"), &awscdkapigatewayv2alpha.HttpApiProps{ApiName: jsii.String("home")})
+
+	homeHttp.AddRoutes(&awscdkapigatewayv2alpha.AddRoutesOptions{Path: jsii.String("/"), Methods: &[]awscdkapigatewayv2alpha.HttpMethod{awscdkapigatewayv2alpha.HttpMethod_GET}, Integration: awscdkapigatewayv2integrationsalpha.NewHttpLambdaIntegration(jsii.String("HomeLambdaIntegration"), homeHandler, &awscdkapigatewayv2integrationsalpha.HttpLambdaIntegrationProps{})})
+
 	return stack
 }
 
