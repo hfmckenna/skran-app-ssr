@@ -15,3 +15,4 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           DEPLOYMENT_ROLE: ${{ secrets.CROSS_ACCOUNT_DEPLOY_ROLE }}
           AWS_DEFAULT_REGION: eu-west-1
+          AWS_ACCOUNT: ${{ secrets.DEPLOYMENT_ACCOUNT }}
