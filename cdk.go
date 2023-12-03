@@ -49,6 +49,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 
 	// Creates S3 Bucket to store our static site content
 	siteBucket := s3.NewBucket(stack, jsii.String("StaticSiteBucket"), &s3.BucketProps{
+		BucketName:        jsii.String("skran-app-ssr-assets"),
 		BlockPublicAccess: s3.BlockPublicAccess_BLOCK_ALL(),
 		PublicReadAccess:  jsii.Bool(false),
 		Versioned:         jsii.Bool(true),
