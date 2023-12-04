@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/aws/aws-cdk-go/awscdk/v2"
+	apigateway "github.com/aws/aws-cdk-go/awscdk/v2/awsapigateway"
 	acm "github.com/aws/aws-cdk-go/awscdk/v2/awscertificatemanager"
 	cloudfront "github.com/aws/aws-cdk-go/awscdk/v2/awscloudfront"
 	origins "github.com/aws/aws-cdk-go/awscdk/v2/awscloudfrontorigins"
@@ -12,8 +13,6 @@ import (
 	s3 "github.com/aws/aws-cdk-go/awscdk/v2/awss3"
 	s3assets "github.com/aws/aws-cdk-go/awscdk/v2/awss3assets"
 	s3deploy "github.com/aws/aws-cdk-go/awscdk/v2/awss3deployment"
-	apiGateway "github.com/aws/aws-cdk-go/awscdkapigatewayv2alpha/v2"
-	apiGatewayIntegrations "github.com/aws/aws-cdk-go/awscdkapigatewayv2integrationsalpha/v2"
 	lambda "github.com/aws/aws-cdk-go/awscdklambdagoalpha/v2"
 	"os"
 	"strings"
@@ -29,8 +28,9 @@ type SkranAppSsrStackProps struct {
 }
 
 type StackConfigs struct {
-	HostedZoneName string `field:"optional"`
-	Subdomain      string `field:"optional"`
+	HostedZoneName  string `field:"optional"`
+	AssetsSubdomain string `field:"optional"`
+	SiteSubdomain   string `field:"optional"`
 }
 
 func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrStackProps) awscdk.Stack {
@@ -42,13 +42,13 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 
 	var cloudfrontDistribution cloudfront.Distribution
 	hostedZoneName := props.stackDetails.HostedZoneName
-	subdomain := props.stackDetails.Subdomain
+	assetsSubdomain := props.stackDetails.AssetsSubdomain
 
 	// Creates Origin Access Identity (OAI) to only allow CloudFront to get content
-	cloudfrontOAI := cloudfront.NewOriginAccessIdentity(stack, jsii.String("CloudFrontOAI"), &cloudfront.OriginAccessIdentityProps{})
+	cloudfrontOAI := cloudfront.NewOriginAccessIdentity(stack, jsii.String("skran-app-ssr-cloudfront-oai"), &cloudfront.OriginAccessIdentityProps{})
 
 	// Creates S3 Bucket to store our static site content
-	siteBucket := s3.NewBucket(stack, jsii.String("StaticSiteBucket"), &s3.BucketProps{
+	siteBucket := s3.NewBucket(stack, jsii.String("skran-app-ssr-assets"), &s3.BucketProps{
 		BucketName:        jsii.String("skran-app-ssr-assets"),
 		BlockPublicAccess: s3.BlockPublicAccess_BLOCK_ALL(),
 		PublicReadAccess:  jsii.Bool(false),
@@ -61,7 +61,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 	cloudfrontDefaultBehavior := &cloudfront.BehaviorOptions{
 		// Sets the S3 Bucket as the origin and tells CloudFront to use the created OAI to access it
 		Origin: origins.NewS3Origin(siteBucket, &origins.S3OriginProps{
-			OriginId:             jsii.String("CloudFrontS3Access"),
+			OriginId:             jsii.String("skran-app-ssr-origin"),
 			OriginAccessIdentity: cloudfrontOAI,
 		}),
 		ViewerProtocolPolicy: cloudfront.ViewerProtocolPolicy_REDIRECT_TO_HTTPS,
@@ -77,13 +77,13 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 
 	// If Route 53 Hosted Zone is set, update AWS Certificate Manager, Route 53, and CloudFront accordingly
 	if strings.TrimSpace(hostedZoneName) != "" {
-		var fullDomain string
+		var assetsDomain string
 
-		// If a subdomain is not set
-		if strings.TrimSpace(subdomain) == "" {
-			fullDomain = hostedZoneName
+		// If a assetsSubdomain is not set
+		if strings.TrimSpace(assetsSubdomain) == "" {
+			assetsDomain = hostedZoneName
 		} else {
-			fullDomain = fmt.Sprintf("%s.%s", subdomain, hostedZoneName)
+			assetsDomain = fmt.Sprintf("%s.%s", assetsSubdomain, hostedZoneName)
 		}
 
 		// Searches Route 53 for existing zone using hosted zone name
@@ -104,14 +104,14 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 			ErrorResponses:    cloudfrontErrorResponses,
 			Certificate:       certificate,
 			DomainNames: &[]*string{
-				jsii.String(fullDomain),
+				jsii.String(assetsDomain),
 			},
 		})
 
 		// Creates Route 53 record to point to the CloudFront Distribution
 		publicEndpoint := route53.NewARecord(stack, jsii.String("skran-app-ssr-assets-cloudfront-public"), &route53.ARecordProps{
 			Zone:       hostedZone,
-			RecordName: jsii.String(subdomain),
+			RecordName: jsii.String(assetsSubdomain),
 			Target:     route53.RecordTarget_FromAlias(route53targets.NewCloudFrontTarget(cloudfrontDistribution)),
 		})
 
@@ -131,7 +131,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 	}
 
 	// Copies site assets from a local path to the S3 Bucket
-	s3deploy.NewBucketDeployment(stack, jsii.String("skran-app-ssr-assets"), &s3deploy.BucketDeploymentProps{
+	s3deploy.NewBucketDeployment(stack, jsii.String("skran-app-ssr-assets-deployment"), &s3deploy.BucketDeploymentProps{
 		DestinationBucket: siteBucket,
 		Sources: &[]s3deploy.ISource{
 			s3deploy.Source_Asset(jsii.String("./public"), &s3assets.AssetOptions{}),
@@ -140,6 +140,24 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		DistributionPaths: &[]*string{
 			jsii.String("/*"),
 		},
+	})
+
+	var siteDomain string
+
+	if strings.TrimSpace(props.stackDetails.SiteSubdomain) == "" {
+		siteDomain = hostedZoneName
+	} else {
+		siteDomain = fmt.Sprintf("%s.%s", props.stackDetails.SiteSubdomain, hostedZoneName)
+	}
+
+	hostedZone := route53.HostedZone_FromLookup(stack, jsii.String("skran-app"), &route53.HostedZoneProviderProps{
+		DomainName:  jsii.String(hostedZoneName),
+		PrivateZone: jsii.Bool(false),
+	})
+
+	siteCert := acm.NewCertificate(stack, jsii.String("skran-app-ssr-site-cert"), &acm.CertificateProps{
+		DomainName: jsii.String(siteDomain),
+		Validation: acm.CertificateValidation_FromDns(hostedZone),
 	})
 
 	// Outputs CloudFront endpoint
@@ -161,9 +179,19 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		},
 	})
 
-	homeHttp := apiGateway.NewHttpApi(stack, jsii.String("skran-app-ssr-root"), &apiGateway.HttpApiProps{ApiName: jsii.String("root")})
+	api := apigateway.NewLambdaRestApi(stack, jsii.String("skran-ssr-app-rest"), &apigateway.LambdaRestApiProps{
+		DomainName: &apigateway.DomainNameOptions{
+			DomainName:  jsii.String(siteDomain),
+			Certificate: siteCert,
+		},
+		Handler: homeHandler,
+	})
 
-	homeHttp.AddRoutes(&apiGateway.AddRoutesOptions{Path: jsii.String("/"), Methods: &[]apiGateway.HttpMethod{apiGateway.HttpMethod_GET}, Integration: apiGatewayIntegrations.NewHttpLambdaIntegration(jsii.String("RootLambdaIntegration"), homeHandler, &apiGatewayIntegrations.HttpLambdaIntegrationProps{})})
+	route53.NewARecord(stack, jsii.String("skran-app-ssr-route"), &route53.ARecordProps{
+		Zone:       hostedZone,
+		RecordName: jsii.String(siteDomain),
+		Target:     route53.RecordTarget_FromAlias(route53targets.NewApiGateway(api)),
+	})
 
 	return stack
 }
@@ -184,7 +212,8 @@ func main() {
 
 			// Optional
 			// Add a subdomain to the hosted zone e.g. "aws". Otherwise, set to ""
-			Subdomain: "assets",
+			AssetsSubdomain: "assets",
+			SiteSubdomain:   "www",
 		},
 	})
 
