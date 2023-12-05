@@ -9,7 +9,7 @@ import (
 
 func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var buf bytes.Buffer
-	api.Test(&buf)
+	api.Home(&buf)
 	s := buf.String()
 	return events.APIGatewayProxyResponse{StatusCode: 200, Body: s}, nil
 }
