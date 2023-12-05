@@ -209,8 +209,8 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 	})
 
 	table := dynamodb.NewTable(stack, jsii.String("skran-ssr-app-table"), &dynamodb.TableProps{
-		PartitionKey: &dynamodb.Attribute{Name: jsii.String("pk"), Type: dynamodb.AttributeType_STRING},
-		SortKey:      &dynamodb.Attribute{Name: jsii.String("sk"), Type: dynamodb.AttributeType_STRING},
+		PartitionKey: &dynamodb.Attribute{Name: jsii.String("Primary"), Type: dynamodb.AttributeType_STRING},
+		SortKey:      &dynamodb.Attribute{Name: jsii.String("Sort"), Type: dynamodb.AttributeType_STRING},
 		TableName:    jsii.String("SkranAppTable"),
 	})
 
