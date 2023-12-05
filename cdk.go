@@ -7,6 +7,7 @@ import (
 	acm "github.com/aws/aws-cdk-go/awscdk/v2/awscertificatemanager"
 	cloudfront "github.com/aws/aws-cdk-go/awscdk/v2/awscloudfront"
 	origins "github.com/aws/aws-cdk-go/awscdk/v2/awscloudfrontorigins"
+	dynamodb "github.com/aws/aws-cdk-go/awscdk/v2/awsdynamodb"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awslambda"
 	route53 "github.com/aws/aws-cdk-go/awscdk/v2/awsroute53"
 	route53targets "github.com/aws/aws-cdk-go/awscdk/v2/awsroute53targets"
@@ -31,6 +32,10 @@ type StackConfigs struct {
 	HostedZoneName  string `field:"optional"`
 	AssetsSubdomain string `field:"optional"`
 	SiteSubdomain   string `field:"optional"`
+}
+
+type LambdaEnvironment struct {
+	REGION string
 }
 
 func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrStackProps) awscdk.Stack {
@@ -142,6 +147,21 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		},
 	})
 
+	templates := s3.NewBucket(stack, jsii.String("skran-app-ssr-templates"), &s3.BucketProps{
+		BucketName:        jsii.String("skran-app-ssr-templates"),
+		BlockPublicAccess: s3.BlockPublicAccess_BLOCK_ALL(),
+		PublicReadAccess:  jsii.Bool(false),
+		Versioned:         jsii.Bool(true),
+	})
+
+	// Copies site assets from a local path to the S3 Bucket
+	s3deploy.NewBucketDeployment(stack, jsii.String("skran-app-ssr-templates-deployment"), &s3deploy.BucketDeploymentProps{
+		DestinationBucket: templates,
+		Sources: &[]s3deploy.ISource{
+			s3deploy.Source_Asset(jsii.String("./templates"), &s3assets.AssetOptions{}),
+		},
+	})
+
 	var siteDomain string
 
 	if strings.TrimSpace(props.stackDetails.SiteSubdomain) == "" {
@@ -174,6 +194,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		FunctionName: jsii.String("skran-app-ssr-home"),
 		Runtime:      awslambda.Runtime_GO_1_X(),
 		Entry:        jsii.String("./src"),
+		Environment:  &map[string]*string{"TEMPLATES": templates.BucketName()},
 		Bundling: &lambda.BundlingOptions{
 			GoBuildFlags: jsii.Strings(`-ldflags "-s -w"`),
 		},
@@ -186,6 +207,15 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		},
 		Handler: homeHandler,
 	})
+
+	table := dynamodb.NewTable(stack, jsii.String("skran-ssr-app-table"), &dynamodb.TableProps{
+		PartitionKey: &dynamodb.Attribute{Name: jsii.String("pk"), Type: dynamodb.AttributeType_STRING},
+		SortKey:      &dynamodb.Attribute{Name: jsii.String("sk"), Type: dynamodb.AttributeType_STRING},
+		TableName:    jsii.String("SkranAppTable"),
+	})
+
+	table.GrantReadData(homeHandler)
+	templates.GrantRead(homeHandler, "*")
 
 	route53.NewARecord(stack, jsii.String("skran-app-ssr-route"), &route53.ARecordProps{
 		Zone:       hostedZone,

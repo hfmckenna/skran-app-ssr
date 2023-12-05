@@ -1,7 +1,11 @@
 package api
 
 import (
+	"context"
 	"fmt"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
@@ -10,16 +14,32 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
 )
 
-const indexPage = "../templates/index.html"
-const headPartial = "../templates/head.html"
+const indexPage = "tmp/index.html"
+const headPartial = "tmp/head.html"
 
 func Home(w io.Writer) {
 	endpoint := os.Getenv("DYNAMO_ENDPOINT")
 	assets := os.Getenv("ASSETS_DOMAIN")
+	region := os.Getenv("AWS_REGION")
+	templates := os.Getenv("TEMPLATES")
+	cfg, err := config.LoadDefaultConfig(context.TODO())
 
-	sess := session.Must(session.NewSession(&aws.Config{Endpoint: aws.String(endpoint), Region: aws.String("eu-west-1"), CredentialsChainVerboseErrors: aws.Bool(true)}))
+	sess := session.Must(session.NewSession(&aws.Config{Endpoint: aws.String(endpoint), Region: aws.String(region), CredentialsChainVerboseErrors: aws.Bool(true)}))
+	if err != nil {
+		log.Printf("error: %v", err)
+		return
+	}
+
+	client := s3.NewFromConfig(cfg)
+	downloader := manager.NewDownloader(client)
+	err = downloadToFile(downloader, "./tmp", templates, "index.html")
+	err = downloadToFile(downloader, "./tmp", templates, "head.html")
+	if err != nil {
+		log.Fatalln("error:", err)
+	}
 
 	svc := dynamodb.New(sess)
 	tmpl, _ := template.New("").ParseFiles([]string{indexPage, headPartial}...)
@@ -65,4 +85,25 @@ func Home(w io.Writer) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func downloadToFile(downloader *manager.Downloader, targetDirectory, bucket, key string) error {
+	// Create the directories in the path
+	file := filepath.Join(targetDirectory, key)
+	if err := os.MkdirAll(filepath.Dir(file), 0775); err != nil {
+		return err
+	}
+
+	// Set up the local file
+	fd, err := os.Create(file)
+	if err != nil {
+		return err
+	}
+	defer fd.Close()
+
+	// Download the file using the AWS SDK for Go
+	fmt.Printf("Downloading s3://%s/%s to %s...\n", bucket, key, file)
+	_, err = downloader.Download(context.TODO(), fd, &s3.GetObjectInput{Bucket: &bucket, Key: &key})
+
+	return err
 }

@@ -7,10 +7,6 @@ import (
 	"skran-app-ssr/api"
 )
 
-type MyEvent struct {
-	Name string `json:"name"`
-}
-
 func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var buf bytes.Buffer
 	api.Test(&buf)
