@@ -17,8 +17,8 @@ import (
 	"path/filepath"
 )
 
-const indexPage = "tmp/index.html"
-const headPartial = "tmp/head.html"
+const indexPage = "/tmp/index.html"
+const headPartial = "/tmp/head.html"
 
 func Home(w io.Writer) {
 	endpoint := os.Getenv("DYNAMO_ENDPOINT")
@@ -35,8 +35,8 @@ func Home(w io.Writer) {
 
 	client := s3.NewFromConfig(cfg)
 	downloader := manager.NewDownloader(client)
-	err = downloadToFile(downloader, "./tmp", templates, "index.html")
-	err = downloadToFile(downloader, "./tmp", templates, "head.html")
+	err = downloadToFile(downloader, "/tmp", templates, "index.html")
+	err = downloadToFile(downloader, "/tmp", templates, "head.html")
 	if err != nil {
 		log.Fatalln("error:", err)
 	}
@@ -90,9 +90,6 @@ func Home(w io.Writer) {
 func downloadToFile(downloader *manager.Downloader, targetDirectory, bucket, key string) error {
 	// Create the directories in the path
 	file := filepath.Join(targetDirectory, key)
-	if err := os.MkdirAll(filepath.Dir(file), 0775); err != nil {
-		return err
-	}
 
 	// Set up the local file
 	fd, err := os.Create(file)
