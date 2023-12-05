@@ -11,7 +11,7 @@ func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 	var buf bytes.Buffer
 	api.Home(&buf)
 	s := buf.String()
-	return events.APIGatewayProxyResponse{StatusCode: 200, Body: s}, nil
+	return events.APIGatewayProxyResponse{StatusCode: 200, Headers: map[string]string{"Content-Type": "text/html"}, Body: s}, nil
 }
 
 func main() {

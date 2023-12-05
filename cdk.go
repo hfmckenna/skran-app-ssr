@@ -194,7 +194,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		FunctionName: jsii.String("skran-app-ssr-home"),
 		Runtime:      awslambda.Runtime_GO_1_X(),
 		Entry:        jsii.String("./src"),
-		Environment:  &map[string]*string{"TEMPLATES": templates.BucketName()},
+		Environment:  &map[string]*string{"TEMPLATES": templates.BucketName(), "ASSETS_DOMAIN": jsii.String("https://assets.skran.app")},
 		Bundling: &lambda.BundlingOptions{
 			GoBuildFlags: jsii.Strings(`-ldflags "-s -w"`),
 		},
