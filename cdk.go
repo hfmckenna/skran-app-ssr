@@ -192,7 +192,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 
 	homeHandler := lambda.NewGoFunction(stack, jsii.String("skran-app-ssr-home"), &lambda.GoFunctionProps{
 		FunctionName: jsii.String("skran-app-ssr-home"),
-		Runtime:      awslambda.Runtime_GO_1_X(),
+		Runtime:      awslambda.Runtime_PROVIDED_AL2023(),
 		Entry:        jsii.String("./src"),
 		Environment:  &map[string]*string{"TEMPLATES": templates.BucketName(), "ASSETS_DOMAIN": jsii.String("https://assets.skran.app")},
 		Bundling: &lambda.BundlingOptions{
