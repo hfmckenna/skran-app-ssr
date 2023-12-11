@@ -13,41 +13,41 @@
       "TableName": "DeployStage-SkranVisitorBff-SkranVisitorBffVisitorBffTable5DD409E6-10C5BXR759OQK",
       "KeyAttributes": {
         "PartitionKey": {
-          "AttributeName": "pk",
+          "AttributeName": "Primary",
           "AttributeType": "S"
         },
         "SortKey": {
-          "AttributeName": "sk",
+          "AttributeName": "Sort",
           "AttributeType": "S"
         }
       },
       "NonKeyAttributes": [
         {
-          "AttributeName": "type",
+          "AttributeName": "Type",
           "AttributeType": "S"
         },
         {
-          "AttributeName": "components",
+          "AttributeName": "Components",
           "AttributeType": "L"
         },
         {
-          "AttributeName": "time",
+          "AttributeName": "Time",
           "AttributeType": "N"
         },
         {
-          "AttributeName": "instructions",
+          "AttributeName": "Instructions",
           "AttributeType": "S"
         },
         {
-          "AttributeName": "ingredients",
+          "AttributeName": "Ingredients",
           "AttributeType": "L"
         },
         {
-          "AttributeName": "id",
+          "AttributeName": "Id",
           "AttributeType": "N"
         },
         {
-          "AttributeName": "title",
+          "AttributeName": "Title",
           "AttributeType": "S"
         }
       ],
@@ -154,22 +154,22 @@
           }
         },
         {
-          "pk": {
+          "Primary": {
             "S": "PRIMARY#BEEF_MINCE"
           },
-          "sk": {
+          "Sort": {
             "S": "SECONDARY#SPAGHETTI_BOLOGNESE"
           },
-          "type": {
+          "Type": {
             "S": "SEARCH"
           },
-          "id": {
+          "Id": {
             "N": "1234"
           },
-          "title": {
+          "Title": {
             "S": "Spaghetti Bolognese"
           },
-          "ingredients": {
+          "Ingredients": {
             "L": [
               {
                 "S": "BEEF_MINCE"
@@ -190,22 +190,22 @@
           }
         },
         {
-          "pk": {
+          "Primary": {
             "S": "PRIMARY#GARLIC"
           },
-          "sk": {
+          "Sort": {
             "S": "SECONDARY#SPAGHETTI_BOLOGNESE"
           },
-          "type": {
+          "Type": {
             "S": "SEARCH"
           },
-          "id": {
+          "Id": {
             "N": "1234"
           },
-          "title": {
+          "Title": {
             "S": "Spaghetti Bolognese"
           },
-          "ingredients": {
+          "Ingredients": {
             "L": [
               {
                 "S": "BEEF_MINCE"
@@ -226,22 +226,22 @@
           }
         },
         {
-          "pk": {
+          "Primary": {
             "S": "PRIMARY#ONIONS"
           },
-          "sk": {
+          "Sort": {
             "S": "SECONDARY#SPAGHETTI_BOLOGNESE"
           },
-          "type": {
+          "Type": {
             "S": "SEARCH"
           },
-          "id": {
+          "Id": {
             "N": "1234"
           },
-          "title": {
+          "Title": {
             "S": "Spaghetti Bolognese"
           },
-          "ingredients": {
+          "Ingredients": {
             "L": [
               {
                 "S": "BEEF_MINCE"
@@ -262,22 +262,22 @@
           }
         },
         {
-          "pk": {
+          "Primary": {
             "S": "PRIMARY#PASTA"
           },
-          "sk": {
+          "Sort": {
             "S": "SECONDARY#SPAGHETTI_BOLOGNESE"
           },
-          "type": {
+          "Type": {
             "S": "SEARCH"
           },
-          "id": {
+          "Id": {
             "N": "1234"
           },
-          "title": {
+          "Title": {
             "S": "Spaghetti Bolognese"
           },
-          "ingredients": {
+          "Ingredients": {
             "L": [
               {
                 "S": "BEEF_MINCE"
@@ -298,22 +298,22 @@
           }
         },
         {
-          "pk": {
+          "Primary": {
             "S": "PRIMARY#TINNED_TOMATOES"
           },
-          "sk": {
+          "Sort": {
             "S": "SECONDARY#SPAGHETTI_BOLOGNESE"
           },
-          "type": {
+          "Type": {
             "S": "SEARCH"
           },
-          "id": {
+          "Id": {
             "N": "1234"
           },
-          "title": {
+          "Title": {
             "S": "Spaghetti Bolognese"
           },
-          "ingredients": {
+          "Ingredients": {
             "L": [
               {
                 "S": "BEEF_MINCE"
@@ -334,22 +334,22 @@
           }
         },
         {
-          "pk": {
+          "Primary": {
             "S": "PRIMARY#BEEF_MINCE"
           },
-          "sk": {
+          "Sort": {
             "S": "SECONDARY#GARLIC#SPAGHETTI_BOLOGNESE"
           },
-          "type": {
+          "Type": {
             "S": "SEARCH"
           },
-          "id": {
+          "Id": {
             "N": "1234"
           },
-          "title": {
+          "Title": {
             "S": "Spaghetti Bolognese"
           },
-          "ingredients": {
+          "Ingredients": {
             "L": [
               {
                 "S": "BEEF_MINCE"
@@ -370,22 +370,22 @@
           }
         },
         {
-          "pk": {
+          "Primary": {
             "S": "PRIMARY#BEEF_MINCE"
           },
-          "sk": {
+          "Sort": {
             "S": "SECONDARY#ONIONS#SPAGHETTI_BOLOGNESE"
           },
-          "type": {
+          "Type": {
             "S": "SEARCH"
           },
-          "id": {
+          "Id": {
             "N": "1234"
           },
-          "title": {
+          "Title": {
             "S": "Spaghetti Bolognese"
           },
-          "ingredients": {
+          "Ingredients": {
             "L": [
               {
                 "S": "BEEF_MINCE"
@@ -406,22 +406,22 @@
           }
         },
         {
-          "pk": {
+          "Primary": {
             "S": "PRIMARY#BEEF_MINCE"
           },
-          "sk": {
+          "Sort": {
             "S": "SECONDARY#PASTA#SPAGHETTI_BOLOGNESE"
           },
-          "type": {
+          "Type": {
             "S": "SEARCH"
           },
-          "id": {
+          "Id": {
             "N": "1234"
           },
-          "title": {
+          "Title": {
             "S": "Spaghetti Bolognese"
           },
-          "ingredients": {
+          "Ingredients": {
             "L": [
               {
                 "S": "BEEF_MINCE"
@@ -442,22 +442,22 @@
           }
         },
         {
-          "pk": {
+          "Primary": {
             "S": "PRIMARY#BEEF_MINCE"
           },
-          "sk": {
+          "Sort": {
             "S": "SECONDARY#TINNED_TOMATOES#SPAGHETTI_BOLOGNESE"
           },
-          "type": {
+          "Type": {
             "S": "SEARCH"
           },
-          "id": {
+          "Id": {
             "N": "1234"
           },
-          "title": {
+          "Title": {
             "S": "Spaghetti Bolognese"
           },
-          "ingredients": {
+          "Ingredients": {
             "L": [
               {
                 "S": "BEEF_MINCE"
@@ -478,22 +478,22 @@
           }
         },
         {
-          "pk": {
+          "Primary": {
             "S": "PRIMARY#GARLIC"
           },
-          "sk": {
+          "Sort": {
             "S": "SECONDARY#ONIONS#SPAGHETTI_BOLOGNESE"
           },
-          "type": {
+          "Type": {
             "S": "SEARCH"
           },
-          "id": {
+          "Id": {
             "N": "1234"
           },
-          "title": {
+          "Title": {
             "S": "Spaghetti Bolognese"
           },
-          "ingredients": {
+          "Ingredients": {
             "L": [
               {
                 "S": "BEEF_MINCE"
@@ -514,22 +514,22 @@
           }
         },
         {
-          "pk": {
+          "Primary": {
             "S": "PRIMARY#GARLIC"
           },
-          "sk": {
+          "Sort": {
             "S": "SECONDARY#PASTA#SPAGHETTI_BOLOGNESE"
           },
-          "type": {
+          "Type": {
             "S": "SEARCH"
           },
-          "id": {
+          "Id": {
             "N": "1234"
           },
-          "title": {
+          "Title": {
             "S": "Spaghetti Bolognese"
           },
-          "ingredients": {
+          "Ingredients": {
             "L": [
               {
                 "S": "BEEF_MINCE"
@@ -550,22 +550,22 @@
           }
         },
         {
-          "pk": {
+          "Primary": {
             "S": "PRIMARY#GARLIC"
           },
-          "sk": {
+          "Sort": {
             "S": "SECONDARY#TINNED_TOMATOES#SPAGHETTI_BOLOGNESE"
           },
-          "type": {
+          "Type": {
             "S": "SEARCH"
           },
-          "id": {
+          "Id": {
             "N": "1234"
           },
-          "title": {
+          "Title": {
             "S": "Spaghetti Bolognese"
           },
-          "ingredients": {
+          "Ingredients": {
             "L": [
               {
                 "S": "BEEF_MINCE"
@@ -586,22 +586,22 @@
           }
         },
         {
-          "pk": {
+          "Primary": {
             "S": "PRIMARY#ONIONS"
           },
-          "sk": {
+          "Sort": {
             "S": "SECONDARY#PASTA#SPAGHETTI_BOLOGNESE"
           },
-          "type": {
+          "Type": {
             "S": "SEARCH"
           },
-          "id": {
+          "Id": {
             "N": "1234"
           },
-          "title": {
+          "Title": {
             "S": "Spaghetti Bolognese"
           },
-          "ingredients": {
+          "Ingredients": {
             "L": [
               {
                 "S": "BEEF_MINCE"
@@ -622,22 +622,22 @@
           }
         },
         {
-          "pk": {
+          "Primary": {
             "S": "PRIMARY#ONIONS"
           },
-          "sk": {
+          "Sort": {
             "S": "SECONDARY#TINNED_TOMATOES#SPAGHETTI_BOLOGNESE"
           },
-          "type": {
+          "Type": {
             "S": "SEARCH"
           },
-          "id": {
+          "Id": {
             "N": "1234"
           },
-          "title": {
+          "Title": {
             "S": "Spaghetti Bolognese"
           },
-          "ingredients": {
+          "Ingredients": {
             "L": [
               {
                 "S": "BEEF_MINCE"
@@ -658,22 +658,22 @@
           }
         },
         {
-          "pk": {
+          "Primary": {
             "S": "PRIMARY#PASTA"
           },
-          "sk": {
+          "Sort": {
             "S": "SECONDARY#TINNED_TOMATOES#SPAGHETTI_BOLOGNESE"
           },
-          "type": {
+          "Type": {
             "S": "SEARCH"
           },
-          "id": {
+          "Id": {
             "N": "1234"
           },
-          "title": {
+          "Title": {
             "S": "Spaghetti Bolognese"
           },
-          "ingredients": {
+          "Ingredients": {
             "L": [
               {
                 "S": "BEEF_MINCE"
