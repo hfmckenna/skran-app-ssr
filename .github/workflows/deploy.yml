@@ -16,6 +16,7 @@ jobs:
           mv htmx.min.js public/htmx.min.js
       - name: Deploy
         run: |
+          echo $DEPLOYMENT_ROLE
           aws sts assume-role --role-arn $DEPLOYMENT_ROLE --role-session-name cross-account-deploy --query Credentials.Expiration
           npx cdk deploy SkranAppSsrStack
         env:

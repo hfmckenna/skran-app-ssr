@@ -222,6 +222,102 @@
           }
         }
       }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Primary": {
+            "S": "SEARCH#BEEF_MINCE"
+          },
+          "Sort": {
+            "S": "BEEF_MINCE"
+          },
+          "Type": {
+            "S": "SEARCH"
+          },
+          "Title": {
+            "S": "Beef Mince"
+          },
+          "Recipes": {
+            "SS": [
+              "1234",
+              "5678"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Primary": {
+            "S": "SEARCH#GARLIC"
+          },
+          "Sort": {
+            "S": "GARLIC"
+          },
+          "Type": {
+            "S": "SEARCH"
+          },
+          "Title": {
+            "S": "Garlic"
+          },
+          "Recipes": {
+            "SS": [
+              "1234",
+              "5678"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Primary": {
+            "S": "SEARCH#PASTA"
+          },
+          "Sort": {
+            "S": "PASTA"
+          },
+          "Type": {
+            "S": "SEARCH"
+          },
+          "Title": {
+            "S": "Pasta"
+          },
+          "Recipes": {
+            "SS": [
+              "1234",
+              "5678"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Primary": {
+            "S": "SEARCH#TINNED_TOMATOES"
+          },
+          "Sort": {
+            "S": "TINNED_TOMATOES"
+          },
+          "Type": {
+            "S": "SEARCH"
+          },
+          "Title": {
+            "S": "Tinned Tomatoes"
+          },
+          "Recipes": {
+            "SS": [
+              "1234",
+              "5678"
+            ]
+          }
+        }
+      }
     }
   ]
 }
