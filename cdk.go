@@ -32,10 +32,6 @@ type StackConfigs struct {
 	SiteSubdomain   string `field:"optional"`
 }
 
-type LambdaEnvironment struct {
-	REGION string
-}
-
 func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrStackProps) awscdk.Stack {
 	var sprops awscdk.StackProps
 	if props != nil {
