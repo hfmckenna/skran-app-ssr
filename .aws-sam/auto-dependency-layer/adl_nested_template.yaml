@@ -1,0 +1,22 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: AWS SAM CLI Nested Stack for Auto Dependency Layer Creation
+Metadata:
+  SamCliInfo: 1.98.0
+  key: AWS SAM CLI sync command
+Outputs:
+  CustomCDKBucketDeployment8693BB64968944B69AAFB0C017088a6DepLayer:
+    Value:
+      Ref: CustomCDKBucketDeployment8693BB64968944B69AAFB0C017088a6DepLayer
+Resources:
+  CustomCDKBucketDeployment8693BB64968944B69AAFB0C017088a6DepLayer:
+    Metadata:
+      CreatedBy: AWS SAM CLI sync command
+    Properties:
+      CompatibleRuntimes:
+      - python3.9
+      ContentUri: /Users/hugh/source/skran-app-ssr/.aws-sam/auto-dependency-layer/CustomCDKBucketDeployment8693BB64968944B69AAFB0C017088a6DepLayer
+      Description: Auto created layer for dependencies of function Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C
+      LayerName: SkranAppSsrb6165b8e-CustomCDKBucketDeploym017088a6-DepLayer
+      RetentionPolicy: Delete
+    Type: AWS::Serverless::LayerVersion
+Transform: AWS::Serverless-2016-10-31
