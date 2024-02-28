@@ -227,94 +227,129 @@
       "PutRequest": {
         "Item": {
           "Primary": {
-            "S": "SEARCH#BEEF_MINCE"
+            "S": "RECIPE#9101"
           },
           "Sort": {
-            "S": "BEEF_MINCE"
+            "S": "TITLE#VEGETABLE_STIR_FRY"
           },
           "Type": {
-            "S": "SEARCH"
+            "S": "RECIPE"
+          },
+          "Id": {
+            "N": "9101"
           },
           "Title": {
-            "S": "Beef Mince"
+            "S": "Vegetable Stir Fry"
           },
-          "Recipes": {
-            "SS": [
-              "1234",
-              "5678"
+          "Components": {
+            "L": [
+              {
+                "M": {
+                  "Title": {
+                    "S": "Vegetables"
+                  },
+                  "Ingredients": {
+                    "L": [
+                      {
+                        "M": {
+                          "Title": {
+                            "S": "Broccoli"
+                          },
+                          "Value": {
+                            "N": "200"
+                          },
+                          "Measurement": {
+                            "S": "grams"
+                          }
+                        }
+                      },
+                      {
+                        "M": {
+                          "Title": {
+                            "S": "Carrots"
+                          },
+                          "Value": {
+                            "N": "200"
+                          },
+                          "Measurement": {
+                            "S": "grams"
+                          }
+                        }
+                      },
+                      {
+                        "M": {
+                          "Title": {
+                            "S": "Bell Peppers"
+                          },
+                          "Value": {
+                            "N": "200"
+                          },
+                          "Measurement": {
+                            "S": "grams"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "M": {
+                  "Title": {
+                    "S": "Sauce"
+                  },
+                  "Ingredients": {
+                    "L": [
+                      {
+                        "M": {
+                          "Title": {
+                            "S": "Soy Sauce"
+                          },
+                          "Value": {
+                            "N": "100"
+                          },
+                          "Measurement": {
+                            "S": "ml"
+                          }
+                        }
+                      },
+                      {
+                        "M": {
+                          "Title": {
+                            "S": "Garlic"
+                          },
+                          "Value": {
+                            "N": "30"
+                          },
+                          "Measurement": {
+                            "S": "grams"
+                          }
+                        }
+                      },
+                      {
+                        "M": {
+                          "Title": {
+                            "S": "Ginger"
+                          },
+                          "Value": {
+                            "N": "30"
+                          },
+                          "Measurement": {
+                            "S": "grams"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
             ]
-          }
-        }
-      }
-    },
-    {
-      "PutRequest": {
-        "Item": {
-          "Primary": {
-            "S": "SEARCH#GARLIC"
           },
-          "Sort": {
-            "S": "GARLIC"
+          "Time": {
+            "N": "20"
           },
-          "Type": {
-            "S": "SEARCH"
-          },
-          "Title": {
-            "S": "Garlic"
-          },
-          "Recipes": {
-            "SS": [
-              "1234",
-              "5678"
-            ]
-          }
-        }
-      }
-    },
-    {
-      "PutRequest": {
-        "Item": {
-          "Primary": {
-            "S": "SEARCH#PASTA"
-          },
-          "Sort": {
-            "S": "PASTA"
-          },
-          "Type": {
-            "S": "SEARCH"
-          },
-          "Title": {
-            "S": "Pasta"
-          },
-          "Recipes": {
-            "SS": [
-              "1234",
-              "5678"
-            ]
-          }
-        }
-      }
-    },
-    {
-      "PutRequest": {
-        "Item": {
-          "Primary": {
-            "S": "SEARCH#TINNED_TOMATOES"
-          },
-          "Sort": {
-            "S": "TINNED_TOMATOES"
-          },
-          "Type": {
-            "S": "SEARCH"
-          },
-          "Title": {
-            "S": "Tinned Tomatoes"
-          },
-          "Recipes": {
-            "SS": [
-              "1234",
-              "5678"
-            ]
+          "Instructions": {
+            "S": "Stir fry vegetables for 10 minutes, then add sauce and cook for another 10 minutes."
           }
         }
       }
