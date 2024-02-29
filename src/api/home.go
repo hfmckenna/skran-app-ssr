@@ -24,7 +24,7 @@ func Home(w io.Writer) {
 	endpoint := os.Getenv("DYNAMO_ENDPOINT")
 	assets := os.Getenv("ASSETS_DOMAIN")
 	region := os.Getenv("AWS_REGION")
-	templates := os.Getenv("TEMPLATES")
+	templates := "skran-app-ssr-templates"
 
 	cfg, err := config.LoadDefaultConfig(context.TODO())
 	sess := session.Must(session.NewSession(&aws.Config{Endpoint: aws.String(endpoint), Region: aws.String(region), CredentialsChainVerboseErrors: aws.Bool(true)}))
@@ -47,10 +47,10 @@ func Home(w io.Writer) {
 		TableName: aws.String("SkranAppTable"),
 		Key: map[string]*dynamodb.AttributeValue{
 			"Primary": {
-				S: aws.String("RECIPE#5678"),
+				S: aws.String("RECIPE#1234"),
 			},
 			"Sort": {
-				S: aws.String("TITLE#CHICKEN_CURRY"),
+				S: aws.String("TITLE#SPAGHETTI_BOLOGNESE"),
 			},
 		},
 	})

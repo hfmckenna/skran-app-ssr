@@ -266,7 +266,7 @@ func env() *awscdk.Environment {
 	// stacks.
 	//---------------------------------------------------------------------------
 	return &awscdk.Environment{
-		Account: jsii.String(os.Getenv("AWS_ACCOUNT")),
-		Region:  jsii.String(os.Getenv("AWS_DEFAULT_REGION")),
+		Account: jsii.String(os.Getenv("CDK_DEFAULT_ACCOUNT")),
+		Region:  jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
 	}
 }

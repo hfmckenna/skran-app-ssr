@@ -1,5 +1,5 @@
 {
-  "getAllItemsFunction": {
+  "skran-app-ssr-home": {
     "ASSETS_DOMAIN": "https://assets.skran.app",
     "TEMPLATES": "skran-app-ssr-templates",
     "TEMPLATE_DIR": "/tmp"
