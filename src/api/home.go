@@ -17,14 +17,12 @@ import (
 	"path/filepath"
 )
 
-const indexPage = "/tmp/index.html"
-const headPartial = "/tmp/head.html"
-
 func Home(w io.Writer) {
 	endpoint := os.Getenv("DYNAMO_ENDPOINT")
-	assets := os.Getenv("ASSETS_DOMAIN")
 	region := os.Getenv("AWS_REGION")
-	templates := "skran-app-ssr-templates"
+	templates := os.Getenv("TEMPLATES")
+	indexPage := "/tmp/index.html"
+	headPartial := "/tmp/head.html"
 
 	cfg, err := config.LoadDefaultConfig(context.TODO())
 	sess := session.Must(session.NewSession(&aws.Config{Endpoint: aws.String(endpoint), Region: aws.String(region), CredentialsChainVerboseErrors: aws.Bool(true)}))
@@ -68,7 +66,7 @@ func Home(w io.Writer) {
 		PageTitle string
 	}
 	data := Data{
-		Assets:    assets,
+		Assets:    os.Getenv("ASSETS_DOMAIN"),
 		PageTitle: "Skran App",
 	}
 	err = dynamodbattribute.UnmarshalMap(result.Item, &data.Item)
