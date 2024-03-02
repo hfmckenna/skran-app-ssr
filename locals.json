@@ -1,7 +1,6 @@
 {
   "skran-app-ssr-home": {
-    "ASSETS_DOMAIN": "/",
-    "TEMPLATES": "skran-app-ssr-templates",
-    "STATIC_FILES": "http://localhost:3000"
+    "ASSETS_DOMAIN": "https://assets.skran.app",
+    "TEMPLATES": "skran-app-ssr-templates"
   }
 }

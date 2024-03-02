@@ -23,7 +23,6 @@ func Home(w io.Writer) {
 	templates := os.Getenv("TEMPLATES")
 	indexPage := "/tmp/index.html"
 	headPartial := "/tmp/head.html"
-
 	cfg, err := config.LoadDefaultConfig(context.TODO())
 	sess := session.Must(session.NewSession(&aws.Config{Endpoint: aws.String(endpoint), Region: aws.String(region), CredentialsChainVerboseErrors: aws.Bool(true)}))
 	if err != nil {
