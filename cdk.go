@@ -184,7 +184,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		Value: siteBucket.BucketDomainName(),
 	})
 
-	homeHandler := lambda.NewGoFunction(stack, jsii.String("skran-app-ssr-home"), &lambda.GoFunctionProps{
+	ssrHandler := lambda.NewGoFunction(stack, jsii.String("skran-app-ssr-home"), &lambda.GoFunctionProps{
 		FunctionName: jsii.String("skran-app-ssr-home"),
 		Runtime:      awslambda.Runtime_PROVIDED_AL2(),
 		Architecture: awslambda.Architecture_ARM_64(),
@@ -195,12 +195,34 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		},
 	})
 
-	api := apigateway.NewLambdaRestApi(stack, jsii.String("skran-ssr-app-rest"), &apigateway.LambdaRestApiProps{
+	ssr := apigateway.NewLambdaRestApi(stack, jsii.String("skran-ssr-app-rest"), &apigateway.LambdaRestApiProps{
 		DomainName: &apigateway.DomainNameOptions{
 			DomainName:  jsii.String(siteDomain),
 			Certificate: siteCert,
 		},
-		Handler: homeHandler,
+		Handler: ssrHandler,
+	})
+
+	adminHandler := lambda.NewGoFunction(stack, jsii.String("skran-app-ssr-admin"), &lambda.GoFunctionProps{
+		FunctionName: jsii.String("skran-app-ssr-admin"),
+		Runtime:      awslambda.Runtime_PROVIDED_AL2(),
+		Architecture: awslambda.Architecture_ARM_64(),
+		Entry:        jsii.String("./src/admin"),
+		Bundling: &lambda.BundlingOptions{
+			GoBuildFlags: jsii.Strings(`-ldflags "-s -w"`),
+		},
+	})
+
+	adminApi := apigateway.NewLambdaRestApi(stack, jsii.String("skran-app-admin-rest"), &apigateway.LambdaRestApiProps{
+		Handler: adminHandler,
+	})
+
+	adminApi.AddApiKey(jsii.String("AdminKey"), &apigateway.ApiKeyOptions{
+		ApiKeyName: jsii.String("AdminApiKey"),
+	})
+
+	adminApi.AddUsagePlan(jsii.String("AdminUsagePlan"), &apigateway.UsagePlanProps{
+		Name: jsii.String("AdminUsagePlan"),
 	})
 
 	table := dynamodb.NewTable(stack, jsii.String("skran-ssr-app-table"), &dynamodb.TableProps{
@@ -209,13 +231,13 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		TableName:    jsii.String("SkranAppTable"),
 	})
 
-	table.GrantReadData(homeHandler)
-	templates.GrantRead(homeHandler, "*")
+	table.GrantReadData(ssrHandler)
+	templates.GrantRead(ssrHandler, "*")
 
 	route53.NewARecord(stack, jsii.String("skran-app-ssr-route"), &route53.ARecordProps{
 		Zone:       hostedZone,
 		RecordName: jsii.String(siteDomain),
-		Target:     route53.RecordTarget_FromAlias(route53targets.NewApiGateway(api)),
+		Target:     route53.RecordTarget_FromAlias(route53targets.NewApiGateway(ssr)),
 	})
 
 	return stack
