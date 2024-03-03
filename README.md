@@ -41,8 +41,8 @@ erDiagram
 
 | Primary           | Sort                       | type   | attributes                               |
 |-------------------|----------------------------|--------|------------------------------------------|
-| RECIPE#1234       | TITLE#SPAGHETTI_BOLOGNESE  | RECIPE | [Recipe Attributes](./src/api/models.go) |
-| SEARCH#BEEF_MINCE | Beef Mince                 | SEARCH | [Search Attributes](./src/api/models.go) |
+| RECIPE#1234       | TITLE#SPAGHETTI_BOLOGNESE  | RECIPE | [Recipe Attributes](src/ssr/api/models.go) |
+| SEARCH#BEEF_MINCE | Beef Mince                 | SEARCH | [Search Attributes](src/ssr/api/models.go) |
 
 ![Table](./docs/table/DeployStage-SkranVisitorBff-SkranVisitorBffVisitorBffTable5DD409E6-10C5BXR759OQK.png)
 

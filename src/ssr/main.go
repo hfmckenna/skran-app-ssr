@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"skran-app-ssr/src/api"
+	"skran-app-ssr/src/ssr/api"
 )
 
 func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
