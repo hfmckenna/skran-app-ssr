@@ -1,0 +1,682 @@
+Resources:
+  skranappssrcloudfrontoaiE6A68478:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: Allows CloudFront to reach the bucket
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-app-ssr-cloudfront-oai/Resource
+  skranappssrassets61E47A61:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: skran-app-ssr-assets
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      Tags:
+      - Key: aws-cdk:cr-owned:6b0f1978
+        Value: 'true'
+      VersioningConfiguration:
+        Status: Enabled
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-app-ssr-assets/Resource
+  skranappssrassetsPolicy5A9CF437:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: skranappssrassets61E47A61
+      PolicyDocument:
+        Statement:
+        - Action:
+          - s3:GetBucket*
+          - s3:GetObject*
+          - s3:List*
+          Effect: Allow
+          Principal:
+            CanonicalUser:
+              Fn::GetAtt:
+              - skranappssrcloudfrontoaiE6A68478
+              - S3CanonicalUserId
+          Resource:
+          - Fn::GetAtt:
+            - skranappssrassets61E47A61
+            - Arn
+          - Fn::Join:
+            - ''
+            - - Fn::GetAtt:
+                - skranappssrassets61E47A61
+                - Arn
+              - /*
+        - Action: s3:GetObject
+          Effect: Allow
+          Principal:
+            CanonicalUser:
+              Fn::GetAtt:
+              - skranappssrcloudfrontoaiE6A68478
+              - S3CanonicalUserId
+          Resource:
+            Fn::Join:
+            - ''
+            - - Fn::GetAtt:
+                - skranappssrassets61E47A61
+                - Arn
+              - /*
+        Version: '2012-10-17'
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-app-ssr-assets/Policy/Resource
+  skranappssrassetscloudfront20B66A98:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Aliases:
+        - assets.skran.app
+        CustomErrorResponses:
+        - ErrorCode: 403
+          ResponseCode: 403
+          ResponsePagePath: /error.html
+        DefaultCacheBehavior:
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+          Compress: true
+          TargetOriginId: skran-app-ssr-origin
+          ViewerProtocolPolicy: redirect-to-https
+        DefaultRootObject: index.html
+        Enabled: true
+        HttpVersion: http2
+        IPV6Enabled: true
+        Origins:
+        - DomainName:
+            Fn::GetAtt:
+            - skranappssrassets61E47A61
+            - RegionalDomainName
+          Id: skran-app-ssr-origin
+          S3OriginConfig:
+            OriginAccessIdentity:
+              Fn::Join:
+              - ''
+              - - origin-access-identity/cloudfront/
+                - Ref: skranappssrcloudfrontoaiE6A68478
+        ViewerCertificate:
+          AcmCertificateArn: arn:aws:acm:us-east-1:078577008688:certificate/338f23b9-ede8-4359-8a8f-f905510efb2c
+          MinimumProtocolVersion: TLSv1.2_2021
+          SslSupportMethod: sni-only
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-app-ssr-assets-cloudfront/Resource
+  skranappssrassetscloudfrontpublic950289DE:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      AliasTarget:
+        DNSName:
+          Fn::GetAtt:
+          - skranappssrassetscloudfront20B66A98
+          - DomainName
+        HostedZoneId:
+          Fn::FindInMap:
+          - AWSCloudFrontPartitionHostedZoneIdMap
+          - Ref: AWS::Partition
+          - zoneId
+      HostedZoneId: Z04363141L3EHVK8YH362
+      Name: assets.skran.app.
+      Type: A
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-app-ssr-assets-cloudfront-public/Resource
+  skranappssrassetsdeploymentAwsCliLayer6F646357:
+    Type: AWS::Lambda::LayerVersion
+    Properties:
+      Content:
+        S3Bucket: cdk-hnb659fds-assets-078577008688-eu-west-1
+        S3Key: 3fb6287214999ddeafa7cd0e3e58bc5144c8678bb720f3b5e45e8fd32f333eb3.zip
+      Description: /opt/awscli/aws
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-app-ssr-assets-deployment/AwsCliLayer/Resource
+      aws:asset:path: ../../cdk.out/asset.3fb6287214999ddeafa7cd0e3e58bc5144c8678bb720f3b5e45e8fd32f333eb3.zip
+      aws:asset:is-bundled: false
+      aws:asset:property: Content
+  skranappssrassetsdeploymentCustomResource178900F1:
+    Type: Custom::CDKBucketDeployment
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+        - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536
+        - Arn
+      SourceBucketNames:
+      - cdk-hnb659fds-assets-078577008688-eu-west-1
+      SourceObjectKeys:
+      - 83d361b95ae14383d2f615340353b266bd536cafae15d017b824d79e2f8676c0.zip
+      DestinationBucketName:
+        Ref: skranappssrassets61E47A61
+      Prune: true
+      DistributionId:
+        Ref: skranappssrassetscloudfront20B66A98
+      DistributionPaths:
+      - /*
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-app-ssr-assets-deployment/CustomResource/Default
+  CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service: lambda.amazonaws.com
+        Version: '2012-10-17'
+      ManagedPolicyArns:
+      - Fn::Join:
+        - ''
+        - - 'arn:'
+          - Ref: AWS::Partition
+          - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/Resource
+  CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+        - Action:
+          - s3:GetBucket*
+          - s3:GetObject*
+          - s3:List*
+          Effect: Allow
+          Resource:
+          - arn:aws:s3:::cdk-hnb659fds-assets-078577008688-eu-west-1
+          - arn:aws:s3:::cdk-hnb659fds-assets-078577008688-eu-west-1/*
+        - Action:
+          - s3:Abort*
+          - s3:DeleteObject*
+          - s3:GetBucket*
+          - s3:GetObject*
+          - s3:List*
+          - s3:PutObject
+          - s3:PutObjectLegalHold
+          - s3:PutObjectRetention
+          - s3:PutObjectTagging
+          - s3:PutObjectVersionTagging
+          Effect: Allow
+          Resource:
+          - Fn::GetAtt:
+            - skranappssrassets61E47A61
+            - Arn
+          - Fn::GetAtt:
+            - skranappssrtemplatesB6F1DF84
+            - Arn
+          - Fn::Join:
+            - ''
+            - - Fn::GetAtt:
+                - skranappssrassets61E47A61
+                - Arn
+              - /*
+          - Fn::Join:
+            - ''
+            - - Fn::GetAtt:
+                - skranappssrtemplatesB6F1DF84
+                - Arn
+              - /*
+        - Action:
+          - cloudfront:CreateInvalidation
+          - cloudfront:GetInvalidation
+          Effect: Allow
+          Resource: '*'
+        Version: '2012-10-17'
+      PolicyName: CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF
+      Roles:
+      - Ref: CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/DefaultPolicy/Resource
+  CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code: CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536
+      Environment:
+        Variables:
+          AWS_CA_BUNDLE: /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+      Handler: index.handler
+      Layers:
+      - Ref: skranappssrassetsdeploymentAwsCliLayer6F646357
+      Role:
+        Fn::GetAtt:
+        - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265
+        - Arn
+      Runtime: python3.9
+      Timeout: 900
+    DependsOn:
+    - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF
+    - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265
+    Metadata:
+      SamNormalized: true
+      SamResourceId: Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C
+      aws:asset:is-bundled: false
+      aws:asset:path: ../../cdk.out/asset.e976a796f036a5efbf44b99e44cfb5a961df08d8dbf7cd37e60bf216fb982a00
+      aws:asset:property: Code
+      aws:cdk:path: SkranAppSsrStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Resource
+  skranappssrtemplatesB6F1DF84:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: skran-app-ssr-templates
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      Tags:
+      - Key: aws-cdk:cr-owned:64bec82b
+        Value: 'true'
+      VersioningConfiguration:
+        Status: Enabled
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-app-ssr-templates/Resource
+  skranappssrtemplatesdeploymentAwsCliLayer9C7D0701:
+    Type: AWS::Lambda::LayerVersion
+    Properties:
+      Content:
+        S3Bucket: cdk-hnb659fds-assets-078577008688-eu-west-1
+        S3Key: 3fb6287214999ddeafa7cd0e3e58bc5144c8678bb720f3b5e45e8fd32f333eb3.zip
+      Description: /opt/awscli/aws
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-app-ssr-templates-deployment/AwsCliLayer/Resource
+      aws:asset:path: ../../cdk.out/asset.3fb6287214999ddeafa7cd0e3e58bc5144c8678bb720f3b5e45e8fd32f333eb3.zip
+      aws:asset:is-bundled: false
+      aws:asset:property: Content
+  skranappssrtemplatesdeploymentCustomResource84044F38:
+    Type: Custom::CDKBucketDeployment
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+        - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536
+        - Arn
+      SourceBucketNames:
+      - cdk-hnb659fds-assets-078577008688-eu-west-1
+      SourceObjectKeys:
+      - 58bbbe5231600d5aa528452fc605a8d3f91048a3434ab40f61df2a4f7199e187.zip
+      DestinationBucketName:
+        Ref: skranappssrtemplatesB6F1DF84
+      Prune: true
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-app-ssr-templates-deployment/CustomResource/Default
+  skranappssrsitecertAE40BAA6:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: www.skran.app
+      DomainValidationOptions:
+      - DomainName: www.skran.app
+        HostedZoneId: Z04363141L3EHVK8YH362
+      Tags:
+      - Key: Name
+        Value: SkranAppSsrStack/skran-app-ssr-site-cert
+      ValidationMethod: DNS
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-app-ssr-site-cert/Resource
+  skranappssrhomeServiceRoleC40521F7:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service: lambda.amazonaws.com
+        Version: '2012-10-17'
+      ManagedPolicyArns:
+      - Fn::Join:
+        - ''
+        - - 'arn:'
+          - Ref: AWS::Partition
+          - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-app-ssr-home/ServiceRole/Resource
+  skranappssrhomeServiceRoleDefaultPolicy6DD20429:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+        - Action:
+          - dynamodb:BatchGetItem
+          - dynamodb:ConditionCheckItem
+          - dynamodb:DescribeTable
+          - dynamodb:GetItem
+          - dynamodb:GetRecords
+          - dynamodb:GetShardIterator
+          - dynamodb:Query
+          - dynamodb:Scan
+          Effect: Allow
+          Resource:
+          - Fn::GetAtt:
+            - skranssrapptable97607040
+            - Arn
+          - Ref: AWS::NoValue
+        - Action:
+          - s3:GetBucket*
+          - s3:GetObject*
+          - s3:List*
+          Effect: Allow
+          Resource:
+          - Fn::GetAtt:
+            - skranappssrtemplatesB6F1DF84
+            - Arn
+          - Fn::Join:
+            - ''
+            - - Fn::GetAtt:
+                - skranappssrtemplatesB6F1DF84
+                - Arn
+              - /*
+        Version: '2012-10-17'
+      PolicyName: skranappssrhomeServiceRoleDefaultPolicy6DD20429
+      Roles:
+      - Ref: skranappssrhomeServiceRoleC40521F7
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-app-ssr-home/ServiceRole/DefaultPolicy/Resource
+  skranappssrhome3225F723:
+    Type: AWS::Lambda::Function
+    Properties:
+      Architectures:
+      - arm64
+      Code:
+        S3Bucket: cdk-hnb659fds-assets-078577008688-eu-west-1
+        S3Key: 247f45ed3dae8f761ab75cdfa44a1d7c17a61af62ae7b21a58f939cb12bdd9a6.zip
+      Environment:
+        Variables:
+          ASSETS_DOMAIN: https://assets.skran.app
+          TEMPLATES:
+            Ref: skranappssrtemplatesB6F1DF84
+          TEMPLATE_DIR: /tmp
+      FunctionName: skran-app-ssr-home
+      Handler: bootstrap
+      Role:
+        Fn::GetAtt:
+        - skranappssrhomeServiceRoleC40521F7
+        - Arn
+      Runtime: provided.al2
+    DependsOn:
+    - skranappssrhomeServiceRoleDefaultPolicy6DD20429
+    - skranappssrhomeServiceRoleC40521F7
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-app-ssr-home/Resource
+      aws:asset:path: ../../cdk.out/asset.247f45ed3dae8f761ab75cdfa44a1d7c17a61af62ae7b21a58f939cb12bdd9a6
+      aws:asset:is-bundled: true
+      aws:asset:property: Code
+  skranssrapprest41D3DA6C:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: skran-ssr-app-rest
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-ssr-app-rest/Resource
+  skranssrapprestDeployment948F77F25f9b638ade2605b395f90c076ca2fed3:
+    Type: AWS::ApiGateway::Deployment
+    Properties:
+      Description: Automatically created by the RestApi construct
+      RestApiId:
+        Ref: skranssrapprest41D3DA6C
+    DependsOn:
+    - skranssrapprestproxyANY5A1A672D
+    - skranssrapprestproxy96BF0A14
+    - skranssrapprestANY7D7F3D2E
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-ssr-app-rest/Deployment/Resource
+  skranssrapprestDeploymentStageprod6CED3759:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      DeploymentId:
+        Ref: skranssrapprestDeployment948F77F25f9b638ade2605b395f90c076ca2fed3
+      RestApiId:
+        Ref: skranssrapprest41D3DA6C
+      StageName: prod
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-ssr-app-rest/DeploymentStage.prod/Resource
+  skranssrapprestCustomDomainF4F86B10:
+    Type: AWS::ApiGateway::DomainName
+    Properties:
+      DomainName: www.skran.app
+      EndpointConfiguration:
+        Types:
+        - REGIONAL
+      RegionalCertificateArn:
+        Ref: skranappssrsitecertAE40BAA6
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-ssr-app-rest/CustomDomain/Resource
+  skranssrapprestCustomDomainMapSkranAppSsrStackskranssrapprestB732779472910A61:
+    Type: AWS::ApiGateway::BasePathMapping
+    Properties:
+      DomainName:
+        Ref: skranssrapprestCustomDomainF4F86B10
+      RestApiId:
+        Ref: skranssrapprest41D3DA6C
+      Stage:
+        Ref: skranssrapprestDeploymentStageprod6CED3759
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-ssr-app-rest/CustomDomain/Map:--=>SkranAppSsrStackskranssrapprestB7327794/Resource
+  skranssrapprestproxy96BF0A14:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId:
+        Fn::GetAtt:
+        - skranssrapprest41D3DA6C
+        - RootResourceId
+      PathPart: '{proxy+}'
+      RestApiId:
+        Ref: skranssrapprest41D3DA6C
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-ssr-app-rest/Default/{proxy+}/Resource
+  skranssrapprestproxyANYApiPermissionSkranAppSsrStackskranssrapprestB7327794ANYproxy84049670:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+        - skranappssrhome3225F723
+        - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+        - ''
+        - - 'arn:aws:execute-api:eu-west-1:078577008688:'
+          - Ref: skranssrapprest41D3DA6C
+          - /
+          - Ref: skranssrapprestDeploymentStageprod6CED3759
+          - /*/*
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-ssr-app-rest/Default/{proxy+}/ANY/ApiPermission.SkranAppSsrStackskranssrapprestB7327794.ANY..{proxy+}
+  skranssrapprestproxyANYApiPermissionTestSkranAppSsrStackskranssrapprestB7327794ANYproxyAFB6806D:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+        - skranappssrhome3225F723
+        - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+        - ''
+        - - 'arn:aws:execute-api:eu-west-1:078577008688:'
+          - Ref: skranssrapprest41D3DA6C
+          - /test-invoke-stage/*/*
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-ssr-app-rest/Default/{proxy+}/ANY/ApiPermission.Test.SkranAppSsrStackskranssrapprestB7327794.ANY..{proxy+}
+  skranssrapprestproxyANY5A1A672D:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: ANY
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+          - ''
+          - - arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/
+            - Fn::GetAtt:
+              - skranappssrhome3225F723
+              - Arn
+            - /invocations
+      ResourceId:
+        Ref: skranssrapprestproxy96BF0A14
+      RestApiId:
+        Ref: skranssrapprest41D3DA6C
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-ssr-app-rest/Default/{proxy+}/ANY/Resource
+  skranssrapprestANYApiPermissionSkranAppSsrStackskranssrapprestB7327794ANYFFD5F115:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+        - skranappssrhome3225F723
+        - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+        - ''
+        - - 'arn:aws:execute-api:eu-west-1:078577008688:'
+          - Ref: skranssrapprest41D3DA6C
+          - /
+          - Ref: skranssrapprestDeploymentStageprod6CED3759
+          - /*/
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-ssr-app-rest/Default/ANY/ApiPermission.SkranAppSsrStackskranssrapprestB7327794.ANY..
+  skranssrapprestANYApiPermissionTestSkranAppSsrStackskranssrapprestB7327794ANY8C75337A:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+        - skranappssrhome3225F723
+        - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+        - ''
+        - - 'arn:aws:execute-api:eu-west-1:078577008688:'
+          - Ref: skranssrapprest41D3DA6C
+          - /test-invoke-stage/*/
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-ssr-app-rest/Default/ANY/ApiPermission.Test.SkranAppSsrStackskranssrapprestB7327794.ANY..
+  skranssrapprestANY7D7F3D2E:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: ANY
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+          - ''
+          - - arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/
+            - Fn::GetAtt:
+              - skranappssrhome3225F723
+              - Arn
+            - /invocations
+      ResourceId:
+        Fn::GetAtt:
+        - skranssrapprest41D3DA6C
+        - RootResourceId
+      RestApiId:
+        Ref: skranssrapprest41D3DA6C
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-ssr-app-rest/Default/ANY/Resource
+  skranssrapptable97607040:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+      - AttributeName: Primary
+        AttributeType: S
+      - AttributeName: Sort
+        AttributeType: S
+      KeySchema:
+      - AttributeName: Primary
+        KeyType: HASH
+      - AttributeName: Sort
+        KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      TableName: SkranAppTable
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-ssr-app-table/Resource
+  skranappssrroute73B33A8F:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      AliasTarget:
+        DNSName:
+          Fn::GetAtt:
+          - skranssrapprestCustomDomainF4F86B10
+          - RegionalDomainName
+        HostedZoneId:
+          Fn::GetAtt:
+          - skranssrapprestCustomDomainF4F86B10
+          - RegionalHostedZoneId
+      HostedZoneId: Z04363141L3EHVK8YH362
+      Name: www.skran.app.
+      Type: A
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-app-ssr-route/Resource
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Analytics: v2:deflate64:H4sIAAAAAAAA/21SyW7bMBD9Ft8p2k63axUbCQIkjWEXvRpjaixPzUUgKbiCoH8vFyUSgpzmzeNwtjd3fL3+wvvVAm6uENW1kHTi/cGDuLJAHXshTVudrdGe96+WatKlEOjcU4Xak+/Y5qw3MeYhxnwasSXnLZ1aT0bH8Lk/MBfK37fiij6+jSibnZEkuoke/ezcg8OBWdN6/BZSlHsUxlYxOKMD+pj82FfYSNOp0AzPP7fvBAPn0DteRjMwCepUAe9Djmfo0P5B62LPB9K1RG/0Q6tFmuIdhNA53qFV5FwajEDxfm8kpp6inebJaGACraczCfCoQEONNlSfuLTcyR0YNFQHcIOO98+p2z06XzaU585wNl/c9uQFWeuUM4OtUUD6F6jEzby42h34yws0TRg9CfCBCrVMawVGnu2s+de9MWMnGb+gv5gkSkYDqzoNylThyH7DKe8mgWFg8wyz0q+tb1o/inOUUZhjOE0hiZc3t5GUtGJJwzhY+tY6b9RnLQ1sVYBsLsBXi5/j0S+jzfmL2ozPj+ZN2IHVZs3vVvzHsgJ7I70Eq75/Xfx1RIVtw5Er5Pts/wPn+JsKUAMAAA==
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/CDKMetadata/Default
+Mappings:
+  AWSCloudFrontPartitionHostedZoneIdMap:
+    aws:
+      zoneId: Z2FDTNDATAQYW2
+    aws-cn:
+      zoneId: Z3RFFRIM2A3IF5
+Outputs:
+  skranappssrassetspublicendpoint:
+    Value:
+      Ref: skranappssrassetscloudfrontpublic950289DE
+  skranappssrassetscloudfrontendpoint:
+    Value:
+      Fn::GetAtt:
+      - skranappssrassetscloudfront20B66A98
+      - DomainName
+  skranappssrassetsendpoint:
+    Value:
+      Fn::GetAtt:
+      - skranappssrassets61E47A61
+      - DomainName
+  skranssrapprestEndpointBDF6FC7D:
+    Value:
+      Fn::Join:
+      - ''
+      - - https://
+        - Ref: skranssrapprest41D3DA6C
+        - .execute-api.eu-west-1.
+        - Ref: AWS::URLSuffix
+        - /
+        - Ref: skranssrapprestDeploymentStageprod6CED3759
+        - /
+Parameters:
+  BootstrapVersion:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /cdk-bootstrap/hnb659fds/version
+    Description: Version of the CDK Bootstrap resources in this environment, automatically
+      retrieved from SSM Parameter Store. [cdk:skip]
+Rules:
+  CheckBootstrapVersion:
+    Assertions:
+    - Assert:
+        Fn::Not:
+        - Fn::Contains:
+          - - '1'
+            - '2'
+            - '3'
+            - '4'
+            - '5'
+          - Ref: BootstrapVersion
+      AssertDescription: CDK bootstrap stack version 6 required. Please run 'cdk bootstrap'
+        with a recent version of the CDK CLI.
