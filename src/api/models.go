@@ -23,10 +23,9 @@ type Ingredient struct {
 }
 
 type SearchItem struct {
-	Primary     string
-	Sort        string
-	Id          string
-	Title       string
-	Ingredients []string
-	Type        string
+	Primary string
+	Sort    string
+	Title   string
+	Recipes []string
+	Type    string
 }

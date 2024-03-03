@@ -23,6 +23,10 @@
       },
       "NonKeyAttributes": [
         {
+          "AttributeName": "Id",
+            "AttributeType": "S"
+        },
+        {
           "AttributeName": "Type",
           "AttributeType": "S"
         },
@@ -43,10 +47,6 @@
           "AttributeType": "SS"
         },
         {
-          "AttributeName": "Id",
-          "AttributeType": "N"
-        },
-        {
           "AttributeName": "Title",
           "AttributeType": "S"
         }
@@ -63,7 +63,7 @@
             "S": "RECIPE"
           },
           "Id": {
-            "N": "1234"
+            "S": "1234"
           },
           "Title": {
             "S": "Spaghetti Bolognese"
@@ -155,16 +155,16 @@
         },
         {
           "Primary": {
-            "S": "SEARCH#BEEF_MINCE"
+            "S": "SEARCH"
           },
           "Sort": {
             "S": "BEEF_MINCE"
           },
-          "Type": {
-            "S": "SEARCH"
-          },
           "Title": {
             "S": "Beef Mince"
+          },
+          "Type": {
+            "S": "SEARCH"
           },
           "Recipes": {
             "SS": [
@@ -175,16 +175,16 @@
         },
         {
           "Primary": {
-            "S": "SEARCH#GARLIC"
+            "S": "SEARCH"
           },
           "Sort": {
             "S": "GARLIC"
           },
-          "Type": {
-            "S": "SEARCH"
-          },
           "Title": {
             "S": "Garlic"
+          },
+          "Type": {
+            "S": "SEARCH"
           },
           "Recipes": {
             "SS": [
@@ -195,7 +195,7 @@
         },
         {
           "Primary": {
-            "S": "SEARCH#PASTA"
+            "S": "SEARCH"
           },
           "Sort": {
             "S": "PASTA"
@@ -215,7 +215,7 @@
         },
         {
           "Primary": {
-            "S": "SEARCH#TINNED_TOMATOES"
+            "S": "SEARCH"
           },
           "Sort": {
             "S": "TINNED_TOMATOES"

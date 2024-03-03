@@ -15,7 +15,7 @@ Enables the following actions for Visitors to Skran.
 
 ```mermaid
 erDiagram
-    RECIPE ||--o{ SEARCH : searches
+    
     RECIPE {
         string Primary
         string Sort
@@ -26,31 +26,25 @@ erDiagram
         string Instructions
         string Type
     }
+
     SEARCH {
         string Primary
-        string Secondary
-        string Type
-        number Id
+        string Sort
         string Title
-        list Ingredients
+        set Recipes
         string Type
     }
+    RECIPE ||--o{ SEARCH: searches
 ```
 
 ## Table Design
 
-| pk                  | sk                                  | type   | attributes                       |
-|---------------------|-------------------------------------|--------|----------------------------------|
-| RECIPE#1234         | TITLE#SPAGHETTI_BOLOGNESE           | RECIPE | [Recipe Attributes](./models.go) |
-| PRIMARY#BEEF_MINCE  | SECONDARY#SPAGHETTI_BOLOGNESE       | SEARCH | [Search Attributes](./models.go) |
-| PRIMARY#BEEF_MINCE  | SECONDARY#PASTA#SPAGHETTI_BOLOGNESE | SEARCH | [Search Attributes](./models.go) |
+| Primary           | Sort                       | type   | attributes                               |
+|-------------------|----------------------------|--------|------------------------------------------|
+| RECIPE#1234       | TITLE#SPAGHETTI_BOLOGNESE  | RECIPE | [Recipe Attributes](./src/api/models.go) |
+| SEARCH#BEEF_MINCE | Beef Mince                 | SEARCH | [Search Attributes](./src/api/models.go) |
 
-![Table](./docs/table/skran-visitor-bff.png)
-
-| method | url                                 | resource                                   |
-|--------|-------------------------------------|--------------------------------------------|
-| GET    | /recipe/{id}                        | Individual recipe details                  |
-| GET    | /recipes?item=beef_mince&item=pasta | List of recipe ids, titles and ingredients |
+![Table](./docs/table/DeployStage-SkranVisitorBff-SkranVisitorBffVisitorBffTable5DD409E6-10C5BXR759OQK.png)
 
 ## Build
 
@@ -62,6 +56,9 @@ chmod +x tailwindcss-macos-x64
 mv tailwindcss-macos-x64 tailwindcss
 ./tailwindcss -i index.css -o public/index.css --minify 
 ```
+
+### JS
+
 ```bash
 curl -sLO https://unpkg.com/htmx.org@1.9.10/dist/htmx.min.js
 mv htmx.min.js public/htmx.min.js
