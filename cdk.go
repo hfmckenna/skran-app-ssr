@@ -214,16 +214,24 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 	})
 
 	adminApi := apigateway.NewLambdaRestApi(stack, jsii.String("skran-app-admin-rest"), &apigateway.LambdaRestApiProps{
-		Handler: adminHandler,
+		Handler:          adminHandler,
+		ApiKeySourceType: apigateway.ApiKeySourceType_HEADER,
 	})
 
-	adminApi.AddApiKey(jsii.String("AdminKey"), &apigateway.ApiKeyOptions{
+	adminApi.Root().AddMethod(jsii.String("GET"), apigateway.NewLambdaIntegration(adminHandler, nil), &apigateway.MethodOptions{
+		ApiKeyRequired: jsii.Bool(true),
+	})
+
+	key := adminApi.AddApiKey(jsii.String("AdminKey"), &apigateway.ApiKeyOptions{
 		ApiKeyName: jsii.String("AdminApiKey"),
 	})
 
-	adminApi.AddUsagePlan(jsii.String("AdminUsagePlan"), &apigateway.UsagePlanProps{
-		Name: jsii.String("AdminUsagePlan"),
+	usage := adminApi.AddUsagePlan(jsii.String("AdminUsagePlan"), &apigateway.UsagePlanProps{
+		Name:      jsii.String("AdminUsagePlan"),
+		ApiStages: &[]*apigateway.UsagePlanPerApiStage{{Api: adminApi, Stage: adminApi.DeploymentStage()}},
 	})
+
+	usage.AddApiKey(key, &apigateway.AddApiKeyOptions{})
 
 	table := dynamodb.NewTable(stack, jsii.String("skran-ssr-app-table"), &dynamodb.TableProps{
 		PartitionKey: &dynamodb.Attribute{Name: jsii.String("Primary"), Type: dynamodb.AttributeType_STRING},
