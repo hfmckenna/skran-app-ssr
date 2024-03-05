@@ -1,5 +1,5 @@
 {
-  "ModelName": "Skran Visitor BFF",
+  "ModelName": "Skran App SSR",
   "ModelMetadata": {
     "Author": "Hugh",
     "DateCreated": "Jan 07, 2023, 04:29 PM",
@@ -24,7 +24,7 @@
       "NonKeyAttributes": [
         {
           "AttributeName": "Id",
-            "AttributeType": "S"
+          "AttributeType": "S"
         },
         {
           "AttributeName": "Type",
@@ -43,12 +43,24 @@
           "AttributeType": "S"
         },
         {
-          "AttributeName": "Recipes",
-          "AttributeType": "SS"
-        },
-        {
           "AttributeName": "Title",
           "AttributeType": "S"
+        },
+        {
+          "AttributeName": "Deleted",
+          "AttributeType": "BOOL"
+        },
+        {
+          "AttributeName": "Recipe Title",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "Recipe Id",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "TTL",
+          "AttributeType": "N"
         }
       ],
       "TableData": [
@@ -155,82 +167,385 @@
         },
         {
           "Primary": {
-            "S": "SEARCH"
+            "S": "RECIPE#9101"
           },
           "Sort": {
-            "S": "BEEF_MINCE"
+            "S": "TITLE#VEGETABLE_STIR_FRY"
+          },
+          "Type": {
+            "S": "RECIPE"
+          },
+          "Id": {
+            "S": "9101"
+          },
+          "Title": {
+            "S": "Vegetable Stir Fry"
+          },
+          "Components": {
+            "L": [
+              {
+                "M": {
+                  "Title": {
+                    "S": "Vegetables"
+                  },
+                  "Ingredients": {
+                    "L": [
+                      {
+                        "M": {
+                          "Title": {
+                            "S": "Broccoli"
+                          },
+                          "Value": {
+                            "N": "200"
+                          },
+                          "Measurement": {
+                            "S": "grams"
+                          }
+                        }
+                      },
+                      {
+                        "M": {
+                          "Title": {
+                            "S": "Carrots"
+                          },
+                          "Value": {
+                            "N": "200"
+                          },
+                          "Measurement": {
+                            "S": "grams"
+                          }
+                        }
+                      },
+                      {
+                        "M": {
+                          "Title": {
+                            "S": "Bell Peppers"
+                          },
+                          "Value": {
+                            "N": "200"
+                          },
+                          "Measurement": {
+                            "S": "grams"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "M": {
+                  "Title": {
+                    "S": "Sauce"
+                  },
+                  "Ingredients": {
+                    "L": [
+                      {
+                        "M": {
+                          "Title": {
+                            "S": "Soy Sauce"
+                          },
+                          "Value": {
+                            "N": "100"
+                          },
+                          "Measurement": {
+                            "S": "ml"
+                          }
+                        }
+                      },
+                      {
+                        "M": {
+                          "Title": {
+                            "S": "Garlic"
+                          },
+                          "Value": {
+                            "N": "30"
+                          },
+                          "Measurement": {
+                            "S": "grams"
+                          }
+                        }
+                      },
+                      {
+                        "M": {
+                          "Title": {
+                            "S": "Ginger"
+                          },
+                          "Value": {
+                            "N": "30"
+                          },
+                          "Measurement": {
+                            "S": "grams"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "Time": {
+            "N": "20"
+          },
+          "Instructions": {
+            "S": "Stir fry vegetables for 10 minutes, then add sauce and cook for another 10 minutes."
+          }
+        },
+        {
+          "Primary": {
+            "S": "SEARCH#BEEF_MINCE"
+          },
+          "Sort": {
+            "S": "SEARCH#SPAGHETTI_BOLOGNESE"
           },
           "Title": {
             "S": "Beef Mince"
           },
+          "Recipe Title": {
+            "S": "Spaghetti Bolognese"
+          },
+          "Recipe Id": {
+            "S": "1234"
+          },
           "Type": {
             "S": "SEARCH"
           },
-          "Recipes": {
-            "SS": [
-              "1234",
-              "5678"
-            ]
+          "Deleted": {
+            "BOOL": false
           }
         },
         {
           "Primary": {
-            "S": "SEARCH"
+            "S": "SEARCH#GARLIC"
           },
           "Sort": {
-            "S": "GARLIC"
+            "S": "SEARCH#VEGETABLE_STIR_FRY"
           },
           "Title": {
             "S": "Garlic"
           },
+          "Recipe Title": {
+            "S": "Vegetable Stir Fry"
+          },
+          "Recipe Id": {
+            "S": "9101"
+          },
           "Type": {
             "S": "SEARCH"
           },
-          "Recipes": {
-            "SS": [
-              "1234",
-              "5678"
-            ]
+          "Deleted": {
+            "BOOL": false
           }
         },
         {
           "Primary": {
-            "S": "SEARCH"
+            "S": "SEARCH#GARLIC"
           },
           "Sort": {
-            "S": "PASTA"
+            "S": "SEARCH#SPAGHETTI_BOLOGNESE"
+          },
+          "Title": {
+            "S": "Garlic"
+          },
+          "Recipe Title": {
+            "S": "Spaghetti Bolognese"
+          },
+          "Recipe Id": {
+            "S": "1234"
           },
           "Type": {
             "S": "SEARCH"
+          },
+          "Deleted": {
+            "BOOL": false
+          }
+        },
+        {
+          "Primary": {
+            "S": "SEARCH#PASTA"
+          },
+          "Sort": {
+            "S": "SEARCH#SPAGHETTI_BOLOGNESE"
           },
           "Title": {
             "S": "Pasta"
           },
-          "Recipes": {
-            "SS": [
-              "1234",
-              "5678"
-            ]
-          }
-        },
-        {
-          "Primary": {
-            "S": "SEARCH"
+          "Recipe Title": {
+            "S": "Spaghetti Bolognese"
           },
-          "Sort": {
-            "S": "TINNED_TOMATOES"
+          "Recipe Id": {
+            "S": "1234"
           },
           "Type": {
             "S": "SEARCH"
           },
+          "Deleted": {
+            "BOOL": false
+          }
+        },
+        {
+          "Primary": {
+            "S": "SEARCH#TINNED_TOMATOES"
+          },
+          "Sort": {
+            "S": "SEARCH#SPAGHETTI_BOLOGNESE"
+          },
           "Title": {
             "S": "Tinned Tomatoes"
           },
-          "Recipes": {
-            "SS": [
-              "1234",
-              "5678"
-            ]
+          "Recipe Title": {
+            "S": "Spaghetti Bolognese"
+          },
+          "Recipe Id": {
+            "S": "1234"
+          },
+          "Type": {
+            "S": "SEARCH"
+          },
+          "Deleted": {
+            "BOOL": false
+          }
+        },
+        {
+          "Primary": {
+            "S": "SEARCH#PARMESAN"
+          },
+          "Sort": {
+            "S": "SEARCH#SPAGHETTI_BOLOGNESE"
+          },
+          "Title": {
+            "S": "Parmesan"
+          },
+          "Recipe Title": {
+            "S": "Spaghetti Bolognese"
+          },
+          "Recipe Id": {
+            "S": "1234"
+          },
+          "Type": {
+            "S": "SEARCH"
+          },
+          "Deleted": {
+            "BOOL": true
+          },
+          "TTL": {
+            "N": 1673948800
+          }
+        },
+        {
+          "Primary": {
+            "S": "SEARCH#CARROT"
+          },
+          "Sort": {
+            "S": "SEARCH#VEGETABLE_STIR_FRY"
+          },
+          "Title": {
+            "S": "Carrot"
+          },
+          "Recipe Title": {
+            "S": "Vegetable Stir Fry"
+          },
+          "Recipe Id": {
+            "S": "9101"
+          },
+          "Type": {
+            "S": "SEARCH"
+          },
+          "Deleted": {
+            "BOOL": false
+          }
+        },
+        {
+          "Primary": {
+            "S": "SEARCH#GINGER"
+          },
+          "Sort": {
+            "S": "SEARCH#VEGETABLE_STIR_FRY"
+          },
+          "Title": {
+            "S": "Ginger"
+          },
+          "Recipe Title": {
+            "S": "Vegetable Stir Fry"
+          },
+          "Recipe Id": {
+            "S": "9101"
+          },
+          "Type": {
+            "S": "SEARCH"
+          },
+          "Deleted": {
+            "BOOL": false
+          }
+        },
+        {
+          "Primary": {
+            "S": "SEARCH#SOY_SAUCE"
+          },
+          "Sort": {
+            "S": "SEARCH#VEGETABLE_STIR_FRY"
+          },
+          "Title": {
+            "S": "Soy Sauce"
+          },
+          "Recipe Title": {
+            "S": "Vegetable Stir Fry"
+          },
+          "Recipe Id": {
+            "S": "9101"
+          },
+          "Type": {
+            "S": "SEARCH"
+          },
+          "Deleted": {
+            "BOOL": false
+          }
+        },
+        {
+          "Primary": {
+            "S": "SEARCH#BELL_PEPPER"
+          },
+          "Sort": {
+            "S": "SEARCH#VEGETABLE_STIR_FRY"
+          },
+          "Title": {
+            "S": "Bell Pepper"
+          },
+          "Recipe Title": {
+            "S": "Vegetable Stir Fry"
+          },
+          "Recipe Id": {
+            "S": "9101"
+          },
+          "Type": {
+            "S": "SEARCH"
+          },
+          "Deleted": {
+            "BOOL": false
+          }
+        },
+        {
+          "Primary": {
+            "S": "SEARCH#BROCCOLI"
+          },
+          "Sort": {
+            "S": "SEARCH#VEGETABLE_STIR_FRY"
+          },
+          "Title": {
+            "S": "Broccoli"
+          },
+          "Recipe Title": {
+            "S": "Vegetable Stir Fry"
+          },
+          "Recipe Id": {
+            "S": "9101"
+          },
+          "Type": {
+            "S": "SEARCH"
+          },
+          "Deleted": {
+            "BOOL": false
           }
         }
       ],
