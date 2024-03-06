@@ -16,6 +16,7 @@ import (
 	s3deploy "github.com/aws/aws-cdk-go/awscdk/v2/awss3deployment"
 	lambda "github.com/aws/aws-cdk-go/awscdklambdagoalpha/v2"
 	"github.com/aws/constructs-go/constructs/v10"
+	_ "github.com/aws/constructs-go/constructs/v10"
 	"github.com/aws/jsii-runtime-go"
 	"os"
 	"strings"
@@ -218,7 +219,9 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		ApiKeySourceType: apigateway.ApiKeySourceType_HEADER,
 	})
 
-	adminApi.Root().AddMethod(jsii.String("GET"), apigateway.NewLambdaIntegration(adminHandler, nil), &apigateway.MethodOptions{
+	recipe := adminApi.Root().AddResource(jsii.String("recipe"), &apigateway.ResourceOptions{})
+
+	recipe.AddMethod(jsii.String("POST"), apigateway.NewLambdaIntegration(adminHandler, nil), &apigateway.MethodOptions{
 		ApiKeyRequired: jsii.Bool(true),
 	})
 
