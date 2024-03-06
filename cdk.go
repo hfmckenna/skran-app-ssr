@@ -9,6 +9,7 @@ import (
 	origins "github.com/aws/aws-cdk-go/awscdk/v2/awscloudfrontorigins"
 	dynamodb "github.com/aws/aws-cdk-go/awscdk/v2/awsdynamodb"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awslambda"
+	awslambdaeventsources "github.com/aws/aws-cdk-go/awscdk/v2/awslambdaeventsources"
 	route53 "github.com/aws/aws-cdk-go/awscdk/v2/awsroute53"
 	route53targets "github.com/aws/aws-cdk-go/awscdk/v2/awsroute53targets"
 	s3 "github.com/aws/aws-cdk-go/awscdk/v2/awss3"
@@ -204,44 +205,28 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		Handler: ssrHandler,
 	})
 
-	adminHandler := lambda.NewGoFunction(stack, jsii.String("skran-app-ssr-admin"), &lambda.GoFunctionProps{
-		FunctionName: jsii.String("skran-app-ssr-admin"),
+	trigger := lambda.NewGoFunction(stack, jsii.String("skran-ssr-app-trigger"), &lambda.GoFunctionProps{
+		FunctionName: jsii.String("skran-app-ssr-trigger"),
 		Runtime:      awslambda.Runtime_PROVIDED_AL2(),
 		Architecture: awslambda.Architecture_ARM_64(),
-		Entry:        jsii.String("./src/admin"),
+		Entry:        jsii.String("./src/trigger"),
 		Bundling: &lambda.BundlingOptions{
 			GoBuildFlags: jsii.Strings(`-ldflags "-s -w"`),
 		},
 	})
 
-	adminApi := apigateway.NewLambdaRestApi(stack, jsii.String("skran-app-admin-rest"), &apigateway.LambdaRestApiProps{
-		Handler:          adminHandler,
-		ApiKeySourceType: apigateway.ApiKeySourceType_HEADER,
-	})
-
-	recipe := adminApi.Root().AddResource(jsii.String("recipe"), &apigateway.ResourceOptions{})
-
-	recipe.AddMethod(jsii.String("POST"), apigateway.NewLambdaIntegration(adminHandler, nil), &apigateway.MethodOptions{
-		ApiKeyRequired: jsii.Bool(true),
-	})
-
-	key := adminApi.AddApiKey(jsii.String("AdminKey"), &apigateway.ApiKeyOptions{
-		ApiKeyName: jsii.String("AdminApiKey"),
-	})
-
-	usage := adminApi.AddUsagePlan(jsii.String("AdminUsagePlan"), &apigateway.UsagePlanProps{
-		Name:      jsii.String("AdminUsagePlan"),
-		ApiStages: &[]*apigateway.UsagePlanPerApiStage{{Api: adminApi, Stage: adminApi.DeploymentStage()}},
-	})
-
-	usage.AddApiKey(key, &apigateway.AddApiKeyOptions{})
-
 	table := dynamodb.NewTable(stack, jsii.String("skran-ssr-app-table"), &dynamodb.TableProps{
 		PartitionKey: &dynamodb.Attribute{Name: jsii.String("Primary"), Type: dynamodb.AttributeType_STRING},
 		SortKey:      &dynamodb.Attribute{Name: jsii.String("Sort"), Type: dynamodb.AttributeType_STRING},
 		TableName:    jsii.String("SkranAppTable"),
+		Stream:       dynamodb.StreamViewType_NEW_AND_OLD_IMAGES,
 	})
 
+	trigger.AddEventSource(awslambdaeventsources.NewDynamoEventSource(table, &awslambdaeventsources.DynamoEventSourceProps{
+		StartingPosition: awslambda.StartingPosition_TRIM_HORIZON,
+	}))
+
+	table.GrantWriteData(trigger)
 	table.GrantReadData(ssrHandler)
 	templates.GrantRead(ssrHandler, "*")
 
