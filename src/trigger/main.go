@@ -13,7 +13,7 @@ import (
 	models "skran-app-ssr/src"
 )
 
-func HandleRequest(uow events.DynamoDBEvent) {
+func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 	region := os.Getenv("AWS_REGION")
 	sess := session.Must(session.NewSession(&aws.Config{Region: aws.String(region)}))
 	svc := dynamodb.New(sess)
@@ -27,7 +27,7 @@ func HandleRequest(uow events.DynamoDBEvent) {
 			var title string
 			stringErr := attributevalue.Unmarshal(v.Dynamodb.NewImage["Id"], &title)
 			if stringErr != nil {
-				return
+				log.Fatalln("error:", stringErr)
 			}
 			req, err := svc.PutItemRequest(&dynamodb.PutItemInput{
 				TableName: aws.String("SkranAppTable"),
@@ -42,10 +42,11 @@ func HandleRequest(uow events.DynamoDBEvent) {
 			}
 			err2 := req.Send()
 			if err2 != nil {
-				log.Fatalln("error:", err)
+				log.Fatalln("error:", err2)
 			}
 		}
 	}
+	return uow, nil
 }
 
 func main() {
