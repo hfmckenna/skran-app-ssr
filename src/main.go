@@ -1,15 +1,14 @@
-package models
+package src
 
 import (
 	"bytes"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"skran-app-ssr/src/api"
 )
 
 func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var buf bytes.Buffer
-	api.Home(&buf)
+	Home(&buf)
 	s := buf.String()
 	return events.APIGatewayProxyResponse{StatusCode: 200, Headers: map[string]string{"Content-Type": "text/html"}, Body: s}, nil
 }

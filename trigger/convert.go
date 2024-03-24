@@ -1,4 +1,4 @@
-package models
+package trigger
 
 import (
 	"fmt"

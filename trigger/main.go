@@ -10,14 +10,13 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"log"
 	"os"
-	models "skran-app-ssr/src"
 )
 
 func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 	region := os.Getenv("AWS_REGION")
 	sess := session.Must(session.NewSession(&aws.Config{Region: aws.String(region)}))
 	svc := dynamodb.New(sess)
-	records, err := models.FromDynamoDBEvent(uow)
+	records, err := FromDynamoDBEvent(uow)
 	if err != nil {
 		log.Fatalln("error:", err)
 	}

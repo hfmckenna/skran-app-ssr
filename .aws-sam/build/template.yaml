@@ -118,7 +118,7 @@ Resources:
           - AWSCloudFrontPartitionHostedZoneIdMap
           - Ref: AWS::Partition
           - zoneId
-      HostedZoneId: DUMMY
+      HostedZoneId: Z04363141L3EHVK8YH362
       Name: assets.skran.app.
       Type: A
     Metadata:
@@ -127,7 +127,7 @@ Resources:
     Type: AWS::Lambda::LayerVersion
     Properties:
       Content:
-        S3Bucket: cdk-hnb659fds-assets-340275517711-eu-west-1
+        S3Bucket: cdk-hnb659fds-assets-078577008688-eu-west-1
         S3Key: 3fb6287214999ddeafa7cd0e3e58bc5144c8678bb720f3b5e45e8fd32f333eb3.zip
       Description: /opt/awscli/aws
     Metadata:
@@ -143,7 +143,7 @@ Resources:
         - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536
         - Arn
       SourceBucketNames:
-      - cdk-hnb659fds-assets-340275517711-eu-west-1
+      - cdk-hnb659fds-assets-078577008688-eu-west-1
       SourceObjectKeys:
       - 29f5e4a141b60cbf9550e4d414ce0ceac358456cac955201582d7e0af6574aae.zip
       DestinationBucketName:
@@ -186,8 +186,8 @@ Resources:
           - s3:List*
           Effect: Allow
           Resource:
-          - arn:aws:s3:::cdk-hnb659fds-assets-340275517711-eu-west-1
-          - arn:aws:s3:::cdk-hnb659fds-assets-340275517711-eu-west-1/*
+          - arn:aws:s3:::cdk-hnb659fds-assets-078577008688-eu-west-1
+          - arn:aws:s3:::cdk-hnb659fds-assets-078577008688-eu-west-1/*
         - Action:
           - s3:Abort*
           - s3:DeleteObject*
@@ -278,7 +278,7 @@ Resources:
     Type: AWS::Lambda::LayerVersion
     Properties:
       Content:
-        S3Bucket: cdk-hnb659fds-assets-340275517711-eu-west-1
+        S3Bucket: cdk-hnb659fds-assets-078577008688-eu-west-1
         S3Key: 3fb6287214999ddeafa7cd0e3e58bc5144c8678bb720f3b5e45e8fd32f333eb3.zip
       Description: /opt/awscli/aws
     Metadata:
@@ -294,7 +294,7 @@ Resources:
         - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536
         - Arn
       SourceBucketNames:
-      - cdk-hnb659fds-assets-340275517711-eu-west-1
+      - cdk-hnb659fds-assets-078577008688-eu-west-1
       SourceObjectKeys:
       - e3a41ac0ef5fb6af79e97dbdd29ff8dc3cf7df7c44ce8b7091f62471b79891ca.zip
       DestinationBucketName:
@@ -310,7 +310,7 @@ Resources:
       DomainName: www.skran.app
       DomainValidationOptions:
       - DomainName: www.skran.app
-        HostedZoneId: DUMMY
+        HostedZoneId: Z04363141L3EHVK8YH362
       Tags:
       - Key: Name
         Value: SkranAppSsrStack/skran-app-ssr-site-cert
@@ -382,8 +382,8 @@ Resources:
       Architectures:
       - arm64
       Code:
-        S3Bucket: cdk-hnb659fds-assets-340275517711-eu-west-1
-        S3Key: 30b78150e247e69613ec6be63b6ed6ac0a585ff643768c4046ae853a432671aa.zip
+        S3Bucket: cdk-hnb659fds-assets-078577008688-eu-west-1
+        S3Key: 759760a859184288e8c7420df531ec9258022a38064a24fc8dd6537e3dd8fdd3.zip
       Environment:
         Variables:
           ASSETS_DOMAIN: https://assets.skran.app
@@ -402,7 +402,7 @@ Resources:
     - skranappssrhomeServiceRoleC40521F7
     Metadata:
       aws:cdk:path: SkranAppSsrStack/skran-app-ssr-home/Resource
-      aws:asset:path: ../../cdk.out/asset.30b78150e247e69613ec6be63b6ed6ac0a585ff643768c4046ae853a432671aa
+      aws:asset:path: ../../cdk.out/asset.759760a859184288e8c7420df531ec9258022a38064a24fc8dd6537e3dd8fdd3
       aws:asset:is-bundled: true
       aws:asset:property: Code
   skranssrapprest41D3DA6C:
@@ -479,7 +479,7 @@ Resources:
       SourceArn:
         Fn::Join:
         - ''
-        - - 'arn:aws:execute-api:eu-west-1:340275517711:'
+        - - 'arn:aws:execute-api:eu-west-1:078577008688:'
           - Ref: skranssrapprest41D3DA6C
           - /
           - Ref: skranssrapprestDeploymentStageprod6CED3759
@@ -498,7 +498,7 @@ Resources:
       SourceArn:
         Fn::Join:
         - ''
-        - - 'arn:aws:execute-api:eu-west-1:340275517711:'
+        - - 'arn:aws:execute-api:eu-west-1:078577008688:'
           - Ref: skranssrapprest41D3DA6C
           - /test-invoke-stage/*/*
     Metadata:
@@ -537,7 +537,7 @@ Resources:
       SourceArn:
         Fn::Join:
         - ''
-        - - 'arn:aws:execute-api:eu-west-1:340275517711:'
+        - - 'arn:aws:execute-api:eu-west-1:078577008688:'
           - Ref: skranssrapprest41D3DA6C
           - /
           - Ref: skranssrapprestDeploymentStageprod6CED3759
@@ -556,7 +556,7 @@ Resources:
       SourceArn:
         Fn::Join:
         - ''
-        - - 'arn:aws:execute-api:eu-west-1:340275517711:'
+        - - 'arn:aws:execute-api:eu-west-1:078577008688:'
           - Ref: skranssrapprest41D3DA6C
           - /test-invoke-stage/*/
     Metadata:
@@ -644,8 +644,8 @@ Resources:
       Architectures:
       - arm64
       Code:
-        S3Bucket: cdk-hnb659fds-assets-340275517711-eu-west-1
-        S3Key: 129c1a51e70456abcef858a635b460f40d63354667e903b31e27772653d9fc1c.zip
+        S3Bucket: cdk-hnb659fds-assets-078577008688-eu-west-1
+        S3Key: 1ed46f84db51d1d2cc858de23be9f2870fedc4f6d5152a0c048f804727f02086.zip
       FunctionName: skran-app-ssr-trigger
       Handler: bootstrap
       Role:
@@ -658,7 +658,7 @@ Resources:
     - skranssrapptriggerServiceRole7747A113
     Metadata:
       aws:cdk:path: SkranAppSsrStack/skran-ssr-app-trigger/Resource
-      aws:asset:path: ../../cdk.out/asset.129c1a51e70456abcef858a635b460f40d63354667e903b31e27772653d9fc1c
+      aws:asset:path: ../../cdk.out/asset.1ed46f84db51d1d2cc858de23be9f2870fedc4f6d5152a0c048f804727f02086
       aws:asset:is-bundled: true
       aws:asset:property: Code
   skranssrapptriggerEventInvokeConfig1F2ACD7A:
@@ -719,7 +719,7 @@ Resources:
           Fn::GetAtt:
           - skranssrapprestCustomDomainF4F86B10
           - RegionalHostedZoneId
-      HostedZoneId: DUMMY
+      HostedZoneId: Z04363141L3EHVK8YH362
       Name: www.skran.app.
       Type: A
     Metadata:

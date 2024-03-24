@@ -209,7 +209,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		FunctionName: jsii.String("skran-app-ssr-trigger"),
 		Runtime:      awslambda.Runtime_PROVIDED_AL2(),
 		Architecture: awslambda.Architecture_ARM_64(),
-		Entry:        jsii.String("./src/trigger"),
+		Entry:        jsii.String("./trigger"),
 		Bundling: &lambda.BundlingOptions{
 			GoBuildFlags: jsii.Strings(`-ldflags "-s -w"`),
 		},
