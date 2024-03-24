@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"log"
 	"os"
 	models "skran-app-ssr/src"
 )
@@ -18,7 +19,7 @@ func HandleRequest(uow events.DynamoDBEvent) {
 	svc := dynamodb.New(sess)
 	records, err := models.FromDynamoDBEvent(uow)
 	if err != nil {
-		return
+		log.Fatalln("error:", err)
 	}
 	stream := sliceToStream(records)
 	for v := range stream {
@@ -28,7 +29,7 @@ func HandleRequest(uow events.DynamoDBEvent) {
 			if stringErr != nil {
 				return
 			}
-			svc.PutItemRequest(&dynamodb.PutItemInput{
+			req, err := svc.PutItemRequest(&dynamodb.PutItemInput{
 				TableName: aws.String("SkranAppTable"),
 				Item: map[string]*dynamodb.AttributeValue{
 					"Primary": {
@@ -36,6 +37,13 @@ func HandleRequest(uow events.DynamoDBEvent) {
 					},
 				},
 			})
+			if err != nil {
+				log.Fatalln("error:", err)
+			}
+			err2 := req.Send()
+			if err2 != nil {
+				log.Fatalln("error:", err)
+			}
 		}
 	}
 }

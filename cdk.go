@@ -18,7 +18,6 @@ import (
 	lambda "github.com/aws/aws-cdk-go/awscdklambdagoalpha/v2"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/constructs-go/constructs/v10"
-	_ "github.com/aws/constructs-go/constructs/v10"
 	"github.com/aws/jsii-runtime-go"
 	"os"
 	"strings"
