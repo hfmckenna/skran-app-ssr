@@ -16,6 +16,7 @@ import (
 	s3assets "github.com/aws/aws-cdk-go/awscdk/v2/awss3assets"
 	s3deploy "github.com/aws/aws-cdk-go/awscdk/v2/awss3deployment"
 	lambda "github.com/aws/aws-cdk-go/awscdklambdagoalpha/v2"
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/constructs-go/constructs/v10"
 	_ "github.com/aws/constructs-go/constructs/v10"
 	"github.com/aws/jsii-runtime-go"
@@ -213,6 +214,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		Bundling: &lambda.BundlingOptions{
 			GoBuildFlags: jsii.Strings(`-ldflags "-s -w"`),
 		},
+		RetryAttempts: aws.Float64(0),
 	})
 
 	table := dynamodb.NewTable(stack, jsii.String("skran-ssr-app-table"), &dynamodb.TableProps{
@@ -224,6 +226,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 
 	trigger.AddEventSource(awslambdaeventsources.NewDynamoEventSource(table, &awslambdaeventsources.DynamoEventSourceProps{
 		StartingPosition: awslambda.StartingPosition_TRIM_HORIZON,
+		RetryAttempts:    aws.Float64(0),
 	}))
 
 	table.GrantWriteData(trigger)
