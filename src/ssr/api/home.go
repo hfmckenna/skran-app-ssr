@@ -15,16 +15,16 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"skran-app-ssr/src"
 )
 
 func Home(w io.Writer) {
-	endpoint := os.Getenv("DYNAMO_ENDPOINT")
 	region := os.Getenv("AWS_REGION")
 	templates := os.Getenv("TEMPLATES")
 	indexPage := "/tmp/index.html"
 	headPartial := "/tmp/head.html"
 	cfg, err := config.LoadDefaultConfig(context.TODO())
-	sess := session.Must(session.NewSession(&aws.Config{Endpoint: aws.String(endpoint), Region: aws.String(region), CredentialsChainVerboseErrors: aws.Bool(true)}))
+	sess := session.Must(session.NewSession(&aws.Config{Region: aws.String(region)}))
 	if err != nil {
 		log.Printf("error: %v", err)
 		return
@@ -60,7 +60,7 @@ func Home(w io.Writer) {
 		return
 	}
 	type Data struct {
-		Item      RecipeItem
+		Item      models.RecipeItem
 		Assets    string
 		PageTitle string
 	}
