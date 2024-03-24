@@ -45,7 +45,7 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 			}
 		}
 	}
-	return uow, nil
+	return events.DynamoDBEvent{}, nil
 }
 
 func main() {
