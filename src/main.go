@@ -1,10 +1,10 @@
-package ssr
+package models
 
 import (
 	"bytes"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"skran-app-ssr/src/ssr/api"
+	"skran-app-ssr/src/api"
 )
 
 func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {

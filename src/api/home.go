@@ -15,7 +15,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"skran-app-ssr/src"
 )
 
 func Home(w io.Writer) {
@@ -60,7 +59,7 @@ func Home(w io.Writer) {
 		return
 	}
 	type Data struct {
-		Item      models.RecipeItem
+		Item      RecipeItem
 		Assets    string
 		PageTitle string
 	}

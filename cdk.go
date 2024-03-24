@@ -188,9 +188,9 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 
 	ssrHandler := lambda.NewGoFunction(stack, jsii.String("skran-app-ssr-home"), &lambda.GoFunctionProps{
 		FunctionName: jsii.String("skran-app-ssr-home"),
-		Runtime:      awslambda.Runtime_PROVIDED_AL2023(),
+		Runtime:      awslambda.Runtime_PROVIDED_AL2(),
 		Architecture: awslambda.Architecture_ARM_64(),
-		Entry:        jsii.String("./src/ssr"),
+		Entry:        jsii.String("./src"),
 		Environment:  &map[string]*string{"TEMPLATES": templates.BucketName(), "ASSETS_DOMAIN": jsii.String("https://assets.skran.app"), "TEMPLATE_DIR": jsii.String("/tmp")},
 		Bundling: &lambda.BundlingOptions{
 			GoBuildFlags: jsii.Strings(`-ldflags "-s -w"`),
@@ -208,7 +208,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 	trigger := lambda.NewGoFunction(stack, jsii.String("skran-ssr-app-trigger"), &lambda.GoFunctionProps{
 		FunctionName: jsii.String("skran-app-ssr-trigger"),
 		Runtime:      awslambda.Runtime_PROVIDED_AL2(),
-		Architecture: awslambda.Architecture_X86_64(),
+		Architecture: awslambda.Architecture_ARM_64(),
 		Entry:        jsii.String("./src/trigger"),
 		Bundling: &lambda.BundlingOptions{
 			GoBuildFlags: jsii.Strings(`-ldflags "-s -w"`),

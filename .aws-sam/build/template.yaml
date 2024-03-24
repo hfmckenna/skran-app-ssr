@@ -118,7 +118,7 @@ Resources:
           - AWSCloudFrontPartitionHostedZoneIdMap
           - Ref: AWS::Partition
           - zoneId
-      HostedZoneId: Z04363141L3EHVK8YH362
+      HostedZoneId: DUMMY
       Name: assets.skran.app.
       Type: A
     Metadata:
@@ -127,7 +127,7 @@ Resources:
     Type: AWS::Lambda::LayerVersion
     Properties:
       Content:
-        S3Bucket: cdk-hnb659fds-assets-078577008688-eu-west-1
+        S3Bucket: cdk-hnb659fds-assets-340275517711-eu-west-1
         S3Key: 3fb6287214999ddeafa7cd0e3e58bc5144c8678bb720f3b5e45e8fd32f333eb3.zip
       Description: /opt/awscli/aws
     Metadata:
@@ -143,9 +143,9 @@ Resources:
         - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536
         - Arn
       SourceBucketNames:
-      - cdk-hnb659fds-assets-078577008688-eu-west-1
+      - cdk-hnb659fds-assets-340275517711-eu-west-1
       SourceObjectKeys:
-      - 83d361b95ae14383d2f615340353b266bd536cafae15d017b824d79e2f8676c0.zip
+      - 29f5e4a141b60cbf9550e4d414ce0ceac358456cac955201582d7e0af6574aae.zip
       DestinationBucketName:
         Ref: skranappssrassets61E47A61
       Prune: true
@@ -186,8 +186,8 @@ Resources:
           - s3:List*
           Effect: Allow
           Resource:
-          - arn:aws:s3:::cdk-hnb659fds-assets-078577008688-eu-west-1
-          - arn:aws:s3:::cdk-hnb659fds-assets-078577008688-eu-west-1/*
+          - arn:aws:s3:::cdk-hnb659fds-assets-340275517711-eu-west-1
+          - arn:aws:s3:::cdk-hnb659fds-assets-340275517711-eu-west-1/*
         - Action:
           - s3:Abort*
           - s3:DeleteObject*
@@ -278,7 +278,7 @@ Resources:
     Type: AWS::Lambda::LayerVersion
     Properties:
       Content:
-        S3Bucket: cdk-hnb659fds-assets-078577008688-eu-west-1
+        S3Bucket: cdk-hnb659fds-assets-340275517711-eu-west-1
         S3Key: 3fb6287214999ddeafa7cd0e3e58bc5144c8678bb720f3b5e45e8fd32f333eb3.zip
       Description: /opt/awscli/aws
     Metadata:
@@ -294,9 +294,9 @@ Resources:
         - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536
         - Arn
       SourceBucketNames:
-      - cdk-hnb659fds-assets-078577008688-eu-west-1
+      - cdk-hnb659fds-assets-340275517711-eu-west-1
       SourceObjectKeys:
-      - 58bbbe5231600d5aa528452fc605a8d3f91048a3434ab40f61df2a4f7199e187.zip
+      - e3a41ac0ef5fb6af79e97dbdd29ff8dc3cf7df7c44ce8b7091f62471b79891ca.zip
       DestinationBucketName:
         Ref: skranappssrtemplatesB6F1DF84
       Prune: true
@@ -310,7 +310,7 @@ Resources:
       DomainName: www.skran.app
       DomainValidationOptions:
       - DomainName: www.skran.app
-        HostedZoneId: Z04363141L3EHVK8YH362
+        HostedZoneId: DUMMY
       Tags:
       - Key: Name
         Value: SkranAppSsrStack/skran-app-ssr-site-cert
@@ -382,8 +382,8 @@ Resources:
       Architectures:
       - arm64
       Code:
-        S3Bucket: cdk-hnb659fds-assets-078577008688-eu-west-1
-        S3Key: 247f45ed3dae8f761ab75cdfa44a1d7c17a61af62ae7b21a58f939cb12bdd9a6.zip
+        S3Bucket: cdk-hnb659fds-assets-340275517711-eu-west-1
+        S3Key: 30b78150e247e69613ec6be63b6ed6ac0a585ff643768c4046ae853a432671aa.zip
       Environment:
         Variables:
           ASSETS_DOMAIN: https://assets.skran.app
@@ -402,7 +402,7 @@ Resources:
     - skranappssrhomeServiceRoleC40521F7
     Metadata:
       aws:cdk:path: SkranAppSsrStack/skran-app-ssr-home/Resource
-      aws:asset:path: ../../cdk.out/asset.247f45ed3dae8f761ab75cdfa44a1d7c17a61af62ae7b21a58f939cb12bdd9a6
+      aws:asset:path: ../../cdk.out/asset.30b78150e247e69613ec6be63b6ed6ac0a585ff643768c4046ae853a432671aa
       aws:asset:is-bundled: true
       aws:asset:property: Code
   skranssrapprest41D3DA6C:
@@ -479,7 +479,7 @@ Resources:
       SourceArn:
         Fn::Join:
         - ''
-        - - 'arn:aws:execute-api:eu-west-1:078577008688:'
+        - - 'arn:aws:execute-api:eu-west-1:340275517711:'
           - Ref: skranssrapprest41D3DA6C
           - /
           - Ref: skranssrapprestDeploymentStageprod6CED3759
@@ -498,7 +498,7 @@ Resources:
       SourceArn:
         Fn::Join:
         - ''
-        - - 'arn:aws:execute-api:eu-west-1:078577008688:'
+        - - 'arn:aws:execute-api:eu-west-1:340275517711:'
           - Ref: skranssrapprest41D3DA6C
           - /test-invoke-stage/*/*
     Metadata:
@@ -537,7 +537,7 @@ Resources:
       SourceArn:
         Fn::Join:
         - ''
-        - - 'arn:aws:execute-api:eu-west-1:078577008688:'
+        - - 'arn:aws:execute-api:eu-west-1:340275517711:'
           - Ref: skranssrapprest41D3DA6C
           - /
           - Ref: skranssrapprestDeploymentStageprod6CED3759
@@ -556,7 +556,7 @@ Resources:
       SourceArn:
         Fn::Join:
         - ''
-        - - 'arn:aws:execute-api:eu-west-1:078577008688:'
+        - - 'arn:aws:execute-api:eu-west-1:340275517711:'
           - Ref: skranssrapprest41D3DA6C
           - /test-invoke-stage/*/
     Metadata:
@@ -585,6 +585,105 @@ Resources:
         Ref: skranssrapprest41D3DA6C
     Metadata:
       aws:cdk:path: SkranAppSsrStack/skran-ssr-app-rest/Default/ANY/Resource
+  skranssrapptriggerServiceRole7747A113:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service: lambda.amazonaws.com
+        Version: '2012-10-17'
+      ManagedPolicyArns:
+      - Fn::Join:
+        - ''
+        - - 'arn:'
+          - Ref: AWS::Partition
+          - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-ssr-app-trigger/ServiceRole/Resource
+  skranssrapptriggerServiceRoleDefaultPolicy42E418E9:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+        - Action: dynamodb:ListStreams
+          Effect: Allow
+          Resource: '*'
+        - Action:
+          - dynamodb:DescribeStream
+          - dynamodb:GetRecords
+          - dynamodb:GetShardIterator
+          Effect: Allow
+          Resource:
+            Fn::GetAtt:
+            - skranssrapptable97607040
+            - StreamArn
+        - Action:
+          - dynamodb:BatchWriteItem
+          - dynamodb:DeleteItem
+          - dynamodb:DescribeTable
+          - dynamodb:PutItem
+          - dynamodb:UpdateItem
+          Effect: Allow
+          Resource:
+          - Fn::GetAtt:
+            - skranssrapptable97607040
+            - Arn
+          - Ref: AWS::NoValue
+        Version: '2012-10-17'
+      PolicyName: skranssrapptriggerServiceRoleDefaultPolicy42E418E9
+      Roles:
+      - Ref: skranssrapptriggerServiceRole7747A113
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-ssr-app-trigger/ServiceRole/DefaultPolicy/Resource
+  skranssrapptrigger9D7781D0:
+    Type: AWS::Lambda::Function
+    Properties:
+      Architectures:
+      - arm64
+      Code:
+        S3Bucket: cdk-hnb659fds-assets-340275517711-eu-west-1
+        S3Key: 129c1a51e70456abcef858a635b460f40d63354667e903b31e27772653d9fc1c.zip
+      FunctionName: skran-app-ssr-trigger
+      Handler: bootstrap
+      Role:
+        Fn::GetAtt:
+        - skranssrapptriggerServiceRole7747A113
+        - Arn
+      Runtime: provided.al2
+    DependsOn:
+    - skranssrapptriggerServiceRoleDefaultPolicy42E418E9
+    - skranssrapptriggerServiceRole7747A113
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-ssr-app-trigger/Resource
+      aws:asset:path: ../../cdk.out/asset.129c1a51e70456abcef858a635b460f40d63354667e903b31e27772653d9fc1c
+      aws:asset:is-bundled: true
+      aws:asset:property: Code
+  skranssrapptriggerEventInvokeConfig1F2ACD7A:
+    Type: AWS::Lambda::EventInvokeConfig
+    Properties:
+      FunctionName:
+        Ref: skranssrapptrigger9D7781D0
+      MaximumRetryAttempts: 0
+      Qualifier: $LATEST
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-ssr-app-trigger/EventInvokeConfig/Resource
+  skranssrapptriggerDynamoDBEventSourceSkranAppSsrStackskranssrapptable23BC17E994087AC6:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      BatchSize: 100
+      EventSourceArn:
+        Fn::GetAtt:
+        - skranssrapptable97607040
+        - StreamArn
+      FunctionName:
+        Ref: skranssrapptrigger9D7781D0
+      MaximumRetryAttempts: 0
+      StartingPosition: TRIM_HORIZON
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-ssr-app-trigger/DynamoDBEventSource:SkranAppSsrStackskranssrapptable23BC17E9/Resource
   skranssrapptable97607040:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -601,6 +700,8 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
       TableName: SkranAppTable
     UpdateReplacePolicy: Retain
     DeletionPolicy: Retain
@@ -618,7 +719,7 @@ Resources:
           Fn::GetAtt:
           - skranssrapprestCustomDomainF4F86B10
           - RegionalHostedZoneId
-      HostedZoneId: Z04363141L3EHVK8YH362
+      HostedZoneId: DUMMY
       Name: www.skran.app.
       Type: A
     Metadata:
@@ -626,7 +727,7 @@ Resources:
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:
-      Analytics: v2:deflate64:H4sIAAAAAAAA/21SyW7bMBD9Ft8p2k63axUbCQIkjWEXvRpjaixPzUUgKbiCoH8vFyUSgpzmzeNwtjd3fL3+wvvVAm6uENW1kHTi/cGDuLJAHXshTVudrdGe96+WatKlEOjcU4Xak+/Y5qw3MeYhxnwasSXnLZ1aT0bH8Lk/MBfK37fiij6+jSibnZEkuoke/ezcg8OBWdN6/BZSlHsUxlYxOKMD+pj82FfYSNOp0AzPP7fvBAPn0DteRjMwCepUAe9Djmfo0P5B62LPB9K1RG/0Q6tFmuIdhNA53qFV5FwajEDxfm8kpp6inebJaGACraczCfCoQEONNlSfuLTcyR0YNFQHcIOO98+p2z06XzaU585wNl/c9uQFWeuUM4OtUUD6F6jEzby42h34yws0TRg9CfCBCrVMawVGnu2s+de9MWMnGb+gv5gkSkYDqzoNylThyH7DKe8mgWFg8wyz0q+tb1o/inOUUZhjOE0hiZc3t5GUtGJJwzhY+tY6b9RnLQ1sVYBsLsBXi5/j0S+jzfmL2ozPj+ZN2IHVZs3vVvzHsgJ7I70Eq75/Xfx1RIVtw5Er5Pts/wPn+JsKUAMAAA==
+      Analytics: v2:deflate64:H4sIAAAAAAAA/21T224aMRD9Ft6NIenttQSaKlLSIKj6igbvsEzxZWV7Q1cr/3t92cCmzdOcOTOeu2/5zc0H3s8ncHZTUZ2mkva833oQJxapXS+kaauDNdrz/tlSTXohBDr3UKH25Du2POhl8rlPPu96rMh5S/vWk9HJfawH5mL6u1ac0CfbgIpYG0miu9KDXpQ7cBiYNa3HTzHEYoPC2Co5F7RFn4Lv+gobaToVi+Hl5epCMHAOveOLJAKToPYV8D7GeIQO7S+0LtW8JV1L9Ebft1rkLi4guo7xGq0ilx99e4kJHvSLOeHS6APVyf4/mZmtaa3AJ2iamOni94YNjEDxfmMk5h6TvM6noMAEWk8HEuBRgYYabezmyuVlXdXAoKE6gjN0vH/M3W/Q+UVDZY4FjuaVtnfV4pnUOWYBK6OA9A9QmRtpaVVr8MdRg/9SMVfuNvFsbc2f7pUZKin4Cf3R5CUXFFjVaVCmikf7E/ZlNhmEwMYRRqmfW9+0flj2TqZF7+KpC0l8cXZLSXn3LN9Eaiw/a5036r2SAptPQTZH4PPJ1+ETzZIs8ae1GczfzeuhBFabG347519mFdgz6RlY9fnj5Lcjmto2fhqFfFPkX/vG2jGgAwAA
     Metadata:
       aws:cdk:path: SkranAppSsrStack/CDKMetadata/Default
 Mappings:
