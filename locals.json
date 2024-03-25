@@ -2,5 +2,7 @@
   "skran-app-ssr-home": {
     "ASSETS_DOMAIN": "https://assets.skran.app",
     "TEMPLATES": "skran-app-ssr-templates"
+  },
+  "skran-app-ssr-trigger": {
   }
 }

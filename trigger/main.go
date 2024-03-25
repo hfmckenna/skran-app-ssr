@@ -18,30 +18,32 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 	svc := dynamodb.New(sess)
 	records, err := FromDynamoDBEvent(uow)
 	if err != nil {
-		log.Fatalln("error:", err)
+		log.Fatalln("error 1:", err)
 	}
 	stream := sliceToStream(records)
 	for v := range stream {
 		if v.EventName == "INSERT" {
 			var title string
-			stringErr := attributevalue.Unmarshal(v.Dynamodb.NewImage["Id"], &title)
+			stringErr := attributevalue.Unmarshal(v.Dynamodb.NewImage["Title"], &title)
+			println(title)
 			if stringErr != nil {
-				log.Fatalln("error:", stringErr)
+				log.Fatalln("error 2:", stringErr)
 			}
-			req, err := svc.PutItemRequest(&dynamodb.PutItemInput{
+			req, resp := svc.PutItemRequest(&dynamodb.PutItemInput{
 				TableName: aws.String("SkranAppTable"),
 				Item: map[string]*dynamodb.AttributeValue{
 					"Primary": {
 						S: aws.String(title),
 					},
+					"Sort": {
+						S: aws.String("TITLE#" + title),
+					},
 				},
 			})
-			if err != nil {
-				log.Fatalln("error:", err)
-			}
 			err2 := req.Send()
+			println(resp)
 			if err2 != nil {
-				log.Fatalln("error:", err2)
+				log.Fatal(err2)
 			}
 		}
 	}

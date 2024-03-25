@@ -383,7 +383,7 @@ Resources:
       - arm64
       Code:
         S3Bucket: cdk-hnb659fds-assets-078577008688-eu-west-1
-        S3Key: 2e5168c9094a264658d143164ff035d9607e6b5d1cb80b7e8d88f93712046e8c.zip
+        S3Key: '018d9d047774882de6fce12bc971b0d7af5dfcf85c989e6414b58f214f014334.zip'
       Environment:
         Variables:
           ASSETS_DOMAIN: https://assets.skran.app
@@ -402,7 +402,7 @@ Resources:
     - skranappssrhomeServiceRoleC40521F7
     Metadata:
       aws:cdk:path: SkranAppSsrStack/skran-app-ssr-home/Resource
-      aws:asset:path: ../../cdk.out/asset.2e5168c9094a264658d143164ff035d9607e6b5d1cb80b7e8d88f93712046e8c
+      aws:asset:path: ../../cdk.out/asset.018d9d047774882de6fce12bc971b0d7af5dfcf85c989e6414b58f214f014334
       aws:asset:is-bundled: true
       aws:asset:property: Code
   skranssrapprest41D3DA6C:
@@ -645,7 +645,7 @@ Resources:
       - arm64
       Code:
         S3Bucket: cdk-hnb659fds-assets-078577008688-eu-west-1
-        S3Key: 8e34e82fe03435bce75e1c9d71a243a8df63c44c1e5e992f2906281ad46ce93f.zip
+        S3Key: 78777df922d02c87ebb9cb5e6c046090730166b805f31212ea5d2c8cf859eff0.zip
       FunctionName: skran-app-ssr-trigger
       Handler: bootstrap
       Role:
@@ -658,7 +658,7 @@ Resources:
     - skranssrapptriggerServiceRole7747A113
     Metadata:
       aws:cdk:path: SkranAppSsrStack/skran-ssr-app-trigger/Resource
-      aws:asset:path: ../../cdk.out/asset.8e34e82fe03435bce75e1c9d71a243a8df63c44c1e5e992f2906281ad46ce93f
+      aws:asset:path: ../../cdk.out/asset.78777df922d02c87ebb9cb5e6c046090730166b805f31212ea5d2c8cf859eff0
       aws:asset:is-bundled: true
       aws:asset:property: Code
   skranssrapptriggerEventInvokeConfig1F2ACD7A:
