@@ -1,4 +1,4 @@
-package main
+package models
 
 type RecipeItem struct {
 	Primary      string      `json:"Primary"`

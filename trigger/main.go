@@ -10,6 +10,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"log"
 	"os"
+	"skran-app-ssr/models"
+	"strings"
 )
 
 func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
@@ -24,26 +26,59 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 	for v := range stream {
 		if v.EventName == "INSERT" {
 			var title string
-			stringErr := attributevalue.Unmarshal(v.Dynamodb.NewImage["Title"], &title)
-			println(title)
-			if stringErr != nil {
-				log.Fatalln("error 2:", stringErr)
+			var id string
+			var components []models.Component
+			err := attributevalue.Unmarshal(v.Dynamodb.NewImage["Title"], &title)
+			if err != nil {
+				log.Fatal(err)
 			}
-			req, resp := svc.PutItemRequest(&dynamodb.PutItemInput{
-				TableName: aws.String("SkranAppTable"),
-				Item: map[string]*dynamodb.AttributeValue{
-					"Primary": {
-						S: aws.String(title),
-					},
-					"Sort": {
-						S: aws.String("TITLE#" + title),
-					},
-				},
+			err = attributevalue.Unmarshal(v.Dynamodb.NewImage["Id"], &id)
+			if err != nil {
+				log.Fatal(err)
+			}
+			err = attributevalue.Unmarshal(v.Dynamodb.NewImage["Components"], &components)
+			if err != nil {
+				log.Fatal(err)
+			}
+			var writeRequest map[string][]*dynamodb.WriteRequest
+			for _, component := range components {
+				for _, ingredient := range component.Ingredients {
+					writeRequest["PutRequest"] = append(writeRequest["PutRequest"], &dynamodb.WriteRequest{
+						PutRequest: &dynamodb.PutRequest{
+							Item: map[string]*dynamodb.AttributeValue{
+								"Primary": {
+									S: aws.String("SEARCH#" + upperSnakeCase(ingredient.Title)),
+								},
+								"Sort": {
+									S: aws.String("SEARCH#" + upperSnakeCase(title)),
+								},
+								"Title": {
+									S: aws.String(ingredient.Title),
+								},
+								"Recipe Title": {
+									S: aws.String(title),
+								},
+								"Recipe Id": {
+									S: aws.String(id),
+								},
+								"Type": {
+									S: aws.String("SEARCH"),
+								},
+								"Deleted": {
+									BOOL: aws.Bool(false),
+								},
+							},
+						},
+					})
+				}
+			}
+			req, resp := svc.BatchWriteItemRequest(&dynamodb.BatchWriteItemInput{
+				RequestItems: writeRequest,
 			})
-			err2 := req.Send()
+			err = req.Send()
 			println(resp)
-			if err2 != nil {
-				log.Fatal(err2)
+			if err != nil {
+				log.Fatal(err)
 			}
 		}
 	}
@@ -63,4 +98,10 @@ func sliceToStream(slice []types.Record) <-chan types.Record {
 		close(stream)
 	}()
 	return stream
+}
+
+func upperSnakeCase(s string) string {
+	upper := strings.ToUpper(s)
+	snake := strings.ReplaceAll(upper, " ", "_")
+	return snake
 }
