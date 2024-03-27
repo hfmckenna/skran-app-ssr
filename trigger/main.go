@@ -24,6 +24,63 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 	}
 	stream := sliceToStream(records)
 	for v := range stream {
+		if v.EventName == "REMOVE" {
+			var title string
+			var id string
+			var components []models.Component
+			err := attributevalue.Unmarshal(v.Dynamodb.OldImage["Title"], &title)
+			if err != nil {
+				log.Fatal(err)
+			}
+			err = attributevalue.Unmarshal(v.Dynamodb.OldImage["Id"], &id)
+			if err != nil {
+				log.Fatal(err)
+			}
+			err = attributevalue.Unmarshal(v.Dynamodb.OldImage["Components"], &components)
+			if err != nil {
+				log.Fatal(err)
+			}
+			writeRequest := make(map[string][]*dynamodb.WriteRequest)
+			for _, component := range components {
+				for _, ingredient := range component.Ingredients {
+					writeRequest["SkranAppTable"] = append(writeRequest["SkranAppTable"], &dynamodb.WriteRequest{
+						PutRequest: &dynamodb.PutRequest{
+							Item: map[string]*dynamodb.AttributeValue{
+								"Primary": {
+									S: aws.String("SEARCH#" + upperSnakeCase(ingredient.Title)),
+								},
+								"Sort": {
+									S: aws.String("SEARCH#" + upperSnakeCase(title)),
+								},
+								"Title": {
+									S: aws.String(ingredient.Title),
+								},
+								"Recipe Title": {
+									S: aws.String(title),
+								},
+								"Recipe Id": {
+									S: aws.String(id),
+								},
+								"Type": {
+									S: aws.String("SEARCH"),
+								},
+								"Deleted": {
+									BOOL: aws.Bool(true),
+								},
+							},
+						},
+					})
+				}
+			}
+			req, resp := svc.BatchWriteItemRequest(&dynamodb.BatchWriteItemInput{
+				RequestItems: writeRequest,
+			})
+			err = req.Send()
+			println(resp)
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
 		if v.EventName == "INSERT" {
 			var title string
 			var id string
@@ -40,10 +97,10 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 			if err != nil {
 				log.Fatal(err)
 			}
-			var writeRequest map[string][]*dynamodb.WriteRequest
+			writeRequest := make(map[string][]*dynamodb.WriteRequest)
 			for _, component := range components {
 				for _, ingredient := range component.Ingredients {
-					writeRequest["PutRequest"] = append(writeRequest["PutRequest"], &dynamodb.WriteRequest{
+					writeRequest["SkranAppTable"] = append(writeRequest["SkranAppTable"], &dynamodb.WriteRequest{
 						PutRequest: &dynamodb.PutRequest{
 							Item: map[string]*dynamodb.AttributeValue{
 								"Primary": {
@@ -73,6 +130,115 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 				}
 			}
 			req, resp := svc.BatchWriteItemRequest(&dynamodb.BatchWriteItemInput{
+				RequestItems: writeRequest,
+			})
+			err = req.Send()
+			println(resp)
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+		if v.EventName == "MODIFY" {
+			var title string
+			var id string
+			var components []models.Component
+			err := attributevalue.Unmarshal(v.Dynamodb.OldImage["Title"], &title)
+			if err != nil {
+				log.Fatal(err)
+			}
+			err = attributevalue.Unmarshal(v.Dynamodb.OldImage["Id"], &id)
+			if err != nil {
+				log.Fatal(err)
+			}
+			err = attributevalue.Unmarshal(v.Dynamodb.OldImage["Components"], &components)
+			if err != nil {
+				log.Fatal(err)
+			}
+			writeRequest := make(map[string][]*dynamodb.WriteRequest)
+			for _, component := range components {
+				for _, ingredient := range component.Ingredients {
+					writeRequest["SkranAppTable"] = append(writeRequest["SkranAppTable"], &dynamodb.WriteRequest{
+						PutRequest: &dynamodb.PutRequest{
+							Item: map[string]*dynamodb.AttributeValue{
+								"Primary": {
+									S: aws.String("SEARCH#" + upperSnakeCase(ingredient.Title)),
+								},
+								"Sort": {
+									S: aws.String("SEARCH#" + upperSnakeCase(title)),
+								},
+								"Title": {
+									S: aws.String(ingredient.Title),
+								},
+								"Recipe Title": {
+									S: aws.String(title),
+								},
+								"Recipe Id": {
+									S: aws.String(id),
+								},
+								"Type": {
+									S: aws.String("SEARCH"),
+								},
+								"Deleted": {
+									BOOL: aws.Bool(true),
+								},
+							},
+						},
+					})
+				}
+			}
+			req, resp := svc.BatchWriteItemRequest(&dynamodb.BatchWriteItemInput{
+				RequestItems: writeRequest,
+			})
+			err = req.Send()
+			println(resp)
+			if err != nil {
+				log.Fatal(err)
+			}
+			err = attributevalue.Unmarshal(v.Dynamodb.NewImage["Title"], &title)
+			if err != nil {
+				log.Fatal(err)
+			}
+			err = attributevalue.Unmarshal(v.Dynamodb.NewImage["Id"], &id)
+			if err != nil {
+				log.Fatal(err)
+			}
+			err = attributevalue.Unmarshal(v.Dynamodb.NewImage["Components"], &components)
+			if err != nil {
+				log.Fatal(err)
+			}
+			writeRequest = make(map[string][]*dynamodb.WriteRequest)
+			for _, component := range components {
+				for _, ingredient := range component.Ingredients {
+					writeRequest["SkranAppTable"] = append(writeRequest["SkranAppTable"], &dynamodb.WriteRequest{
+						PutRequest: &dynamodb.PutRequest{
+							Item: map[string]*dynamodb.AttributeValue{
+								"Primary": {
+									S: aws.String("SEARCH#" + upperSnakeCase(ingredient.Title)),
+								},
+								"Sort": {
+									S: aws.String("SEARCH#" + upperSnakeCase(title)),
+								},
+								"Title": {
+									S: aws.String(ingredient.Title),
+								},
+								"Recipe Title": {
+									S: aws.String(title),
+								},
+								"Recipe Id": {
+									S: aws.String(id),
+								},
+								"Type": {
+									S: aws.String("SEARCH"),
+								},
+								"Deleted": {
+									BOOL: aws.Bool(false),
+								},
+							},
+						},
+					})
+				}
+			}
+			req, resp = svc.BatchWriteItemRequest(&dynamodb.BatchWriteItemInput{
 				RequestItems: writeRequest,
 			})
 			err = req.Send()
