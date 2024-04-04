@@ -44,7 +44,7 @@ func Home(w io.Writer) {
 		TableName: aws.String("SkranAppTable"),
 		Key: map[string]*dynamodb.AttributeValue{
 			"Primary": {
-				S: aws.String("RECIPE#1234"),
+				S: aws.String("RECIPE#1"),
 			},
 			"Sort": {
 				S: aws.String("TITLE#SPAGHETTI_BOLOGNESE"),

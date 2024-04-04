@@ -4,7 +4,7 @@
       "PutRequest": {
         "Item": {
           "Primary": {
-            "S": "RECIPE#1234"
+            "S": "RECIPE#1"
           },
           "Sort": {
             "S": "TITLE#SPAGHETTI_BOLOGNESE"
@@ -13,7 +13,7 @@
             "S": "RECIPE"
           },
           "Id": {
-            "S": "1234"
+            "S": "1"
           },
           "Title": {
             "S": "Spaghetti Bolognese"
@@ -109,7 +109,7 @@
       "PutRequest": {
         "Item": {
           "Primary": {
-            "S": "RECIPE#5678"
+            "S": "RECIPE#2"
           },
           "Sort": {
             "S": "TITLE#CHICKEN_CURRY"
@@ -118,7 +118,7 @@
             "S": "RECIPE"
           },
           "Id": {
-            "S": "5678"
+            "S": "2"
           },
           "Title": {
             "S": "Chicken Curry"
@@ -227,7 +227,7 @@
       "PutRequest": {
         "Item": {
           "Primary": {
-            "S": "RECIPE#9101"
+            "S": "RECIPE#3"
           },
           "Sort": {
             "S": "TITLE#VEGETABLE_STIR_FRY"
@@ -236,7 +236,7 @@
             "S": "RECIPE"
           },
           "Id": {
-            "S": "9101"
+            "S": "3"
           },
           "Title": {
             "S": "Vegetable Stir Fry"
@@ -350,6 +350,137 @@
           },
           "Instructions": {
             "S": "Stir fry vegetables for 10 minutes, then add sauce and cook for another 10 minutes."
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Primary": {
+            "S": "RECIPE#5"
+          },
+          "Sort": {
+            "S": "TITLE#PIPERADE"
+          },
+          "Title": {
+            "S": "Piperade"
+          },
+          "Type": {
+            "S": "RECIPE"
+          },
+          "Id": {
+            "N": "5"
+          },
+          "Instructions": {
+            "S": "Cook the base for 20 minutes then add the veg"
+          },
+          "Time": {
+            "N": "60"
+          },
+          "Components": {
+            "L": [
+              {
+                "M": {
+                  "Title": {
+                    "S": "Base"
+                  },
+                  "Ingredients": {
+                    "L": [
+                      {
+                        "M": {
+                          "Title": {
+                            "S": "Onions"
+                          },
+                          "Measurement": {
+                            "S": ""
+                          },
+                          "Value": {
+                            "N": "4"
+                          }
+                        }
+                      },
+                      {
+                        "M": {
+                          "Title": {
+                            "S": "Garlic cloves"
+                          },
+                          "Measurement": {
+                            "S": ""
+                          },
+                          "Value": {
+                            "N": "2"
+                          }
+                        }
+                      },
+                      {
+                        "M": {
+                          "Title": {
+                            "S": "Pimento"
+                          },
+                          "Measurement": {
+                            "S": "tsp"
+                          },
+                          "Value": {
+                            "N": "1"
+                          }
+                        }
+                      },
+                      {
+                        "M": {
+                          "Title": {
+                            "S": "Olive Oil"
+                          },
+                          "Measurement": {
+                            "S": "ml"
+                          },
+                          "Value": {
+                            "N": "25"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "M": {
+                  "Title": {
+                    "S": "Veg"
+                  },
+                  "Ingredients": {
+                    "L": [
+                      {
+                        "M": {
+                          "Title": {
+                            "S": "Peppers"
+                          },
+                          "Measurement": {
+                            "S": ""
+                          },
+                          "Value": {
+                            "N": "4"
+                          }
+                        }
+                      },
+                      {
+                        "M": {
+                          "Title": {
+                            "S": "Tomatoes"
+                          },
+                          "Measurement": {
+                            "S": ""
+                          },
+                          "Value": {
+                            "N": "4"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
           }
         }
       }
