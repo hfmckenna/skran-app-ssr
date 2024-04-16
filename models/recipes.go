@@ -4,7 +4,7 @@ type RecipeItem struct {
 	Primary      string      `json:"Primary"`
 	Sort         string      `json:"Sort"`
 	Type         string      `json:"Type"`
-	Id           uint32      `json:"Id"`
+	Id           string      `json:"Id"`
 	Title        string      `json:"Title"`
 	Components   []Component `json:"Components"`
 	Instructions string      `json:"Instructions"`

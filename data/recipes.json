@@ -33,7 +33,7 @@
                             "S": "Pasta"
                           },
                           "Value": {
-                            "N": "500"
+                            "N": 500
                           },
                           "Measurement": {
                             "S": "grams"
@@ -57,7 +57,7 @@
                             "S": "Beef Mince"
                           },
                           "Value": {
-                            "N": "250"
+                            "N": 250
                           },
                           "Measurement": {
                             "S": "grams"
@@ -70,7 +70,7 @@
                             "S": "Tinned Tomatoes"
                           },
                           "Value": {
-                            "N": "500"
+                            "N": 500
                           },
                           "Measurement": {
                             "S": "grams"
@@ -83,7 +83,7 @@
                             "S": "Garlic"
                           },
                           "Value": {
-                            "N": "50"
+                            "N": 50
                           },
                           "Measurement": {
                             "S": "grams"
@@ -97,7 +97,7 @@
             ]
           },
           "Time": {
-            "N": "30"
+            "N": 30
           },
           "Instructions": {
             "S": "Cook pasta for 15 minutes."
@@ -138,7 +138,7 @@
                             "S": "Rice"
                           },
                           "Value": {
-                            "N": "500"
+                            "N": 500
                           },
                           "Measurement": {
                             "S": "g"
@@ -162,7 +162,7 @@
                             "S": "Onions"
                           },
                           "Value": {
-                            "N": "500"
+                            "N": 500
                           },
                           "Measurement": {
                             "S": "g"
@@ -175,7 +175,7 @@
                             "S": "Garlic"
                           },
                           "Value": {
-                            "N": "2"
+                            "N": 2
                           },
                           "Measurement": {
                             "S": "Tbsp"
@@ -188,7 +188,7 @@
                             "S": "Tomatoes"
                           },
                           "Value": {
-                            "N": "500"
+                            "N": 500
                           },
                           "Measurement": {
                             "S": "g"
@@ -201,7 +201,7 @@
                             "S": "Cumin"
                           },
                           "Value": {
-                            "N": "1"
+                            "N": 1
                           },
                           "Measurement": {
                             "S": "Tsp"
@@ -215,7 +215,7 @@
             ]
           },
           "Time": {
-            "N": "30"
+            "N": 30
           },
           "Instructions": {
             "S": "Cook pasta for 15 minutes."
@@ -256,7 +256,7 @@
                             "S": "Broccoli"
                           },
                           "Value": {
-                            "N": "200"
+                            "N": 200
                           },
                           "Measurement": {
                             "S": "grams"
@@ -269,7 +269,7 @@
                             "S": "Carrots"
                           },
                           "Value": {
-                            "N": "200"
+                            "N": 200
                           },
                           "Measurement": {
                             "S": "grams"
@@ -282,7 +282,7 @@
                             "S": "Bell Peppers"
                           },
                           "Value": {
-                            "N": "200"
+                            "N": 200
                           },
                           "Measurement": {
                             "S": "grams"
@@ -306,7 +306,7 @@
                             "S": "Soy Sauce"
                           },
                           "Value": {
-                            "N": "100"
+                            "N": 100
                           },
                           "Measurement": {
                             "S": "ml"
@@ -319,7 +319,7 @@
                             "S": "Garlic"
                           },
                           "Value": {
-                            "N": "30"
+                            "N": 30
                           },
                           "Measurement": {
                             "S": "grams"
@@ -332,7 +332,7 @@
                             "S": "Ginger"
                           },
                           "Value": {
-                            "N": "30"
+                            "N": 30
                           },
                           "Measurement": {
                             "S": "grams"
@@ -346,7 +346,7 @@
             ]
           },
           "Time": {
-            "N": "20"
+            "N": 20
           },
           "Instructions": {
             "S": "Stir fry vegetables for 10 minutes, then add sauce and cook for another 10 minutes."
@@ -370,13 +370,13 @@
             "S": "RECIPE"
           },
           "Id": {
-            "N": "5"
+            "S": 5
           },
           "Instructions": {
             "S": "Cook the base for 20 minutes then add the veg"
           },
           "Time": {
-            "N": "60"
+            "N": 60
           },
           "Components": {
             "L": [
@@ -396,7 +396,7 @@
                             "S": ""
                           },
                           "Value": {
-                            "N": "4"
+                            "N": 4
                           }
                         }
                       },
@@ -409,7 +409,7 @@
                             "S": ""
                           },
                           "Value": {
-                            "N": "2"
+                            "N": 2
                           }
                         }
                       },
@@ -422,7 +422,7 @@
                             "S": "tsp"
                           },
                           "Value": {
-                            "N": "1"
+                            "N": 1
                           }
                         }
                       },
@@ -435,7 +435,7 @@
                             "S": "ml"
                           },
                           "Value": {
-                            "N": "25"
+                            "N": 25
                           }
                         }
                       }
@@ -459,7 +459,7 @@
                             "S": ""
                           },
                           "Value": {
-                            "N": "4"
+                            "N": 4
                           }
                         }
                       },
@@ -472,7 +472,7 @@
                             "S": ""
                           },
                           "Value": {
-                            "N": "4"
+                            "N": 4
                           }
                         }
                       }

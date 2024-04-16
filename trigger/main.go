@@ -47,7 +47,7 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 						PutRequest: &dynamodb.PutRequest{
 							Item: map[string]*dynamodb.AttributeValue{
 								"Primary": {
-									S: aws.String("SEARCH#" + upperSnakeCase(ingredient.Title)),
+									S: aws.String("SEARCH#" + upperSnakeCase(getFirstChar(ingredient.Title))),
 								},
 								"Sort": {
 									S: aws.String("SEARCH#" + upperSnakeCase(title)),
@@ -104,7 +104,7 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 						PutRequest: &dynamodb.PutRequest{
 							Item: map[string]*dynamodb.AttributeValue{
 								"Primary": {
-									S: aws.String("SEARCH#" + upperSnakeCase(ingredient.Title)),
+									S: aws.String("SEARCH#" + upperSnakeCase(getFirstChar(ingredient.Title))),
 								},
 								"Sort": {
 									S: aws.String("SEARCH#" + upperSnakeCase(title)),
@@ -161,7 +161,7 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 						PutRequest: &dynamodb.PutRequest{
 							Item: map[string]*dynamodb.AttributeValue{
 								"Primary": {
-									S: aws.String("SEARCH#" + upperSnakeCase(ingredient.Title)),
+									S: aws.String("SEARCH#" + upperSnakeCase(getFirstChar(ingredient.Title))),
 								},
 								"Sort": {
 									S: aws.String("SEARCH#" + upperSnakeCase(title)),
@@ -213,7 +213,7 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 						PutRequest: &dynamodb.PutRequest{
 							Item: map[string]*dynamodb.AttributeValue{
 								"Primary": {
-									S: aws.String("SEARCH#" + upperSnakeCase(ingredient.Title)),
+									S: aws.String("SEARCH#" + upperSnakeCase(getFirstChar(ingredient.Title))),
 								},
 								"Sort": {
 									S: aws.String("SEARCH#" + upperSnakeCase(title)),
@@ -270,4 +270,11 @@ func upperSnakeCase(s string) string {
 	upper := strings.ToUpper(s)
 	snake := strings.ReplaceAll(upper, " ", "_")
 	return snake
+}
+
+func getFirstChar(s string) string {
+	if len(s) == 0 {
+		return ""
+	}
+	return string(s[0])
 }
