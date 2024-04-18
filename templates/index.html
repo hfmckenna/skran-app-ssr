@@ -4,14 +4,15 @@
 {{ template "head" . }}
 <body>
 <main>
-    <h1 class="text-green-500">{{ .PageTitle }}</h1>
-    <div>{{ .Item.Title }}</div>
-    <div>
-        <ul>
-            {{ range .Item.Components }}
-            <li>{{ .Title }}</li>
-            {{ end }}
-        </ul>
+    <h1  class="mb-2 mt-0 text-5xl font-medium leading-tight text-primary">{{ .PageTitle }}</h1>
+    <div class="relative flex w-full flex-wrap items-stretch">
+      <span class="flex items-center whitespace-nowrap rounded-s border border-e-0 border-solid border-neutral-200 px-4 py-[0.45rem] text-center text-xl font-normal text-surface dark:border-white/10 dark:text-white"
+            id="inputGroup-sizing-lg">Search Ingredient...</span>
+        <input
+                type="text"
+                class="relative m-0 block flex-auto rounded-e border border-solid border-neutral-200 bg-transparent bg-clip-padding px-4 py-[0.45rem] text-xl font-normal text-surface outline-none transition duration-200 ease-in-out placeholder:text-neutral-500 focus:z-[3] focus:border-primary focus:shadow-inset focus:outline-none motion-reduce:transition-none dark:border-white/10 dark:text-white dark:placeholder:text-neutral-200 dark:autofill:shadow-autofill dark:focus:border-primary"
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-lg"/>
     </div>
 </main>
 </body>

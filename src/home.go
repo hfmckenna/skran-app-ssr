@@ -6,25 +6,18 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/dynamodb"
-	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"html/template"
 	"io"
 	"log"
 	"os"
 	"path/filepath"
-	"skran-app-ssr/models"
 )
 
 func Home(w io.Writer) {
-	region := os.Getenv("AWS_REGION")
 	templates := os.Getenv("TEMPLATES")
 	indexPage := "/tmp/index.html"
 	headPartial := "/tmp/head.html"
 	cfg, err := config.LoadDefaultConfig(context.TODO())
-	sess := session.Must(session.NewSession(&aws.Config{Region: aws.String(region)}))
 	if err != nil {
 		log.Printf("error: %v", err)
 		return
@@ -38,39 +31,10 @@ func Home(w io.Writer) {
 	if err != nil {
 		log.Fatalln("error:", err)
 	}
-	svc := dynamodb.New(sess)
 	tmpl, _ := template.New("").ParseFiles([]string{indexPage, headPartial}...)
-	result, err := svc.GetItem(&dynamodb.GetItemInput{
-		TableName: aws.String("SkranAppTable"),
-		Key: map[string]*dynamodb.AttributeValue{
-			"Primary": {
-				S: aws.String("RECIPE#1"),
-			},
-			"Sort": {
-				S: aws.String("TITLE#SPAGHETTI_BOLOGNESE"),
-			},
-		},
-	})
-	if err != nil {
-		log.Fatal(err)
-		return
-	}
-	if result.Item == nil {
-		log.Fatalf("No item")
-		return
-	}
-	type Data struct {
-		Item      models.RecipeItem
-		Assets    string
-		PageTitle string
-	}
 	data := Data{
 		Assets:    os.Getenv("ASSETS_DOMAIN"),
 		PageTitle: "Skran App",
-	}
-	err = dynamodbattribute.UnmarshalMap(result.Item, &data.Item)
-	if err != nil {
-		panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
 	}
 	err = tmpl.ExecuteTemplate(w, "home", &data)
 	if err != nil {
@@ -100,4 +64,9 @@ func fileExists(filename string) bool {
 	}
 	// return false if the 'file' is a directory.
 	return !info.IsDir()
+}
+
+type Data struct {
+	Assets    string
+	PageTitle string
 }

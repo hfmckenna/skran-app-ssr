@@ -296,7 +296,7 @@ Resources:
       SourceBucketNames:
       - cdk-hnb659fds-assets-078577008688-eu-west-1
       SourceObjectKeys:
-      - e3a41ac0ef5fb6af79e97dbdd29ff8dc3cf7df7c44ce8b7091f62471b79891ca.zip
+      - 3735de3372c184d4d7ff08593433ea62d425612a0b215315294c28acebe67948.zip
       DestinationBucketName:
         Ref: skranappssrtemplatesB6F1DF84
       Prune: true
@@ -383,7 +383,7 @@ Resources:
       - arm64
       Code:
         S3Bucket: cdk-hnb659fds-assets-078577008688-eu-west-1
-        S3Key: 5a655f2256b4992336e47b3255bfdc3d67da0f4b34732d7dc192ba10a7730b20.zip
+        S3Key: bd6e7e32edf672806e2ba4a1ebb0c50ca7d88f97f234d8f30cf884f75c1334b2.zip
       Environment:
         Variables:
           ASSETS_DOMAIN: https://assets.skran.app
@@ -402,7 +402,7 @@ Resources:
     - skranappssrhomeServiceRoleC40521F7
     Metadata:
       aws:cdk:path: SkranAppSsrStack/skran-app-ssr-home/Resource
-      aws:asset:path: ../../cdk.out/asset.5a655f2256b4992336e47b3255bfdc3d67da0f4b34732d7dc192ba10a7730b20
+      aws:asset:path: ../../cdk.out/asset.bd6e7e32edf672806e2ba4a1ebb0c50ca7d88f97f234d8f30cf884f75c1334b2
       aws:asset:is-bundled: true
       aws:asset:property: Code
   skranssrapprest41D3DA6C:
@@ -645,7 +645,7 @@ Resources:
       - arm64
       Code:
         S3Bucket: cdk-hnb659fds-assets-078577008688-eu-west-1
-        S3Key: ceefd50b3c6032b119b38c948c317fb8923067686cf9c4a13f0a1ecbdeaad727.zip
+        S3Key: fcd06fdf96c61799afb3d3945162ca76b1b1af83371544b8632eefa83e077a80.zip
       FunctionName: skran-app-ssr-trigger
       Handler: bootstrap
       Role:
@@ -658,7 +658,7 @@ Resources:
     - skranssrapptriggerServiceRole7747A113
     Metadata:
       aws:cdk:path: SkranAppSsrStack/skran-ssr-app-trigger/Resource
-      aws:asset:path: ../../cdk.out/asset.ceefd50b3c6032b119b38c948c317fb8923067686cf9c4a13f0a1ecbdeaad727
+      aws:asset:path: ../../cdk.out/asset.fcd06fdf96c61799afb3d3945162ca76b1b1af83371544b8632eefa83e077a80
       aws:asset:is-bundled: true
       aws:asset:property: Code
   skranssrapptriggerEventInvokeConfig1F2ACD7A:
