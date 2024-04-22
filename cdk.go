@@ -197,6 +197,16 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		},
 	})
 
+	searchHandler := lambda.NewGoFunction(stack, jsii.String("skran-app-search"), &lambda.GoFunctionProps{
+		FunctionName: jsii.String("skran-app-search"),
+		Runtime:      awslambda.Runtime_PROVIDED_AL2(),
+		Architecture: awslambda.Architecture_ARM_64(),
+		Entry:        jsii.String("./api"),
+		Bundling: &lambda.BundlingOptions{
+			GoBuildFlags: jsii.Strings(`-ldflags "-s -w"`),
+		},
+	})
+
 	ssr := apigateway.NewLambdaRestApi(stack, jsii.String("skran-ssr-app-rest"), &apigateway.LambdaRestApiProps{
 		DomainName: &apigateway.DomainNameOptions{
 			DomainName:  jsii.String(siteDomain),
@@ -204,6 +214,10 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		},
 		Handler: ssrHandler,
 	})
+
+	v1 := ssr.Root().AddResource(jsii.String("v1"), &apigateway.ResourceOptions{})
+	search := v1.AddResource(jsii.String("search"), &apigateway.ResourceOptions{})
+	search.AddMethod(jsii.String("GET"), apigateway.NewLambdaIntegration(searchHandler, &apigateway.LambdaIntegrationOptions{}), &apigateway.MethodOptions{})
 
 	trigger := lambda.NewGoFunction(stack, jsii.String("skran-ssr-app-trigger"), &lambda.GoFunctionProps{
 		FunctionName: jsii.String("skran-app-ssr-trigger"),

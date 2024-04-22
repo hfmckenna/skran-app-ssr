@@ -145,7 +145,7 @@ Resources:
       SourceBucketNames:
       - cdk-hnb659fds-assets-078577008688-eu-west-1
       SourceObjectKeys:
-      - 29f5e4a141b60cbf9550e4d414ce0ceac358456cac955201582d7e0af6574aae.zip
+      - 34fb6c6f812e2d1788f4385853ddcc0deee591617489f2a0394f1ab0cc2a6758.zip
       DestinationBucketName:
         Ref: skranappssrassets61E47A61
       Prune: true
@@ -296,7 +296,7 @@ Resources:
       SourceBucketNames:
       - cdk-hnb659fds-assets-078577008688-eu-west-1
       SourceObjectKeys:
-      - 3735de3372c184d4d7ff08593433ea62d425612a0b215315294c28acebe67948.zip
+      - 53f3e90cb3499f28bbe6c79eaed81a5546f5fa209d10e48f609a87c05de95461.zip
       DestinationBucketName:
         Ref: skranappssrtemplatesB6F1DF84
       Prune: true
@@ -383,7 +383,7 @@ Resources:
       - arm64
       Code:
         S3Bucket: cdk-hnb659fds-assets-078577008688-eu-west-1
-        S3Key: bd6e7e32edf672806e2ba4a1ebb0c50ca7d88f97f234d8f30cf884f75c1334b2.zip
+        S3Key: 1e671cd012774df55b6e005bf7c951b8b11a52b148bbd57aefd7ab5f488d5b47.zip
       Environment:
         Variables:
           ASSETS_DOMAIN: https://assets.skran.app
@@ -402,7 +402,7 @@ Resources:
     - skranappssrhomeServiceRoleC40521F7
     Metadata:
       aws:cdk:path: SkranAppSsrStack/skran-app-ssr-home/Resource
-      aws:asset:path: ../../cdk.out/asset.bd6e7e32edf672806e2ba4a1ebb0c50ca7d88f97f234d8f30cf884f75c1334b2
+      aws:asset:path: ../../cdk.out/asset.1e671cd012774df55b6e005bf7c951b8b11a52b148bbd57aefd7ab5f488d5b47
       aws:asset:is-bundled: true
       aws:asset:property: Code
   skranssrapprest41D3DA6C:
@@ -645,7 +645,7 @@ Resources:
       - arm64
       Code:
         S3Bucket: cdk-hnb659fds-assets-078577008688-eu-west-1
-        S3Key: fcd06fdf96c61799afb3d3945162ca76b1b1af83371544b8632eefa83e077a80.zip
+        S3Key: db88f102da4f129540fbdc240f5b49c3da6efa812b526c05b238a0c98cd9ad23.zip
       FunctionName: skran-app-ssr-trigger
       Handler: bootstrap
       Role:
@@ -658,7 +658,7 @@ Resources:
     - skranssrapptriggerServiceRole7747A113
     Metadata:
       aws:cdk:path: SkranAppSsrStack/skran-ssr-app-trigger/Resource
-      aws:asset:path: ../../cdk.out/asset.fcd06fdf96c61799afb3d3945162ca76b1b1af83371544b8632eefa83e077a80
+      aws:asset:path: ../../cdk.out/asset.db88f102da4f129540fbdc240f5b49c3da6efa812b526c05b238a0c98cd9ad23
       aws:asset:is-bundled: true
       aws:asset:property: Code
   skranssrapptriggerEventInvokeConfig1F2ACD7A:
