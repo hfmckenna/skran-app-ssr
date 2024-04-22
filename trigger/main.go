@@ -62,7 +62,7 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 									S: aws.String(id),
 								},
 								"Type": {
-									S: aws.String("SEARCH#S +EARCH"),
+									S: aws.String("SEARCH"),
 								},
 								"Deleted": {
 									BOOL: aws.Bool(true),
