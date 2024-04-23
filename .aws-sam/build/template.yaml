@@ -145,7 +145,7 @@ Resources:
       SourceBucketNames:
       - cdk-hnb659fds-assets-078577008688-eu-west-1
       SourceObjectKeys:
-      - 34fb6c6f812e2d1788f4385853ddcc0deee591617489f2a0394f1ab0cc2a6758.zip
+      - 44a90af81b42b488a90f9a86c7d9e244dc7e8e7e8a332e475553350e9347d36d.zip
       DestinationBucketName:
         Ref: skranappssrassets61E47A61
       Prune: true
@@ -296,7 +296,7 @@ Resources:
       SourceBucketNames:
       - cdk-hnb659fds-assets-078577008688-eu-west-1
       SourceObjectKeys:
-      - 53f3e90cb3499f28bbe6c79eaed81a5546f5fa209d10e48f609a87c05de95461.zip
+      - '0ebf02befe4c44ffd83cdaa8d07a32b38167f37d22ffe6e4a7dffeac04d2fbc4.zip'
       DestinationBucketName:
         Ref: skranappssrtemplatesB6F1DF84
       Prune: true
@@ -383,7 +383,7 @@ Resources:
       - arm64
       Code:
         S3Bucket: cdk-hnb659fds-assets-078577008688-eu-west-1
-        S3Key: 1e671cd012774df55b6e005bf7c951b8b11a52b148bbd57aefd7ab5f488d5b47.zip
+        S3Key: 71e4c89d722dc1bc2b04128e212ca30f2ee75a74d69e56d5381dd5a0810ea648.zip
       Environment:
         Variables:
           ASSETS_DOMAIN: https://assets.skran.app
@@ -402,7 +402,47 @@ Resources:
     - skranappssrhomeServiceRoleC40521F7
     Metadata:
       aws:cdk:path: SkranAppSsrStack/skran-app-ssr-home/Resource
-      aws:asset:path: ../../cdk.out/asset.1e671cd012774df55b6e005bf7c951b8b11a52b148bbd57aefd7ab5f488d5b47
+      aws:asset:path: ../../cdk.out/asset.71e4c89d722dc1bc2b04128e212ca30f2ee75a74d69e56d5381dd5a0810ea648
+      aws:asset:is-bundled: true
+      aws:asset:property: Code
+  skranappsearchServiceRoleEB9232F0:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service: lambda.amazonaws.com
+        Version: '2012-10-17'
+      ManagedPolicyArns:
+      - Fn::Join:
+        - ''
+        - - 'arn:'
+          - Ref: AWS::Partition
+          - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-app-search/ServiceRole/Resource
+  skranappsearch98BC3CB9:
+    Type: AWS::Lambda::Function
+    Properties:
+      Architectures:
+      - arm64
+      Code:
+        S3Bucket: cdk-hnb659fds-assets-078577008688-eu-west-1
+        S3Key: 7a76c69b09467df7a2090e1854f940f1caa024746a2cb8adcf756ee5bf04bf0b.zip
+      FunctionName: skran-app-search
+      Handler: bootstrap
+      Role:
+        Fn::GetAtt:
+        - skranappsearchServiceRoleEB9232F0
+        - Arn
+      Runtime: provided.al2
+    DependsOn:
+    - skranappsearchServiceRoleEB9232F0
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-app-search/Resource
+      aws:asset:path: ../../cdk.out/asset.7a76c69b09467df7a2090e1854f940f1caa024746a2cb8adcf756ee5bf04bf0b
       aws:asset:is-bundled: true
       aws:asset:property: Code
   skranssrapprest41D3DA6C:
@@ -411,7 +451,7 @@ Resources:
       Name: skran-ssr-app-rest
     Metadata:
       aws:cdk:path: SkranAppSsrStack/skran-ssr-app-rest/Resource
-  skranssrapprestDeployment948F77F25f9b638ade2605b395f90c076ca2fed3:
+  skranssrapprestDeployment948F77F21883ed732a68837bfbd071bca509a259:
     Type: AWS::ApiGateway::Deployment
     Properties:
       Description: Automatically created by the RestApi construct
@@ -421,13 +461,16 @@ Resources:
     - skranssrapprestproxyANY5A1A672D
     - skranssrapprestproxy96BF0A14
     - skranssrapprestANY7D7F3D2E
+    - skranssrapprestv1EBEB15AD
+    - skranssrapprestv1searchGET811A95CF
+    - skranssrapprestv1searchA0DF61C7
     Metadata:
       aws:cdk:path: SkranAppSsrStack/skran-ssr-app-rest/Deployment/Resource
   skranssrapprestDeploymentStageprod6CED3759:
     Type: AWS::ApiGateway::Stage
     Properties:
       DeploymentId:
-        Ref: skranssrapprestDeployment948F77F25f9b638ade2605b395f90c076ca2fed3
+        Ref: skranssrapprestDeployment948F77F21883ed732a68837bfbd071bca509a259
       RestApiId:
         Ref: skranssrapprest41D3DA6C
       StageName: prod
@@ -585,6 +628,86 @@ Resources:
         Ref: skranssrapprest41D3DA6C
     Metadata:
       aws:cdk:path: SkranAppSsrStack/skran-ssr-app-rest/Default/ANY/Resource
+  skranssrapprestv1EBEB15AD:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId:
+        Fn::GetAtt:
+        - skranssrapprest41D3DA6C
+        - RootResourceId
+      PathPart: v1
+      RestApiId:
+        Ref: skranssrapprest41D3DA6C
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-ssr-app-rest/Default/v1/Resource
+  skranssrapprestv1searchA0DF61C7:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId:
+        Ref: skranssrapprestv1EBEB15AD
+      PathPart: search
+      RestApiId:
+        Ref: skranssrapprest41D3DA6C
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-ssr-app-rest/Default/v1/search/Resource
+  skranssrapprestv1searchGETApiPermissionSkranAppSsrStackskranssrapprestB7327794GETv1searchA304F9AC:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+        - skranappsearch98BC3CB9
+        - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+        - ''
+        - - 'arn:aws:execute-api:eu-west-1:078577008688:'
+          - Ref: skranssrapprest41D3DA6C
+          - /
+          - Ref: skranssrapprestDeploymentStageprod6CED3759
+          - /GET/v1/search
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-ssr-app-rest/Default/v1/search/GET/ApiPermission.SkranAppSsrStackskranssrapprestB7327794.GET..v1.search
+  skranssrapprestv1searchGETApiPermissionTestSkranAppSsrStackskranssrapprestB7327794GETv1search8DE54519:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+        - skranappsearch98BC3CB9
+        - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+        - ''
+        - - 'arn:aws:execute-api:eu-west-1:078577008688:'
+          - Ref: skranssrapprest41D3DA6C
+          - /test-invoke-stage/GET/v1/search
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-ssr-app-rest/Default/v1/search/GET/ApiPermission.Test.SkranAppSsrStackskranssrapprestB7327794.GET..v1.search
+  skranssrapprestv1searchGET811A95CF:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: GET
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+          - ''
+          - - arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/
+            - Fn::GetAtt:
+              - skranappsearch98BC3CB9
+              - Arn
+            - /invocations
+      ResourceId:
+        Ref: skranssrapprestv1searchA0DF61C7
+      RestApiId:
+        Ref: skranssrapprest41D3DA6C
+    Metadata:
+      aws:cdk:path: SkranAppSsrStack/skran-ssr-app-rest/Default/v1/search/GET/Resource
   skranssrapptriggerServiceRole7747A113:
     Type: AWS::IAM::Role
     Properties:
@@ -645,7 +768,7 @@ Resources:
       - arm64
       Code:
         S3Bucket: cdk-hnb659fds-assets-078577008688-eu-west-1
-        S3Key: db88f102da4f129540fbdc240f5b49c3da6efa812b526c05b238a0c98cd9ad23.zip
+        S3Key: c6ea5780d351d739ef739e9b4a7367dfc514725974d3ed3b9eec2fe2f0bbfcd8.zip
       FunctionName: skran-app-ssr-trigger
       Handler: bootstrap
       Role:
@@ -658,7 +781,7 @@ Resources:
     - skranssrapptriggerServiceRole7747A113
     Metadata:
       aws:cdk:path: SkranAppSsrStack/skran-ssr-app-trigger/Resource
-      aws:asset:path: ../../cdk.out/asset.db88f102da4f129540fbdc240f5b49c3da6efa812b526c05b238a0c98cd9ad23
+      aws:asset:path: ../../cdk.out/asset.c6ea5780d351d739ef739e9b4a7367dfc514725974d3ed3b9eec2fe2f0bbfcd8
       aws:asset:is-bundled: true
       aws:asset:property: Code
   skranssrapptriggerEventInvokeConfig1F2ACD7A:
@@ -727,7 +850,7 @@ Resources:
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:
-      Analytics: v2:deflate64:H4sIAAAAAAAA/21T224aMRD9Ft6NIenttQSaKlLSIKj6igbvsEzxZWV7Q1cr/3t92cCmzdOcOTOeu2/5zc0H3s8ncHZTUZ2mkva833oQJxapXS+kaauDNdrz/tlSTXohBDr3UKH25Du2POhl8rlPPu96rMh5S/vWk9HJfawH5mL6u1ac0CfbgIpYG0miu9KDXpQ7cBiYNa3HTzHEYoPC2Co5F7RFn4Lv+gobaToVi+Hl5epCMHAOveOLJAKToPYV8D7GeIQO7S+0LtW8JV1L9Ebft1rkLi4guo7xGq0ilx99e4kJHvSLOeHS6APVyf4/mZmtaa3AJ2iamOni94YNjEDxfmMk5h6TvM6noMAEWk8HEuBRgYYabezmyuVlXdXAoKE6gjN0vH/M3W/Q+UVDZY4FjuaVtnfV4pnUOWYBK6OA9A9QmRtpaVVr8MdRg/9SMVfuNvFsbc2f7pUZKin4Cf3R5CUXFFjVaVCmikf7E/ZlNhmEwMYRRqmfW9+0flj2TqZF7+KpC0l8cXZLSXn3LN9Eaiw/a5036r2SAptPQTZH4PPJ1+ETzZIs8ae1GczfzeuhBFabG347519mFdgz6RlY9fnj5Lcjmto2fhqFfFPkX/vG2jGgAwAA
+      Analytics: v2:deflate64:H4sIAAAAAAAA/21T23LaMBD9Ft6FgPT2WgJNJzNJw0Cnr8wiL2aLLHkkOdTj0b9XF4OdNk979uxq77rji8UH3s0ncLFTUZynkg682zkQZxaofSekboqj0crx7sVQSWopBFr7WKBy5Fq2OqpV9HmIPu96rMk6Q4fGkVbRfax7ZkP6+0ac0UVbj7LYaEmiHehez8o9WPTM6MbhpxBiuUWhTRGdM9qhi8H3XYG11G0ViuH55fpGMLAWneXLKDyTUB0K4F2I8QQtml9obKx5R6qU6LR6aJRIXdxAcB3jDZqKbHr07TUkeFSv+owrrY5URvv/ZGJ2ujECn6GuQ6ab3xvWM4KKd1stMfUY5TCfjDwTaBwdSYDDChSUaEI3A5eWNaieQU1lABdoefeUut+idcua8hwzHM0rbm/QwpmUKWYGa10BqR9QJW6kxVVtwJ1GDf5LhVyp28izjdF/2ivTV5LxM7qTTkvu0dXiWdEqqHQRrvcnHPKQEvCejUONanhpXN24fut7GTe+DzcvJPHlxa4kpSNg6Thih+lZY52u3qvNs/kUZH0CPp987X/TLMocf1rq3vxdXy/Gs1Iv+N2cf5kVYC6kZmCqzx8nvy3R1DTh91TIt1n+BXpVvBipAwAA
     Metadata:
       aws:cdk:path: SkranAppSsrStack/CDKMetadata/Default
 Mappings:
