@@ -23,9 +23,11 @@ type Ingredient struct {
 }
 
 type SearchItem struct {
-	Primary string   `json:"Primary"`
-	Sort    string   `json:"Sort"`
-	Title   string   `json:"Title"`
-	Recipes []string `json:"Recipes"`
-	Type    string   `json:"Type"`
+	Primary     string `json:"Primary"`
+	Sort        string `json:"Sort"`
+	Title       string `json:"Title"`
+	RecipeTitle string `json:"Recipe Title"`
+	Type        string `json:"Type"`
+	RecipeId    string `json:"Recipe Id"`
+	Deleted     bool   `json:"Deleted"`
 }
