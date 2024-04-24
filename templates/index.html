@@ -14,7 +14,7 @@
             <div class="flex lg:w-2/3 w-full sm:flex-row flex-col mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-4 sm:px-0 items-end">
                 <div class="relative flex-grow w-full">
                     <label for="ingredient" class="leading-7 text-gray-600">First Ingredient</label>
-                    <input id="ingredient" name="ingredient" type="text"
+                    <input id="ingredient" name="q" type="text"
                            hx-get="/v1/search"
                            hx-trigger="keyup changed delay:500ms"
                            hx-target="#search-results"
