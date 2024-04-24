@@ -39,7 +39,6 @@ func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 		}
 		html := make([]string, len(result.Items))
 		for i, item := range result.Items {
-			// Use fmt.Sprintf to interpolate string
 			searchItem := models.SearchItem{}
 			err = dynamodbattribute.UnmarshalMap(item, &searchItem)
 			if err != nil {

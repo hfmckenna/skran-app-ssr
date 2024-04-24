@@ -244,6 +244,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 
 	table.GrantWriteData(trigger)
 	table.GrantReadData(ssrHandler)
+	table.GrantReadData(searchHandler)
 	templates.GrantRead(ssrHandler, "*")
 
 	route53.NewARecord(stack, jsii.String("skran-app-ssr-route"), &route53.ARecordProps{
