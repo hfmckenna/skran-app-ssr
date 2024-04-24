@@ -24,14 +24,14 @@ func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 	if len(query) > 3 {
 		result, err := ddb.Query(&dynamodb.QueryInput{
 			TableName:              aws.String("SkranAppTable"),
-			KeyConditionExpression: jsii.String("#pk = :char and begins_with(#sk, SEARCH#:query"),
+			KeyConditionExpression: jsii.String("#pk = :char and begins_with(#sk, :query)"),
 			ExpressionAttributeNames: map[string]*string{
 				"#pk": jsii.String("Primary"),
 				"#sk": jsii.String("Sort"),
 			},
 			ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
 				":char":  {S: jsii.String(strings.ToUpper(getFirstChar(query)))},
-				":query": {S: jsii.String(upperSnakeCase(query))},
+				":query": {S: jsii.String(fmt.Sprintf("SEARCH#%s", upperSnakeCase(query)))},
 			},
 		})
 		if err != nil {
