@@ -30,7 +30,7 @@ func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 				"#sk": jsii.String("Sort"),
 			},
 			ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
-				":char":  {S: jsii.String(strings.ToUpper(getFirstChar(query)))},
+				":char":  {S: jsii.String(fmt.Sprintf("SEARCH#%s", getFirstChar(upperSnakeCase(query))))},
 				":query": {S: jsii.String(fmt.Sprintf("SEARCH#%s", upperSnakeCase(query)))},
 			},
 		})
