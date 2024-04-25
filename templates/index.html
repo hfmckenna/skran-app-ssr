@@ -13,7 +13,7 @@
             </div>
             <div class="flex lg:w-2/3 w-full sm:flex-row flex-col mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-4 sm:px-0 items-end">
                 <div class="relative flex-grow w-full">
-                    <div>
+                    <form action="/v1/search" method="post">
                         <label for="ingredient" class="leading-7 text-gray-600">First Ingredient</label>
                         <input id="ingredient" name="q" type="text"
                                hx-get="/v1/search"
@@ -21,14 +21,31 @@
                                hx-target="#search-results"
                                placeholder="What's in your cupboard..."
                                class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-red-500 focus:bg-transparent focus:ring-2 focus:ring-red-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-                        <button hx></button>
-                    </div>
+                        <button id="search-ingredient">Search</button>
+                    </form>
                     <div id="search-results"></div>
                 </div>
                 <div id="active-search"></div>
             </div>
         </div>
     </section>
+    <template id="template">
+        <input type="text" disabled/>
+    </template>
+    <script>
+        const search = document.getElementById('search-ingredient');
+        const ingredient = document.getElementById('ingredient');
+        const template = document.getElementById('template');
+        const form = document.querySelector('form');
+        search.addEventListener('click', () => {
+            this.preventDefault();
+            const input = template.content.cloneNode();
+            input.name = `ingredient-${document.querySelectorAll('input').length}`;
+            input.value = ingredient.value;
+            form.appendChild(input);
+            form.submit();
+        })
+    </script>
 </main>
 </body>
 </html>
