@@ -44,7 +44,7 @@ func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 			if err != nil {
 				panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
 			}
-			html[i] = fmt.Sprintf("<div class=\"cursor-pointer\" onclick=\"const input = document.getElementById('ingredient'); input.value = this.innerText; input.dispatchEvent(new Event('keyup'));\">%s</div>", searchItem.Title)
+			html[i] = fmt.Sprintf("<input class=\"cursor-pointer\" hx-get=\"/v1/search\" type=\"text\" hx-trigger=\"click\" hx-include=\"[name='recipe']\" name=\"recipe\" hx-swap=\"outerHTML\" value=\"%s\" placeholder=\"%s\"/>", searchItem.Title, searchItem.Title)
 		}
 		response = strings.Join(html, "")
 	}

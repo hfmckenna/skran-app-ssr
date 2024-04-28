@@ -13,7 +13,7 @@
             </div>
             <div class="flex lg:w-2/3 w-full sm:flex-row flex-col mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-4 sm:px-0 items-end">
                 <div id="ingredient-container" class="relative flex-grow w-full">
-                    <label for="ingredient" class="leading-7 text-gray-600">First Ingredient</label>
+                    <label for="ingredient" class="leading-7 text-gray-600">Add Ingredient</label>
                     <input id="ingredient" name="q" type="text"
                            hx-get="/v1/search"
                            hx-trigger="keyup changed delay:500ms"
@@ -28,21 +28,24 @@
         </div>
     </section>
     <template id="template">
-        <input type="text" disabled/>
+        <input type="text" hx-include=".recipe-ingredient" hx-get="/v1/search" hx-trigger="keyup changed"
+               class="recipe-ingredient" hx-target="#active-search"/>
     </template>
     <script>
-        const search = document.getElementById('search-ingredient');
-        const container = document.getElementById('ingredient-container');
+        const container = document.getElementById('search-results');
         const ingredient = document.getElementById('ingredient');
         const template = document.getElementById('template');
-        search.addEventListener('click', function () {
-            console.log('test');
-            const clone = template.content.cloneNode(true);
-            const input = clone.querySelector('input');
-            input.name = `ingredient-${document.querySelectorAll('input').length}`;
-            input.value = ingredient.value;
-            input.placeholder = ingredient.value;
-            container.appendChild(input);
+        container.addEventListener('click', function (event) {
+            if (event.target.classList.contains('search-item')) {
+                const clone = template.content.cloneNode(true);
+                const input = clone.querySelector('input');
+                input.name = `ingredient-${document.querySelectorAll('input').length}`;
+                input.placeholder = event.target.innerText;
+                input.value = event.target.innerText;
+                ingredient.value = '';
+                container.appendChild(input);
+                input.dispatchEvent(new Event('keyup'));
+            }
         })
     </script>
 </main>
