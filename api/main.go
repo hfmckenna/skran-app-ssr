@@ -19,26 +19,11 @@ var sess *session.Session
 var ddb *dynamodb.DynamoDB
 var region string
 
-func queryDynamo(query string) (*dynamodb.QueryOutput, error) {
-	result, err := ddb.Query(&dynamodb.QueryInput{
-		TableName:              aws.String("SkranAppTable"),
-		KeyConditionExpression: jsii.String("#pk = :char and begins_with(#sk, :query)"),
-		ExpressionAttributeNames: map[string]*string{
-			"#pk": jsii.String("Primary"),
-			"#sk": jsii.String("Sort"),
-		},
-		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
-			":char":  {S: jsii.String(fmt.Sprintf("SEARCH#%s", getFirstChar(upperSnakeCase(query))))},
-			":query": {S: jsii.String(fmt.Sprintf("SEARCH#%s", upperSnakeCase(query)))},
-		},
-	})
-	return result, err
-}
-
 func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	query := req.QueryStringParameters["q"]
+	searches := req.MultiValueQueryStringParameters["search"]
 	response := ""
-	if len(query) > 3 {
+	if len(query) > 3 && len(query) < 30 {
 		result, err := queryDynamo(query)
 		if err != nil {
 			log.Fatal(err)
@@ -53,6 +38,8 @@ func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 			html[i] = fmt.Sprintf("<button hx-get=\"/v1/search\" name=\"search\" hx-target=\"#search-results\" value=\"%s\">%s</button>", searchItem.Title, searchItem.Title)
 		}
 		response = strings.Join(html, "")
+	}
+	if len(searches) > 0 && len(searches) < 6 {
 	}
 	return events.APIGatewayProxyResponse{StatusCode: 200, Headers: map[string]string{"Content-Type": "text/html"}, Body: response}, nil
 }
@@ -75,4 +62,35 @@ func upperSnakeCase(s string) string {
 	upper := strings.ToUpper(s)
 	snake := strings.ReplaceAll(upper, " ", "_")
 	return snake
+}
+
+func queryDynamo(query string) (*dynamodb.QueryOutput, error) {
+	result, err := ddb.Query(&dynamodb.QueryInput{
+		TableName:              aws.String("SkranAppTable"),
+		KeyConditionExpression: jsii.String("#pk = :char and begins_with(#sk, :query)"),
+		ExpressionAttributeNames: map[string]*string{
+			"#pk": jsii.String("Primary"),
+			"#sk": jsii.String("Sort"),
+		},
+		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+			":char":  {S: jsii.String(fmt.Sprintf("SEARCH#%s", getFirstChar(upperSnakeCase(query))))},
+			":query": {S: jsii.String(fmt.Sprintf("SEARCH#%s", upperSnakeCase(query)))},
+		},
+	})
+	return result, err
+}
+
+func batchGetDynamo(searches []string) (*dynamodb.BatchGetItemOutput, error) {
+	keys := make([]map[string]*dynamodb.AttributeValue, len(searches))
+	for i := range keys {
+		keys[i] = map[string]*dynamodb.AttributeValue{
+			"Primary": {S: jsii.String(searches[i])},
+		}
+	}
+	result, err := ddb.BatchGetItem(&dynamodb.BatchGetItemInput{
+		RequestItems: map[string]*dynamodb.KeysAndAttributes{"SkranAppTable": {
+			Keys: keys,
+		}},
+	})
+	return result, err
 }
