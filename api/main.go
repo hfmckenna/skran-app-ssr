@@ -15,25 +15,31 @@ import (
 	"strings"
 )
 
+var sess *session.Session
+var ddb *dynamodb.DynamoDB
+var region string
+
+func queryDynamo(query string) (*dynamodb.QueryOutput, error) {
+	result, err := ddb.Query(&dynamodb.QueryInput{
+		TableName:              aws.String("SkranAppTable"),
+		KeyConditionExpression: jsii.String("#pk = :char and begins_with(#sk, :query)"),
+		ExpressionAttributeNames: map[string]*string{
+			"#pk": jsii.String("Primary"),
+			"#sk": jsii.String("Sort"),
+		},
+		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+			":char":  {S: jsii.String(fmt.Sprintf("SEARCH#%s", getFirstChar(upperSnakeCase(query))))},
+			":query": {S: jsii.String(fmt.Sprintf("SEARCH#%s", upperSnakeCase(query)))},
+		},
+	})
+	return result, err
+}
+
 func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	region := os.Getenv("AWS_REGION")
 	query := req.QueryStringParameters["q"]
-	sess := session.Must(session.NewSession(&aws.Config{Region: aws.String(region)}))
-	ddb := dynamodb.New(sess)
 	response := ""
 	if len(query) > 3 {
-		result, err := ddb.Query(&dynamodb.QueryInput{
-			TableName:              aws.String("SkranAppTable"),
-			KeyConditionExpression: jsii.String("#pk = :char and begins_with(#sk, :query)"),
-			ExpressionAttributeNames: map[string]*string{
-				"#pk": jsii.String("Primary"),
-				"#sk": jsii.String("Sort"),
-			},
-			ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
-				":char":  {S: jsii.String(fmt.Sprintf("SEARCH#%s", getFirstChar(upperSnakeCase(query))))},
-				":query": {S: jsii.String(fmt.Sprintf("SEARCH#%s", upperSnakeCase(query)))},
-			},
-		})
+		result, err := queryDynamo(query)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -44,7 +50,7 @@ func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 			if err != nil {
 				panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
 			}
-			html[i] = fmt.Sprintf("<input class=\"cursor-pointer\" hx-get=\"/v1/search\" type=\"text\" hx-trigger=\"click\" hx-include=\"[name='recipe']\" name=\"recipe\" hx-swap=\"outerHTML\" value=\"%s\" placeholder=\"%s\"/>", searchItem.Title, searchItem.Title)
+			html[i] = fmt.Sprintf("<button hx-get=\"/v1/search\" name=\"search\" hx-target=\"#search-results\" value=\"%s\">%s</button>", searchItem.Title, searchItem.Title)
 		}
 		response = strings.Join(html, "")
 	}
@@ -52,6 +58,9 @@ func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 }
 
 func main() {
+	region = os.Getenv("AWS_REGION")
+	sess = session.Must(session.NewSession(&aws.Config{Region: aws.String(region)}))
+	ddb = dynamodb.New(sess)
 	lambda.Start(HandleRequest)
 }
 
