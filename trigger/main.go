@@ -47,10 +47,13 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 						PutRequest: &dynamodb.PutRequest{
 							Item: map[string]*dynamodb.AttributeValue{
 								"Primary": {
-									S: aws.String("SEARCH#" + upperSnakeCase(getFirstChar(ingredient.Title))),
+									S: aws.String("SEARCH#" + upperSnakeCase(ingredient.Title)),
+								},
+								"Secondary": {
+									S: aws.String("SEARCH#" + getFirstChar(upperSnakeCase(ingredient.Title))),
 								},
 								"Sort": {
-									S: aws.String("SEARCH#" + upperSnakeCase(ingredient.Title)),
+									S: aws.String(upperSnakeCase(ingredient.Title) + "#" + upperSnakeCase(title)),
 								},
 								"Title": {
 									S: aws.String(ingredient.Title),
@@ -104,10 +107,13 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 						PutRequest: &dynamodb.PutRequest{
 							Item: map[string]*dynamodb.AttributeValue{
 								"Primary": {
-									S: aws.String("SEARCH#" + upperSnakeCase(getFirstChar(ingredient.Title))),
+									S: aws.String("SEARCH#" + upperSnakeCase(ingredient.Title)),
+								},
+								"Secondary": {
+									S: aws.String("SEARCH#" + getFirstChar(upperSnakeCase(ingredient.Title))),
 								},
 								"Sort": {
-									S: aws.String("SEARCH#" + upperSnakeCase(ingredient.Title)),
+									S: aws.String(upperSnakeCase(ingredient.Title) + "#" + upperSnakeCase(title)),
 								},
 								"Title": {
 									S: aws.String(ingredient.Title),
@@ -161,10 +167,13 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 						PutRequest: &dynamodb.PutRequest{
 							Item: map[string]*dynamodb.AttributeValue{
 								"Primary": {
-									S: aws.String("SEARCH#" + upperSnakeCase(getFirstChar(ingredient.Title))),
+									S: aws.String("SEARCH#" + upperSnakeCase(ingredient.Title)),
+								},
+								"Secondary": {
+									S: aws.String("SEARCH#" + getFirstChar(upperSnakeCase(ingredient.Title))),
 								},
 								"Sort": {
-									S: aws.String("SEARCH#" + upperSnakeCase(ingredient.Title)),
+									S: aws.String(upperSnakeCase(ingredient.Title) + "#" + upperSnakeCase(title)),
 								},
 								"Title": {
 									S: aws.String(ingredient.Title),
@@ -213,10 +222,13 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 						PutRequest: &dynamodb.PutRequest{
 							Item: map[string]*dynamodb.AttributeValue{
 								"Primary": {
-									S: aws.String("SEARCH#" + upperSnakeCase(getFirstChar(ingredient.Title))),
+									S: aws.String("SEARCH#" + upperSnakeCase(ingredient.Title)),
+								},
+								"Secondary": {
+									S: aws.String("SEARCH#" + getFirstChar(upperSnakeCase(ingredient.Title))),
 								},
 								"Sort": {
-									S: aws.String("SEARCH#" + upperSnakeCase(ingredient.Title)),
+									S: aws.String(upperSnakeCase(ingredient.Title) + "#" + upperSnakeCase(title)),
 								},
 								"Title": {
 									S: aws.String(ingredient.Title),

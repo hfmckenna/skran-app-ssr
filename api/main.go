@@ -20,7 +20,7 @@ var ddb *dynamodb.DynamoDB
 var region string
 
 func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	query := req.QueryStringParameters["q"]
+	query := upperSnakeCase(req.QueryStringParameters["q"])
 	searches := req.MultiValueQueryStringParameters["search"]
 	response := ""
 	if len(query) > 3 && len(query) < 30 {
@@ -69,12 +69,12 @@ func queryDynamo(query string) (*dynamodb.QueryOutput, error) {
 		TableName:              aws.String("SkranAppTable"),
 		KeyConditionExpression: jsii.String("#pk = :char and begins_with(#sk, :query)"),
 		ExpressionAttributeNames: map[string]*string{
-			"#pk": jsii.String("Primary"),
+			"#pk": jsii.String("Secondary"),
 			"#sk": jsii.String("Sort"),
 		},
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
-			":char":  {S: jsii.String(fmt.Sprintf("SEARCH#%s", getFirstChar(upperSnakeCase(query))))},
-			":query": {S: jsii.String(fmt.Sprintf("SEARCH#%s", upperSnakeCase(query)))},
+			":char":  {S: jsii.String("SEARCH#" + query)},
+			":query": {S: jsii.String(query)},
 		},
 	})
 	return result, err
