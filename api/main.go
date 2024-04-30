@@ -67,13 +67,14 @@ func upperSnakeCase(s string) string {
 func queryDynamo(query string) (*dynamodb.QueryOutput, error) {
 	result, err := ddb.Query(&dynamodb.QueryInput{
 		TableName:              aws.String("SkranAppTable"),
+		IndexName:              aws.String("Secondary"),
 		KeyConditionExpression: jsii.String("#pk = :char and begins_with(#sk, :query)"),
 		ExpressionAttributeNames: map[string]*string{
 			"#pk": jsii.String("Secondary"),
 			"#sk": jsii.String("Sort"),
 		},
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
-			":char":  {S: jsii.String("SEARCH#" + query)},
+			":char":  {S: jsii.String("SEARCH#" + getFirstChar(query))},
 			":query": {S: jsii.String(query)},
 		},
 	})
