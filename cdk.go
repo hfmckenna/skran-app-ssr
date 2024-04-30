@@ -239,6 +239,15 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		Stream:       dynamodb.StreamViewType_NEW_AND_OLD_IMAGES,
 	})
 
+	table.AddGlobalSecondaryIndex(&dynamodb.GlobalSecondaryIndexProps{
+		IndexName: jsii.String("Secondary"),
+		PartitionKey: &dynamodb.Attribute{
+			Name: jsii.String("Secondary"),
+			Type: dynamodb.AttributeType_STRING,
+		},
+		SortKey: &dynamodb.Attribute{Name: jsii.String("Sort"), Type: dynamodb.AttributeType_STRING},
+	})
+
 	trigger.AddEventSource(awslambdaeventsources.NewDynamoEventSource(table, &awslambdaeventsources.DynamoEventSourceProps{
 		StartingPosition: awslambda.StartingPosition_TRIM_HORIZON,
 		RetryAttempts:    aws.Float64(0),
