@@ -245,6 +245,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 			Name: jsii.String("Secondary"),
 			Type: dynamodb.AttributeType_STRING,
 		},
+		SortKey: &dynamodb.Attribute{Name: jsii.String("Sort"), Type: dynamodb.AttributeType_STRING},
 	})
 
 	trigger.AddEventSource(awslambdaeventsources.NewDynamoEventSource(table, &awslambdaeventsources.DynamoEventSourceProps{
