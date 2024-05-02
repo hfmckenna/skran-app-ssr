@@ -50,7 +50,7 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 									S: aws.String("SEARCH#" + upperSnakeCase(getFirstChar(ingredient.Title))),
 								},
 								"Sort": {
-									S: aws.String("SEARCH#" + upperSnakeCase(ingredient.Title)),
+									S: aws.String(upperSnakeCase(ingredient.Title) + "#" + upperSnakeCase(title)),
 								},
 								"Title": {
 									S: aws.String(ingredient.Title),
@@ -107,7 +107,7 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 									S: aws.String("SEARCH#" + upperSnakeCase(getFirstChar(ingredient.Title))),
 								},
 								"Sort": {
-									S: aws.String("SEARCH#" + upperSnakeCase(ingredient.Title)),
+									S: aws.String(upperSnakeCase(ingredient.Title) + "#" + upperSnakeCase(title)),
 								},
 								"Title": {
 									S: aws.String(ingredient.Title),
@@ -164,7 +164,7 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 									S: aws.String("SEARCH#" + upperSnakeCase(getFirstChar(ingredient.Title))),
 								},
 								"Sort": {
-									S: aws.String("SEARCH#" + upperSnakeCase(ingredient.Title)),
+									S: aws.String(upperSnakeCase(ingredient.Title) + "#" + upperSnakeCase(title)),
 								},
 								"Title": {
 									S: aws.String(ingredient.Title),
@@ -216,7 +216,7 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 									S: aws.String("SEARCH#" + upperSnakeCase(getFirstChar(ingredient.Title))),
 								},
 								"Sort": {
-									S: aws.String("SEARCH#" + upperSnakeCase(ingredient.Title)),
+									S: aws.String(upperSnakeCase(ingredient.Title) + "#" + upperSnakeCase(title)),
 								},
 								"Title": {
 									S: aws.String(ingredient.Title),

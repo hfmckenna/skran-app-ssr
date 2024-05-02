@@ -21,9 +21,13 @@ var region string
 
 func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	query := upperSnakeCase(req.QueryStringParameters["q"])
+	find := upperSnakeCase(req.QueryStringParameters["find"]) + "#"
 	response := ""
-	if len(query) > 2 && len(query) < 20 {
+	if len(query) > 2 && len(query) < 20 && len(find) == 0 {
 		response = queryDynamo(query)
+	}
+	if len(find) > 0 && len(query) == 0 {
+		response = queryDynamo(find)
 	}
 	return events.APIGatewayProxyResponse{StatusCode: 200, Headers: map[string]string{"Content-Type": "text/html"}, Body: response}, nil
 }
@@ -59,7 +63,7 @@ func queryDynamo(query string) string {
 		},
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
 			":char":  {S: jsii.String("SEARCH#" + getFirstChar(query))},
-			":query": {S: jsii.String(query)},
+			":query": {S: jsii.String("SEARCH#" + query)},
 		},
 	})
 	if result.Items != nil {
@@ -70,7 +74,7 @@ func queryDynamo(query string) string {
 			if err != nil {
 				panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
 			}
-			html[i] = fmt.Sprintf("<button hx-get=\"/v1/search\" name=\"q\" hx-target=\"#search-results\" value=\"%s\">%s</button>", searchItem.Title, searchItem.Title)
+			html[i] = fmt.Sprintf("<button hx-get=\"/v1/search\" name=\"find\" hx-target=\"#search-results\" value=\"%s\">%s</button>", searchItem.Title, searchItem.Title)
 		}
 		response = strings.Join(dedupeStrings(html), "")
 	} else if err != nil {
