@@ -23,10 +23,10 @@ func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 	query := upperSnakeCase(req.QueryStringParameters["q"])
 	find := upperSnakeCase(req.QueryStringParameters["find"]) + "#"
 	response := ""
-	if len(query) > 2 && len(query) < 20 && len(find) == 0 {
+	if len(query) > 2 && len(query) < 20 {
 		response = queryDynamo(query)
 	}
-	if len(find) > 0 && len(query) == 0 {
+	if len(find) > 0 {
 		response = queryDynamo(find)
 	}
 	return events.APIGatewayProxyResponse{StatusCode: 200, Headers: map[string]string{"Content-Type": "text/html"}, Body: response}, nil
@@ -63,7 +63,7 @@ func queryDynamo(query string) string {
 		},
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
 			":char":  {S: jsii.String("SEARCH#" + getFirstChar(query))},
-			":query": {S: jsii.String("SEARCH#" + query)},
+			":query": {S: jsii.String(query)},
 		},
 	})
 	if result.Items != nil {
