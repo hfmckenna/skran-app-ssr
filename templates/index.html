@@ -23,7 +23,7 @@
                 </div>
                 <div id="existing-searches"></div>
                 <div id="search-results"></div>
-                <div id="active-search"></div>
+                <div id="active-search" hx-get="/v1/search" hx-include="previous [name='find']" hx-swap="innerHTML" hx-trigger="ingredientAdded from:body"></div>
             </div>
         </div>
     </section>
