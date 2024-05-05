@@ -40,6 +40,13 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 			if err != nil {
 				log.Fatal(err)
 			}
+			var ingredients []*string
+			for _, component := range components {
+				for _, ingredient := range component.Ingredients {
+					ingredientTitle := upperSnakeCase(ingredient.Title)
+					ingredients = append(ingredients, &ingredientTitle)
+				}
+			}
 			writeRequest := make(map[string][]*dynamodb.WriteRequest)
 			for _, component := range components {
 				for _, ingredient := range component.Ingredients {
@@ -63,6 +70,9 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 								},
 								"Type": {
 									S: aws.String("SEARCH"),
+								},
+								"Recipe Ingredients": {
+									SS: ingredients,
 								},
 								"Deleted": {
 									BOOL: aws.Bool(true),
@@ -97,6 +107,13 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 			if err != nil {
 				log.Fatal(err)
 			}
+			var ingredients []*string
+			for _, component := range components {
+				for _, ingredient := range component.Ingredients {
+					ingredientTitle := upperSnakeCase(ingredient.Title)
+					ingredients = append(ingredients, &ingredientTitle)
+				}
+			}
 			writeRequest := make(map[string][]*dynamodb.WriteRequest)
 			for _, component := range components {
 				for _, ingredient := range component.Ingredients {
@@ -120,6 +137,9 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 								},
 								"Type": {
 									S: aws.String("SEARCH"),
+								},
+								"Recipe Ingredients": {
+									SS: ingredients,
 								},
 								"Deleted": {
 									BOOL: aws.Bool(false),
@@ -154,6 +174,13 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 			if err != nil {
 				log.Fatal(err)
 			}
+			var ingredients []*string
+			for _, component := range components {
+				for _, ingredient := range component.Ingredients {
+					ingredientTitle := upperSnakeCase(ingredient.Title)
+					ingredients = append(ingredients, &ingredientTitle)
+				}
+			}
 			writeRequest := make(map[string][]*dynamodb.WriteRequest)
 			for _, component := range components {
 				for _, ingredient := range component.Ingredients {
@@ -177,6 +204,9 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 								},
 								"Type": {
 									S: aws.String("SEARCH"),
+								},
+								"Recipe Ingredients": {
+									SS: ingredients,
 								},
 								"Deleted": {
 									BOOL: aws.Bool(true),
@@ -206,7 +236,6 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 			if err != nil {
 				log.Fatal(err)
 			}
-			writeRequest = make(map[string][]*dynamodb.WriteRequest)
 			for _, component := range components {
 				for _, ingredient := range component.Ingredients {
 					writeRequest["SkranAppTable"] = append(writeRequest["SkranAppTable"], &dynamodb.WriteRequest{
@@ -229,6 +258,9 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 								},
 								"Type": {
 									S: aws.String("SEARCH"),
+								},
+								"Recipe Ingredients": {
+									SS: ingredients,
 								},
 								"Deleted": {
 									BOOL: aws.Bool(false),
