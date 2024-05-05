@@ -26,8 +26,7 @@ func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 	headers := map[string]string{"Content-Type": "text/html"}
 	response := ""
 	if len(ingredient) > 0 {
-		headers = map[string]string{"Content-Type": "text/html", "HX-Trigger": "ingredientAdded"}
-		response = fmt.Sprintf("<input type=\"text\" name=\"find\" value=\"%s\" readonly />", ingredient)
+		response = fmt.Sprintf("<input type=\"text\" name=\"find\" hx-trigger=\"load\" hx-get=\"/v1/search\" hx-target=\"#active-search\" value=\"%s\" readonly />", ingredient)
 	}
 	if len(query) > 2 && len(query) < 20 {
 		result, err := queryDynamo(query)
@@ -37,7 +36,7 @@ func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 		uniqueItems := dedupeSearch(result)
 		html := make([]string, len(uniqueItems))
 		for i, item := range uniqueItems {
-			html[i] = fmt.Sprintf("<button hx-get=\"/v1/search\" name=\"ingredient\" hx-target=\"#existing-searches\" hx-swap=\"beforeend\" hx-on:click=\"const search = document.getElementById('ingredient');search.value = '';search.dispatchEvent(new Event('keyup'));\" value=\"%s\">%s</button>", item.Title, item.Title)
+			html[i] = fmt.Sprintf("<button hx-get=\"/v1/search\" name=\"ingredient\" hx-target=\"#existing-searches\" value=\"%s\" hx-on:click=\"const search = document.getElementById('ingredient');search.value = '';search.dispatchEvent(new Event('keyup'));\">%s</button>", item.Title, item.Title)
 		}
 		response = strings.Join(html, "\n")
 	}
@@ -52,6 +51,7 @@ func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 			html[i] = fmt.Sprintf("<div><a href=\"/recipes/%s\">%s</a></div>", item.RecipeId, item.RecipeTitle)
 		}
 		response = strings.Join(html, "\n")
+		response = "<div>" + response + "</div>"
 	}
 	return events.APIGatewayProxyResponse{StatusCode: 200, Headers: headers, Body: response}, nil
 }
