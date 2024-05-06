@@ -36,7 +36,7 @@ func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 		uniqueItems := dedupeSearch(result)
 		html := make([]string, len(uniqueItems))
 		for i, item := range uniqueItems {
-			html[i] = fmt.Sprintf("<button hx-get=\"/v1/search\" name=\"ingredient\" hx-target=\"#existing-searches\" value=\"%s\" hx-on:click=\"const search = document.getElementById('ingredient');search.value = '';search.dispatchEvent(new Event('keyup'));\">%s</button>", item.Title, item.Title)
+			html[i] = fmt.Sprintf("<button hx-get=\"/v1/search\" name=\"ingredient\" hx-target=\"#existing-searches\" hx-swap=\"beforeend\" value=\"%s\" hx-on:click=\"const search = document.getElementById('ingredient');search.value = '';search.dispatchEvent(new Event('keyup'));\">%s</button>", item.Title, item.Title)
 		}
 		response = strings.Join(html, "\n")
 	}
@@ -102,11 +102,11 @@ func queryDynamo(query string) ([]models.SearchItem, error) {
 
 func dedupeRecipes(items []models.SearchItem) []models.SearchItem {
 	var deduped []models.SearchItem
+	seen := make(map[string]int)
 	for _, item := range items {
-		seen := make(map[string]string)
 		if _, exists := seen[item.RecipeId]; !exists {
 			deduped = append(deduped, item)
-			seen[item.RecipeId] = item.RecipeId
+			seen[item.RecipeId] = 1
 		}
 	}
 	return deduped
@@ -114,11 +114,11 @@ func dedupeRecipes(items []models.SearchItem) []models.SearchItem {
 
 func dedupeSearch(items []models.SearchItem) []models.SearchItem {
 	var deduped []models.SearchItem
+	seen := make(map[string]int)
 	for _, item := range items {
-		seen := make(map[string]struct{})
 		if _, exists := seen[item.Title]; !exists {
 			deduped = append(deduped, item)
-			seen[item.Title] = struct{}{}
+			seen[item.Title] = 1
 		}
 	}
 	return deduped
