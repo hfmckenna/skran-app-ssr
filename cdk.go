@@ -45,6 +45,28 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 	hostedZoneName := props.stackDetails.HostedZoneName
 	assetsSubdomain := props.stackDetails.AssetsSubdomain
 
+	var siteDomain string
+
+	if strings.TrimSpace(props.stackDetails.SiteSubdomain) == "" {
+		siteDomain = hostedZoneName
+	} else {
+		siteDomain = fmt.Sprintf("%s.%s", props.stackDetails.SiteSubdomain, hostedZoneName)
+	}
+
+	hostedZone := route53.HostedZone_FromLookup(stack, jsii.String("skran-app"), &route53.HostedZoneProviderProps{
+		DomainName:  jsii.String(hostedZoneName),
+		PrivateZone: jsii.Bool(false),
+	})
+
+	certificate := acm.NewCertificate(stack, jsii.String("skran-app-ssr-cdn-cert"), &acm.CertificateProps{
+		DomainName: jsii.String(assetsSubdomain + hostedZoneName),
+	})
+
+	siteCert := acm.NewCertificate(stack, jsii.String("skran-app-ssr-site-cert"), &acm.CertificateProps{
+		DomainName: jsii.String(siteDomain),
+		Validation: acm.CertificateValidation_FromDns(hostedZone),
+	})
+
 	// Creates Origin Access Identity (OAI) to only allow CloudFront to get content
 	cloudfrontOAI := cloudfront.NewOriginAccessIdentity(stack, jsii.String("skran-app-ssr-cloudfront-oai"), &cloudfront.OriginAccessIdentityProps{})
 
@@ -94,9 +116,6 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		})
 
 		awscdk.Annotations_Of(hostedZone).AddInfo(jsii.String("Route 53 Hosted Zone is set"))
-
-		// Creates an SSL/TLS certificate
-		certificate := acm.Certificate_FromCertificateArn(stack, jsii.String("skran-app-ssr-cert"), jsii.String("arn:aws:acm:us-east-1:078577008688:certificate/338f23b9-ede8-4359-8a8f-f905510efb2c"))
 
 		// Creates a new CloudFront Distribution with a custom Route 53 domain and custom SSL/TLS Certificate
 		cloudfrontDistribution = cloudfront.NewDistribution(stack, jsii.String("skran-app-ssr-assets-cloudfront"), &cloudfront.DistributionProps{
@@ -158,24 +177,6 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		},
 	})
 
-	var siteDomain string
-
-	if strings.TrimSpace(props.stackDetails.SiteSubdomain) == "" {
-		siteDomain = hostedZoneName
-	} else {
-		siteDomain = fmt.Sprintf("%s.%s", props.stackDetails.SiteSubdomain, hostedZoneName)
-	}
-
-	hostedZone := route53.HostedZone_FromLookup(stack, jsii.String("skran-app"), &route53.HostedZoneProviderProps{
-		DomainName:  jsii.String(hostedZoneName),
-		PrivateZone: jsii.Bool(false),
-	})
-
-	siteCert := acm.NewCertificate(stack, jsii.String("skran-app-ssr-site-cert"), &acm.CertificateProps{
-		DomainName: jsii.String(siteDomain),
-		Validation: acm.CertificateValidation_FromDns(hostedZone),
-	})
-
 	// Outputs CloudFront endpoint
 	awscdk.NewCfnOutput(stack, jsii.String("skran-app-ssr-assets-cloudfront-endpoint"), &awscdk.CfnOutputProps{
 		Value: cloudfrontDistribution.DistributionDomainName(),
@@ -190,7 +191,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		FunctionName: jsii.String("skran-app-ssr-home"),
 		Runtime:      awslambda.Runtime_PROVIDED_AL2(),
 		Architecture: awslambda.Architecture_ARM_64(),
-		MemorySize:   jsii.Number(512),
+		MemorySize:   jsii.Number(1024),
 		Entry:        jsii.String("./src"),
 		Environment:  &map[string]*string{"TEMPLATES": templates.BucketName(), "ASSETS_DOMAIN": jsii.String("https://assets.skran.app"), "TEMPLATE_DIR": jsii.String("/tmp")},
 		Bundling: &lambda.BundlingOptions{
@@ -202,7 +203,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		FunctionName: jsii.String("skran-app-search"),
 		Runtime:      awslambda.Runtime_PROVIDED_AL2(),
 		Architecture: awslambda.Architecture_ARM_64(),
-		MemorySize:   jsii.Number(512),
+		MemorySize:   jsii.Number(1024),
 		Entry:        jsii.String("./api"),
 		Bundling: &lambda.BundlingOptions{
 			GoBuildFlags: jsii.Strings(`-ldflags "-s -w"`),
@@ -210,6 +211,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 	})
 
 	ssr := apigateway.NewLambdaRestApi(stack, jsii.String("skran-ssr-app-rest"), &apigateway.LambdaRestApiProps{
+		DisableExecuteApiEndpoint: jsii.Bool(true),
 		DomainName: &apigateway.DomainNameOptions{
 			DomainName:  jsii.String(siteDomain),
 			Certificate: siteCert,
@@ -217,6 +219,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		Handler: ssrHandler,
 	})
 
+	ssr.Root().AddMethod(jsii.String("GET"), apigateway.NewLambdaIntegration(ssrHandler, &apigateway.LambdaIntegrationOptions{}), &apigateway.MethodOptions{})
 	v1 := ssr.Root().AddResource(jsii.String("v1"), &apigateway.ResourceOptions{})
 	search := v1.AddResource(jsii.String("search"), &apigateway.ResourceOptions{})
 	search.AddMethod(jsii.String("GET"), apigateway.NewLambdaIntegration(searchHandler, &apigateway.LambdaIntegrationOptions{}), &apigateway.MethodOptions{})
@@ -274,7 +277,7 @@ func main() {
 
 			// Optional
 			// Add a subdomain to the hosted zone e.g. "aws". Otherwise, set to ""
-			AssetsSubdomain: "assets",
+			AssetsSubdomain: "recipes",
 			SiteSubdomain:   "www",
 		},
 	})
