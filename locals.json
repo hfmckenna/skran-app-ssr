@@ -1,6 +1,6 @@
 {
   "skran-app-ssr-home": {
-    "ASSETS_DOMAIN": "https://assets.skran.app",
+    "ASSETS_DOMAIN": "https://recipes.skran.app",
     "TEMPLATES": "skran-app-ssr-templates"
   },
   "skran-app-ssr-trigger": {}

@@ -73,7 +73,7 @@ Resources:
     Properties:
       DistributionConfig:
         Aliases:
-        - assets.skran.app
+        - recipes.skran.app
         CustomErrorResponses:
         - ErrorCode: 403
           ResponseCode: 403
@@ -119,7 +119,7 @@ Resources:
           - Ref: AWS::Partition
           - zoneId
       HostedZoneId: Z04363141L3EHVK8YH362
-      Name: assets.skran.app.
+      Name: recipes.skran.app.
       Type: A
     Metadata:
       aws:cdk:path: SkranAppSsrStack/skran-app-ssr-assets-cloudfront-public/Resource
@@ -389,7 +389,7 @@ Resources:
         S3Key: dd983448b75afc803e74a567d1fe33807a19d33797c25e4e617afeb8496d1c4d.zip
       Environment:
         Variables:
-          ASSETS_DOMAIN: https://assets.skran.app
+          ASSETS_DOMAIN: https://recipes.skran.app
           TEMPLATES:
             Ref: skranappssrtemplatesB6F1DF84
           TEMPLATE_DIR: /tmp
