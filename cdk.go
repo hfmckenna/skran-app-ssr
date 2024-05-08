@@ -58,10 +58,8 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		PrivateZone: jsii.Bool(false),
 	})
 
-	certificate := acm.NewCertificate(stack, jsii.String("skran-app-ssr-cdn-cert"), &acm.CertificateProps{
-		DomainName: jsii.String(assetsSubdomain + "." + hostedZoneName),
-		Validation: acm.CertificateValidation_FromDns(hostedZone),
-	})
+	// Creates an SSL/TLS certificate
+	certificate := acm.Certificate_FromCertificateArn(stack, jsii.String("skran-app-ssr-cert"), jsii.String("arn:aws:acm:us-east-1:078577008688:certificate/aec46f6a-661a-423a-b641-2d9c1c729809"))
 
 	siteCert := acm.NewCertificate(stack, jsii.String("skran-app-ssr-site-cert"), &acm.CertificateProps{
 		DomainName: jsii.String(siteDomain),
