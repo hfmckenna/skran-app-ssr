@@ -59,7 +59,8 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 	})
 
 	certificate := acm.NewCertificate(stack, jsii.String("skran-app-ssr-cdn-cert"), &acm.CertificateProps{
-		DomainName: jsii.String(assetsSubdomain + hostedZoneName),
+		DomainName: jsii.String(assetsSubdomain + "." + hostedZoneName),
+		Validation: acm.CertificateValidation_FromDns(hostedZone),
 	})
 
 	siteCert := acm.NewCertificate(stack, jsii.String("skran-app-ssr-site-cert"), &acm.CertificateProps{
@@ -219,7 +220,6 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		Handler: ssrHandler,
 	})
 
-	ssr.Root().AddMethod(jsii.String("GET"), apigateway.NewLambdaIntegration(ssrHandler, &apigateway.LambdaIntegrationOptions{}), &apigateway.MethodOptions{})
 	v1 := ssr.Root().AddResource(jsii.String("v1"), &apigateway.ResourceOptions{})
 	search := v1.AddResource(jsii.String("search"), &apigateway.ResourceOptions{})
 	search.AddMethod(jsii.String("GET"), apigateway.NewLambdaIntegration(searchHandler, &apigateway.LambdaIntegrationOptions{}), &apigateway.MethodOptions{})
