@@ -209,17 +209,24 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		},
 	})
 
-	ssr := apigateway.NewLambdaRestApi(stack, jsii.String("skran-ssr-app-rest"), &apigateway.LambdaRestApiProps{
-		DisableExecuteApiEndpoint: jsii.Bool(true),
+	ssr := apigateway.NewRestApi(stack, jsii.String("skran-ssr-app-rest"), &apigateway.RestApiProps{
+		RestApiName: jsii.String("SkranAppApi"),
 		DomainName: &apigateway.DomainNameOptions{
 			DomainName:  jsii.String(siteDomain),
 			Certificate: siteCert,
 		},
-		Handler: ssrHandler,
 	})
 
+	ssr.Root().AddMethod(jsii.String("GET"), apigateway.NewLambdaIntegration(ssrHandler, &apigateway.LambdaIntegrationOptions{}), &apigateway.MethodOptions{})
+
 	v1 := ssr.Root().AddResource(jsii.String("v1"), &apigateway.ResourceOptions{})
-	search := v1.AddResource(jsii.String("search"), &apigateway.ResourceOptions{})
+	search := v1.AddResource(jsii.String("search"), &apigateway.ResourceOptions{
+		DefaultCorsPreflightOptions: &apigateway.CorsOptions{
+			AllowOrigins: &[]*string{jsii.String("https://recipes.skran.app")},
+			AllowMethods: &[]*string{jsii.String("GET")},
+		},
+	})
+
 	search.AddMethod(jsii.String("GET"), apigateway.NewLambdaIntegration(searchHandler, &apigateway.LambdaIntegrationOptions{}), &apigateway.MethodOptions{})
 
 	trigger := lambda.NewGoFunction(stack, jsii.String("skran-ssr-app-trigger"), &lambda.GoFunctionProps{
