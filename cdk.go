@@ -234,6 +234,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		Runtime:      awslambda.Runtime_PROVIDED_AL2(),
 		Architecture: awslambda.Architecture_ARM_64(),
 		Entry:        jsii.String("./trigger"),
+		Environment:  &map[string]*string{"TEMPLATES": templates.BucketName(), "ASSETS_DOMAIN": jsii.String("https://recipes.skran.app"), "RECIPES": siteBucket.BucketName()},
 		Bundling: &lambda.BundlingOptions{
 			GoBuildFlags: jsii.Strings(`-ldflags "-s -w"`),
 		},
@@ -256,6 +257,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 	table.GrantReadData(ssrHandler)
 	table.GrantReadData(searchHandler)
 	templates.GrantRead(ssrHandler, "*")
+	templates.GrantRead(trigger, "*")
 
 	route53.NewARecord(stack, jsii.String("skran-app-ssr-route"), &route53.ARecordProps{
 		Zone:       hostedZone,

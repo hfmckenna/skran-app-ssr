@@ -48,7 +48,7 @@ func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 		uniqueItems := dedupeRecipes(result)
 		html := make([]string, len(uniqueItems))
 		for i, item := range uniqueItems {
-			html[i] = fmt.Sprintf("<div><a href=\"/recipes/%s\">%s</a></div>", item.RecipeId, item.RecipeTitle)
+			html[i] = fmt.Sprintf("<div><a href=\"https://recipes.skran.app/%s\">%s</a></div>", item.RecipeId, item.RecipeTitle)
 		}
 		response = strings.Join(html, "\n")
 		response = "<div>" + response + "</div>"
