@@ -9,7 +9,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodbstreams/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodbstreams/types"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -40,13 +39,14 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 	if err != nil {
 		log.Fatalln("error:", err)
 	}
+	println("yep")
 	tmpl, _ := template.New("").ParseFiles([]string{indexPage, headPartial}...)
 	records, err := FromDynamoDBEvent(uow)
 	if err != nil {
 		log.Fatalln("error 1:", err)
 	}
-	stream := sliceToStream(records)
-	for v := range stream {
+	println("hey")
+	for _, v := range records {
 		if v.EventName == "REMOVE" {
 			var title string
 			var id string
@@ -130,6 +130,7 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 			if err != nil {
 				log.Fatal(err)
 			}
+			println("woop")
 			var ingredients []*string
 			for _, component := range components {
 				for _, ingredient := range component.Ingredients {
@@ -137,19 +138,23 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 					ingredients = append(ingredients, &ingredientTitle)
 				}
 			}
+			println("glab")
 			writeRequest := make(map[string][]*dynamodb.WriteRequest)
 			data := Data{
 				Assets:    assets,
 				PageTitle: title,
 			}
-			var tplBuffer bytes.Buffer
-			err = tmpl.Execute(&tplBuffer, data)
+			var buffer bytes.Buffer
+			err = tmpl.Execute(&buffer, data)
+			println("moov")
 			if err != nil {
 				log.Fatal(err)
 			}
+			println("PUT")
 			_, err = client.PutObject(context.TODO(), &s3.PutObjectInput{
 				Bucket: aws.String(os.Getenv("RECIPES")),
 				Key:    aws.String(id + ".html"),
+				Body:   bytes.NewReader([]byte(buffer.String())),
 			})
 			if err != nil {
 				log.Fatal(err)
@@ -324,17 +329,6 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 
 func main() {
 	lambda.Start(HandleRequest)
-}
-
-func sliceToStream(slice []types.Record) <-chan types.Record {
-	stream := make(chan types.Record)
-	go func() {
-		for _, v := range slice {
-			stream <- v
-		}
-		close(stream)
-	}()
-	return stream
 }
 
 func upperSnakeCase(s string) string {
