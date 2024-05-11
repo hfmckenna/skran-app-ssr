@@ -187,11 +187,10 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 					})
 				}
 			}
-			req, resp := svc.BatchWriteItemRequest(&dynamodb.BatchWriteItemInput{
+			req, _ := svc.BatchWriteItemRequest(&dynamodb.BatchWriteItemInput{
 				RequestItems: writeRequest,
 			})
 			err = req.Send()
-			println(resp)
 			if err != nil {
 				log.Fatal(err)
 			}
