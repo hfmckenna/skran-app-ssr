@@ -24,7 +24,7 @@ import (
 func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 	assets := os.Getenv("ASSETS_DOMAIN")
 	templates := os.Getenv("TEMPLATES")
-	indexPage := "/tmp/recipe.html"
+	recipePage := "/tmp/recipe.html"
 	headPartial := "/tmp/head.html"
 	region := os.Getenv("AWS_REGION")
 	sess := session.Must(session.NewSession(&aws.Config{Region: aws.String(region)}))
@@ -32,20 +32,18 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 	cfg, err := config.LoadDefaultConfig(context.TODO())
 	client := s3.NewFromConfig(cfg)
 	downloader := manager.NewDownloader(client)
-	if !(fileExists(indexPage) && fileExists(headPartial)) {
+	if !(fileExists(recipePage) && fileExists(headPartial)) {
 		err = downloadToFile(downloader, "/tmp", templates, "recipe.html")
 		err = downloadToFile(downloader, "/tmp", templates, "head.html")
 	}
 	if err != nil {
 		log.Fatalln("error:", err)
 	}
-	println("yep")
-	tmpl, _ := template.New("").ParseFiles([]string{indexPage, headPartial}...)
+	tmpl, _ := template.New("").ParseFiles([]string{recipePage, headPartial}...)
 	records, err := FromDynamoDBEvent(uow)
 	if err != nil {
 		log.Fatalln("error 1:", err)
 	}
-	println("hey")
 	for _, v := range records {
 		if v.EventName == "REMOVE" {
 			var title string
@@ -130,7 +128,6 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 			if err != nil {
 				log.Fatal(err)
 			}
-			println("woop")
 			var ingredients []*string
 			for _, component := range components {
 				for _, ingredient := range component.Ingredients {
@@ -138,19 +135,16 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 					ingredients = append(ingredients, &ingredientTitle)
 				}
 			}
-			println("glab")
 			writeRequest := make(map[string][]*dynamodb.WriteRequest)
 			data := Data{
-				Assets:    assets,
-				PageTitle: title,
+				Assets: assets,
+				Title:  title,
 			}
 			var buffer bytes.Buffer
-			err = tmpl.Execute(&buffer, data)
-			println("moov")
+			err = tmpl.ExecuteTemplate(&buffer, "recipe", &data)
 			if err != nil {
 				log.Fatal(err)
 			}
-			println("PUT")
 			_, err = client.PutObject(context.TODO(), &s3.PutObjectInput{
 				Bucket: aws.String(os.Getenv("RECIPES")),
 				Key:    aws.String(id + ".html"),
@@ -369,6 +363,6 @@ func fileExists(filename string) bool {
 }
 
 type Data struct {
-	Assets    string
-	PageTitle string
+	Assets string
+	Title  string
 }
