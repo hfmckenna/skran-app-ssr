@@ -45,6 +45,15 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 		log.Fatalln("error 1:", err)
 	}
 	for _, v := range records {
+		var entity string
+		err = attributevalue.Unmarshal(v.Dynamodb.NewImage["Type"], &entity)
+		err = attributevalue.Unmarshal(v.Dynamodb.OldImage["Type"], &entity)
+		if err != nil {
+			log.Fatal(err)
+		}
+		if entity != "RECIPE" {
+			return events.DynamoDBEvent{}, nil
+		}
 		if v.EventName == "REMOVE" {
 			var title string
 			var id string
