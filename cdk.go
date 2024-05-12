@@ -70,19 +70,18 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 	cloudfrontOAI := cloudfront.NewOriginAccessIdentity(stack, jsii.String("skran-app-ssr-cloudfront-oai"), &cloudfront.OriginAccessIdentityProps{})
 
 	// Creates S3 Bucket to store our static site content
-	siteBucket := s3.NewBucket(stack, jsii.String("skran-app-ssr-assets"), &s3.BucketProps{
+	assetBucket := s3.NewBucket(stack, jsii.String("skran-app-ssr-assets"), &s3.BucketProps{
 		BucketName:        jsii.String("skran-app-ssr-assets"),
 		BlockPublicAccess: s3.BlockPublicAccess_BLOCK_ALL(),
 		PublicReadAccess:  jsii.Bool(false),
-		Versioned:         jsii.Bool(true),
 	})
 
 	// Adds a policy to the S3 Bucket that allows the OAI to get objects
-	siteBucket.GrantRead(cloudfrontOAI, nil)
+	assetBucket.GrantRead(cloudfrontOAI, "*")
 
 	cloudfrontDefaultBehavior := &cloudfront.BehaviorOptions{
 		// Sets the S3 Bucket as the origin and tells CloudFront to use the created OAI to access it
-		Origin: origins.NewS3Origin(siteBucket, &origins.S3OriginProps{
+		Origin: origins.NewS3Origin(assetBucket, &origins.S3OriginProps{
 			OriginId:             jsii.String("skran-app-ssr-origin"),
 			OriginAccessIdentity: cloudfrontOAI,
 		}),
@@ -151,7 +150,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 
 	// Copies site assets from a local path to the S3 Bucket
 	s3deploy.NewBucketDeployment(stack, jsii.String("skran-app-ssr-assets-deployment"), &s3deploy.BucketDeploymentProps{
-		DestinationBucket: siteBucket,
+		DestinationBucket: assetBucket,
 		Sources: &[]s3deploy.ISource{
 			s3deploy.Source_Asset(jsii.String("./public"), &s3assets.AssetOptions{}),
 		},
@@ -183,7 +182,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 
 	// Outputs S3 Bucket endpoint (to show that it's not public)
 	awscdk.NewCfnOutput(stack, jsii.String("skran-app-ssr-assets-endpoint"), &awscdk.CfnOutputProps{
-		Value: siteBucket.BucketDomainName(),
+		Value: assetBucket.BucketDomainName(),
 	})
 
 	ssrHandler := lambda.NewGoFunction(stack, jsii.String("skran-app-ssr-home"), &lambda.GoFunctionProps{
@@ -234,7 +233,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		Runtime:      awslambda.Runtime_PROVIDED_AL2(),
 		Architecture: awslambda.Architecture_ARM_64(),
 		Entry:        jsii.String("./trigger"),
-		Environment:  &map[string]*string{"TEMPLATES": templates.BucketName(), "ASSETS_DOMAIN": jsii.String("https://recipes.skran.app"), "RECIPES": siteBucket.BucketName()},
+		Environment:  &map[string]*string{"TEMPLATES": templates.BucketName(), "ASSETS_DOMAIN": jsii.String("https://recipes.skran.app"), "RECIPES": assetBucket.BucketName()},
 		Bundling: &lambda.BundlingOptions{
 			GoBuildFlags: jsii.Strings(`-ldflags "-s -w"`),
 		},
@@ -258,7 +257,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 	table.GrantReadData(searchHandler)
 	templates.GrantRead(ssrHandler, "*")
 	templates.GrantRead(trigger, "*")
-	siteBucket.GrantWrite(trigger, "*.html", &[]*string{jsii.String("s3:PutObject")})
+	assetBucket.GrantWrite(trigger, "*.html", &[]*string{jsii.String("s3:PutObject")})
 
 	route53.NewARecord(stack, jsii.String("skran-app-ssr-route"), &route53.ARecordProps{
 		Zone:       hostedZone,

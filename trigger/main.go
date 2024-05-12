@@ -155,9 +155,10 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 				log.Fatal(err)
 			}
 			_, err = client.PutObject(context.TODO(), &s3.PutObjectInput{
-				Bucket: aws.String(os.Getenv("RECIPES")),
-				Key:    aws.String(id + ".html"),
-				Body:   bytes.NewReader([]byte(buffer.String())),
+				Bucket:      aws.String(os.Getenv("RECIPES")),
+				Key:         aws.String(id + ".html"),
+				Body:        bytes.NewReader([]byte(buffer.String())),
+				ContentType: aws.String("text/html"),
 			})
 			if err != nil {
 				log.Fatal(err)
