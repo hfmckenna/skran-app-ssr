@@ -222,7 +222,8 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 	search := v1.AddResource(jsii.String("search"), &apigateway.ResourceOptions{
 		DefaultCorsPreflightOptions: &apigateway.CorsOptions{
 			AllowOrigins: &[]*string{jsii.String("https://recipes.skran.app")},
-			AllowMethods: &[]*string{jsii.String("GET")},
+			AllowMethods: &[]*string{jsii.String("GET"), jsii.String("OPTIONS")},
+			AllowHeaders: &[]*string{jsii.String("*")},
 		},
 	})
 
