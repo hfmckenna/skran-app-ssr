@@ -23,7 +23,7 @@ func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 	query := upperSnakeCase(req.QueryStringParameters["q"])
 	ingredient := req.QueryStringParameters["ingredient"]
 	find := upperSnakeCase(req.QueryStringParameters["find"]) + "#"
-	headers := map[string]string{"Content-Type": "text/html"}
+	headers := map[string]string{"Content-Type": "text/html", "Access-Control-Allow-Origin": "https://recipes.skran.app"}
 	response := ""
 	if len(ingredient) > 0 {
 		response = fmt.Sprintf("<input type=\"text\" name=\"find\" hx-trigger=\"load\" hx-get=\"/v1/search\" hx-target=\"#active-search\" value=\"%s\" readonly />", ingredient)
