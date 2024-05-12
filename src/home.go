@@ -33,8 +33,8 @@ func Home(w io.Writer) {
 	}
 	tmpl, _ := template.New("").ParseFiles([]string{indexPage, headPartial}...)
 	data := Data{
-		Assets:    os.Getenv("ASSETS_DOMAIN"),
-		PageTitle: "Skran App",
+		Assets: os.Getenv("ASSETS_DOMAIN"),
+		Title:  "Skran App",
 	}
 	err = tmpl.ExecuteTemplate(w, "home", &data)
 	if err != nil {
@@ -67,6 +67,6 @@ func fileExists(filename string) bool {
 }
 
 type Data struct {
-	Assets    string
-	PageTitle string
+	Assets string
+	Title  string
 }
