@@ -258,7 +258,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 	table.GrantReadData(searchHandler)
 	templates.GrantRead(ssrHandler, "*")
 	templates.GrantRead(trigger, "*")
-	assetBucket.GrantWrite(trigger, "*.html", &[]*string{jsii.String("s3:PutObject")})
+	assetBucket.GrantWrite(trigger, "*.html", &[]*string{jsii.String("s3:PutObject"), jsii.String("s3:DeleteObject")})
 
 	route53.NewARecord(stack, jsii.String("skran-app-ssr-route"), &route53.ARecordProps{
 		Zone:       hostedZone,
