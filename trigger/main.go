@@ -45,13 +45,14 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 		log.Fatalln("error 1:", err)
 	}
 	for _, v := range records {
-		var entity string
-		err = attributevalue.Unmarshal(v.Dynamodb.NewImage["Type"], &entity)
-		err = attributevalue.Unmarshal(v.Dynamodb.OldImage["Type"], &entity)
+		var NewType string
+		var OldType string
+		err = attributevalue.Unmarshal(v.Dynamodb.NewImage["Type"], &NewType)
+		err = attributevalue.Unmarshal(v.Dynamodb.OldImage["Type"], &OldType)
 		if err != nil {
 			log.Fatal(err)
 		}
-		if entity != "RECIPE" {
+		if NewType != "RECIPE" && OldType != "RECIPE" {
 			return events.DynamoDBEvent{}, nil
 		}
 		if v.EventName == "REMOVE" {
@@ -78,6 +79,13 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 				}
 			}
 			writeRequest := make(map[string][]*dynamodb.WriteRequest)
+			_, err = client.DeleteObject(context.TODO(), &s3.DeleteObjectInput{
+				Bucket: aws.String(os.Getenv("RECIPES")),
+				Key:    aws.String(id + ".html"),
+			})
+			if err != nil {
+				log.Fatal(err)
+			}
 			for _, component := range components {
 				for _, ingredient := range component.Ingredients {
 					writeRequest["SkranAppTable"] = append(writeRequest["SkranAppTable"], &dynamodb.WriteRequest{
@@ -229,6 +237,24 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 				}
 			}
 			writeRequest := make(map[string][]*dynamodb.WriteRequest)
+			data := Data{
+				Assets: assets,
+				Title:  title,
+			}
+			var buffer bytes.Buffer
+			err = tmpl.ExecuteTemplate(&buffer, "recipe", &data)
+			if err != nil {
+				log.Fatal(err)
+			}
+			_, err = client.PutObject(context.TODO(), &s3.PutObjectInput{
+				Bucket:      aws.String(os.Getenv("RECIPES")),
+				Key:         aws.String(id + ".html"),
+				Body:        bytes.NewReader([]byte(buffer.String())),
+				ContentType: aws.String("text/html"),
+			})
+			if err != nil {
+				log.Fatal(err)
+			}
 			for _, component := range components {
 				for _, ingredient := range component.Ingredients {
 					writeRequest["SkranAppTable"] = append(writeRequest["SkranAppTable"], &dynamodb.WriteRequest{
