@@ -22,14 +22,19 @@ var region string
 func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	query := upperSnakeCase(req.QueryStringParameters["q"])
 	ingredient := req.QueryStringParameters["ingredient"]
-	find := upperSnakeCase(req.QueryStringParameters["find"]) + "#"
+	find := req.MultiValueQueryStringParameters["find"]
+	var upperFind []string
+	for _, findQuery := range find {
+		upperFind = append(upperFind, upperSnakeCase(findQuery))
+	}
 	headers := map[string]string{"Content-Type": "text/html", "Access-Control-Allow-Origin": "https://recipes.skran.app"}
 	response := ""
 	if len(ingredient) > 0 {
-		response = fmt.Sprintf("<input type=\"text\" name=\"find\" hx-trigger=\"load\" hx-get=\"/v1/search\" hx-target=\"#active-search\" value=\"%s\" readonly />", ingredient)
+		response = fmt.Sprintf("<input type=\"text\" name=\"find\" hx-trigger=\"load\" hx-include=\"[name='find']\" hx-get=\"/v1/search\" hx-target=\"#active-search\" value=\"%s\" readonly />", ingredient)
 	}
 	if len(query) > 2 && len(query) < 20 {
-		result, err := queryDynamo(query)
+		dynamoValue := Queries{value: query}
+		result, err := queryDynamo(dynamoValue)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -40,8 +45,9 @@ func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 		}
 		response = strings.Join(html, "\n")
 	}
-	if len(find) > 4 {
-		result, err := queryDynamo(find)
+	if len(upperFind) > 0 {
+		dynamoValue := Queries{value: upperFind}
+		result, err := queryDynamo(dynamoValue)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -76,8 +82,55 @@ func upperSnakeCase(s string) string {
 	return snake
 }
 
-func queryDynamo(query string) ([]models.SearchItem, error) {
+type Queries struct {
+	value interface{}
+}
+
+func (q *Queries) IsString() bool {
+	_, ok := q.value.(string)
+	return ok
+}
+
+func (q *Queries) IsSlice() bool {
+	_, ok := q.value.([]string)
+	return ok
+}
+
+func (q *Queries) GetString() string {
+	v, _ := q.value.(string)
+	return v
+}
+
+func (q *Queries) GetSlice() []string {
+	v, _ := q.value.([]string)
+	return v
+}
+
+func queryDynamo(query Queries) ([]models.SearchItem, error) {
 	var items []models.SearchItem
+	var search string
+	expression := map[string]*dynamodb.AttributeValue{
+		":char":        {S: jsii.String("SEARCH#" + getFirstChar(search))},
+		":query":       {S: jsii.String(search)},
+		":ingredients": {S: jsii.String("Recipe Ingredients")},
+	}
+	if query.IsString() {
+		search = query.GetString() + "#"
+	}
+	filter := ""
+	if query.IsSlice() {
+		q := query.GetSlice()
+		search = q[0] + "#"
+		for i, item := range q[1:] {
+			partialFilter := fmt.Sprintf("contains(:ingredients, :val%i)", i)
+			if i > 0 {
+				partialFilter = " AND " + partialFilter
+			}
+			key := fmt.Sprintf(":val%i", i)
+			expression[key] = &dynamodb.AttributeValue{S: jsii.String(item)}
+			filter = filter + partialFilter
+		}
+	}
 	result, err := ddb.Query(&dynamodb.QueryInput{
 		TableName:              aws.String("SkranAppTable"),
 		KeyConditionExpression: jsii.String("#pk = :char and begins_with(#sk, :query)"),
@@ -85,10 +138,8 @@ func queryDynamo(query string) ([]models.SearchItem, error) {
 			"#pk": jsii.String("Primary"),
 			"#sk": jsii.String("Sort"),
 		},
-		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
-			":char":  {S: jsii.String("SEARCH#" + getFirstChar(query))},
-			":query": {S: jsii.String(query)},
-		},
+		ExpressionAttributeValues: expression,
+		FilterExpression:          jsii.String(filter),
 	})
 	if result != nil && result.Items != nil {
 		for _, item := range result.Items {
