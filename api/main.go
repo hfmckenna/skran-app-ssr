@@ -45,7 +45,7 @@ func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 		}
 		response = strings.Join(html, "\n")
 	}
-	if len(upperFind) > 0 {
+	if len(upperFind) > 0 && len(upperFind) < 4 {
 		dynamoValue := Queries{value: upperFind}
 		result, err := queryDynamo(dynamoValue)
 		if err != nil {
@@ -109,29 +109,29 @@ func (q *Queries) GetSlice() []string {
 func queryDynamo(query Queries) ([]models.SearchItem, error) {
 	var items []models.SearchItem
 	var search string
-	expression := map[string]*dynamodb.AttributeValue{
-		":char":        {S: jsii.String("SEARCH#" + getFirstChar(search))},
-		":query":       {S: jsii.String(search)},
-		":ingredients": {S: jsii.String("Recipe Ingredients")},
-	}
-	if query.IsString() {
-		search = query.GetString() + "#"
-	}
 	filter := ""
+	expression := map[string]*dynamodb.AttributeValue{}
+	if query.IsString() {
+		search = query.GetString()
+		expression[":char"] = &dynamodb.AttributeValue{S: jsii.String("SEARCH#" + getFirstChar(search))}
+		expression[":query"] = &dynamodb.AttributeValue{S: jsii.String(search)}
+	}
 	if query.IsSlice() {
 		q := query.GetSlice()
-		search = q[0] + "#"
+		search = q[0]
+		expression[":char"] = &dynamodb.AttributeValue{S: jsii.String("SEARCH#" + getFirstChar(search))}
+		expression[":query"] = &dynamodb.AttributeValue{S: jsii.String(search + "#")}
 		for i, item := range q[1:] {
-			partialFilter := fmt.Sprintf("contains(:ingredients, :val%i)", i)
+			partialFilter := fmt.Sprintf("contains(#ingredients, :val%d)", i)
 			if i > 0 {
 				partialFilter = " AND " + partialFilter
 			}
-			key := fmt.Sprintf(":val%i", i)
+			key := fmt.Sprintf(":val%d", i)
 			expression[key] = &dynamodb.AttributeValue{S: jsii.String(item)}
 			filter = filter + partialFilter
 		}
 	}
-	result, err := ddb.Query(&dynamodb.QueryInput{
+	input := &dynamodb.QueryInput{
 		TableName:              aws.String("SkranAppTable"),
 		KeyConditionExpression: jsii.String("#pk = :char and begins_with(#sk, :query)"),
 		ExpressionAttributeNames: map[string]*string{
@@ -139,8 +139,13 @@ func queryDynamo(query Queries) ([]models.SearchItem, error) {
 			"#sk": jsii.String("Sort"),
 		},
 		ExpressionAttributeValues: expression,
-		FilterExpression:          jsii.String(filter),
-	})
+	}
+	println(filter)
+	if filter != "" {
+		input.ExpressionAttributeNames["#ingredients"] = jsii.String("Recipe Ingredients")
+		input.FilterExpression = aws.String(filter)
+	}
+	result, err := ddb.Query(input)
 	if result != nil && result.Items != nil {
 		for _, item := range result.Items {
 			searchItem := models.SearchItem{}
