@@ -21,16 +21,21 @@ var region string
 
 func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	query := upperSnakeCase(req.QueryStringParameters["q"])
+	remove := upperSnakeCase(req.QueryStringParameters["remove"])
 	ingredient := req.QueryStringParameters["ingredient"]
 	find := req.MultiValueQueryStringParameters["find"]
 	var upperFind []string
 	for _, findQuery := range find {
 		upperFind = append(upperFind, upperSnakeCase(findQuery))
+		if remove != "" {
+			upperFind = append(upperFind, remove)
+		}
+		upperFind = removeDuplicates(upperFind)
 	}
 	headers := map[string]string{"Content-Type": "text/html", "Access-Control-Allow-Origin": "https://recipes.skran.app"}
-	response := ""
+	response := "<div></div>"
 	if len(ingredient) > 0 {
-		response = fmt.Sprintf("<input type=\"text\" name=\"find\" hx-trigger=\"load\" hx-include=\"[name='find']\" hx-get=\"/v1/search\" hx-target=\"#active-search\" value=\"%s\" readonly />", ingredient)
+		response = fmt.Sprintf("<div><input type=\"text\" name=\"find\" hx-trigger=\"load\" hx-include=\"[name='find']\" hx-get=\"/v1/search\" hx-target=\"#active-search\" value=\"%s\" readonly /><button name=\"remove\" hx-include=\"[name='find']\" hx-get=\"/v1/search\" value=\"%s\" hx-target=\"#active-search\" hx-on:click=\"this.parentNode.remove()\">X</button></div>", ingredient, ingredient)
 	}
 	if len(query) > 2 && len(query) < 20 {
 		dynamoValue := Queries{value: query}
@@ -140,7 +145,6 @@ func queryDynamo(query Queries) ([]models.SearchItem, error) {
 		},
 		ExpressionAttributeValues: expression,
 	}
-	println(filter)
 	if filter != "" {
 		input.ExpressionAttributeNames["#ingredients"] = jsii.String("Recipe Ingredients")
 		input.FilterExpression = aws.String(filter)
@@ -178,4 +182,20 @@ func dedupeSearch(items []models.SearchItem) []models.SearchItem {
 		}
 	}
 	return deduped
+}
+
+func removeDuplicates(slice []string) []string {
+	// Create a map to count occurrences of each string
+	countMap := make(map[string]int)
+	for _, str := range slice {
+		countMap[str]++
+	}
+	// Create a new slice to hold the result
+	var result []string
+	for _, str := range slice {
+		if countMap[str] == 1 {
+			result = append(result, str)
+		}
+	}
+	return result
 }
