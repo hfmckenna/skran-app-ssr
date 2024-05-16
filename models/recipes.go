@@ -31,3 +31,9 @@ type SearchItem struct {
 	RecipeId    string `json:"Recipe Id"`
 	Deleted     bool   `json:"Deleted"`
 }
+
+type RecipeTemplate struct {
+	Title  string
+	Assets string
+	Recipe RecipeItem
+}

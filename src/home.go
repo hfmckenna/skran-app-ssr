@@ -33,8 +33,8 @@ func Home(w io.Writer) {
 	}
 	tmpl, _ := template.New("").ParseFiles([]string{indexPage, headPartial}...)
 	data := Data{
-		Assets: os.Getenv("ASSETS_DOMAIN"),
 		Title:  "Skran App",
+		Assets: os.Getenv("ASSETS_DOMAIN"),
 	}
 	err = tmpl.ExecuteTemplate(w, "home", &data)
 	if err != nil {

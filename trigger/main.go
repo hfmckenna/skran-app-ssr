@@ -153,12 +153,18 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 				}
 			}
 			writeRequest := make(map[string][]*dynamodb.WriteRequest)
-			data := Data{
-				Assets: assets,
-				Title:  title,
-			}
 			var buffer bytes.Buffer
-			err = tmpl.ExecuteTemplate(&buffer, "recipe", &data)
+			var data models.RecipeItem
+			err = attributevalue.UnmarshalMap(v.Dynamodb.NewImage, &data)
+			if err != nil {
+				log.Fatal(err)
+			}
+			recipeData := models.RecipeTemplate{
+				Title:  title,
+				Assets: assets,
+				Recipe: data,
+			}
+			err = tmpl.ExecuteTemplate(&buffer, "recipe", &recipeData)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -237,12 +243,18 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 				}
 			}
 			writeRequest := make(map[string][]*dynamodb.WriteRequest)
-			data := Data{
-				Assets: assets,
-				Title:  title,
-			}
 			var buffer bytes.Buffer
-			err = tmpl.ExecuteTemplate(&buffer, "recipe", &data)
+			var data models.RecipeItem
+			err = attributevalue.UnmarshalMap(v.Dynamodb.NewImage, &data)
+			if err != nil {
+				log.Fatal(err)
+			}
+			recipeData := models.RecipeTemplate{
+				Title:  title,
+				Assets: assets,
+				Recipe: data,
+			}
+			err = tmpl.ExecuteTemplate(&buffer, "recipe", &recipeData)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -293,7 +305,6 @@ func HandleRequest(uow events.DynamoDBEvent) (events.DynamoDBEvent, error) {
 				RequestItems: writeRequest,
 			})
 			err = req.Send()
-			println(resp)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -395,9 +406,4 @@ func fileExists(filename string) bool {
 	}
 	// return false if the 'file' is a directory.
 	return !info.IsDir()
-}
-
-type Data struct {
-	Assets string
-	Title  string
 }

@@ -3,7 +3,25 @@
 {{ define "recipe" }}
 {{ template "head" . }}
 <body>
-<h1 class="w-0">{{ .Title }}</h1>
+<div>
+    <h1 class="w-0">
+        {{- /*gotype: skran-app-ssr/models.RecipeTemplate*/ -}}
+        {{ .Recipe.Title }}
+    </h1>
+    <div>
+        {{ range .Recipe.Components }}
+            <h2>{{ .Title }}</h2>
+            <div>
+                {{ range .Ingredients }}
+                    <h2>{{ .Title }}</h2>
+                    <div>{{ .Value }} {{ .Measurement }}</div>
+                {{ end }}
+            </div>
+        {{ end }}
+        <div>{{ .Recipe.Instructions }}</div>
+        <div>{{ .Recipe.Time }} minutes</div>
+    </div>
+</div>
 </body>
 </html>
 {{ end }}
