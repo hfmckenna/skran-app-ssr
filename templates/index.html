@@ -5,13 +5,13 @@
 <body>
 <main>
     <section class="text-gray-600 body-font">
-        <div class="container px-5 py-24 mx-auto">
+        <div class="container px-5 py-24 mx-auto lg:w-2/3 w-full mx-auto space-y-4 sm:space-x-4 sm:px-0">
             <div class="flex flex-col text-center w-full mb-12">
                 <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Skran</h1>
                 <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Search for recipes by entering a list of
                     ingredients you want to use.</p>
             </div>
-            <div class="flex lg:w-2/3 w-full sm:flex-row flex-col mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-4 sm:px-0 items-end">
+            <div>
                 <div id="ingredient-container" class="relative flex-grow w-full">
                     <label for="ingredient" class="leading-7 text-gray-600">Add Ingredient</label>
                     <input id="ingredient" name="q" type="text"
@@ -22,9 +22,9 @@
                            class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-red-500 focus:bg-transparent focus:ring-2 focus:ring-red-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                 </div>
             </div>
-            <div class="flex lg:w-2/3 w-full sm:flex-row flex-col mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-4 sm:px-0 items-end" id="existing-searches"></div>
-            <div class="flex lg:w-2/3 w-full sm:flex-row flex-col mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-4 sm:px-0 items-end" id="search-results"></div>
-            <div class="flex lg:w-2/3 w-full sm:flex-row flex-col mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-4 sm:px-0 items-end" id="active-search"></div>
+            <div class="absolute" id="search-results"></div>
+            <div id="existing-searches"></div>
+            <div id="active-search"></div>
         </div>
     </section>
 </main>
