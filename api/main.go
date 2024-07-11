@@ -46,7 +46,7 @@ func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 		uniqueItems := dedupeSearch(result)
 		html := make([]string, len(uniqueItems))
 		for i, item := range uniqueItems {
-			html[i] = fmt.Sprintf("<button class=\"w-full text-left px-4 py-2 hover:bg-gray-100\" hx-get=\"/v1/search\" name=\"ingredient\" hx-target=\"#existing-searches\" hx-swap=\"beforeend\" value=\"%s\" hx-on:click=\"const search = document.getElementById('ingredient');search.value = '';search.dispatchEvent(new Event('keyup'));\">%s</button>", item.Title, item.Title)
+			html[i] = fmt.Sprintf("<button class=\"px-4 py-2 hover:bg-gray-100\" hx-get=\"/v1/search\" name=\"ingredient\" hx-target=\"#existing-searches\" hx-swap=\"beforeend\" value=\"%s\" hx-on:click=\"const search = document.getElementById('ingredient');search.value = '';search.dispatchEvent(new Event('keyup'));\">%s</button>", item.Title, item.Title)
 		}
 		response = strings.Join(html, "\n")
 	}
