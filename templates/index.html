@@ -2,29 +2,32 @@
 <html lang="en">
 {{ define "home" }}
 {{ template "head" . }}
-<body>
+<body class="bg-gray-50 font-sans">
 <main>
     <section class="text-gray-600 body-font">
-        <div class="container px-5 py-24 mx-auto lg:w-2/3 w-full mx-auto space-y-4 sm:space-x-4 sm:px-0">
+        <div class="container px-5 py-24 mx-auto lg:w-2/3 w-full space-y-6 sm:space-x-4 sm:px-0">
             <div class="flex flex-col text-center w-full mb-12">
-                <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Skran</h1>
+                <h1 class="sm:text-4xl text-3xl font-bold title-font mb-4 text-gray-900 font-heading">Skran</h1>
                 <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Search for recipes by entering a list of
                     ingredients you want to use.</p>
             </div>
-            <div>
+            <div class="relative">
                 <div id="ingredient-container" class="relative flex-grow w-full">
-                    <label for="ingredient" class="leading-7 text-gray-600">Add Ingredient</label>
-                    <input id="ingredient" name="q" type="text"
-                           hx-get="/v1/search"
-                           hx-trigger="keyup changed delay:750ms"
-                           hx-target="#search-results"
+                    <label for="ingredient" class="block mb-2 text-sm font-medium text-gray-700">Add Ingredient</label>
+                    <input id="ingredient" name="q" type="text" hx-get="/v1/search"
+                           hx-trigger="keyup changed delay:750ms" hx-target="#search-results"
                            placeholder="What's in your cupboard..."
-                           class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-red-500 focus:bg-transparent focus:ring-2 focus:ring-red-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                           class="w-full bg-white bg-opacity-90 rounded-lg border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 text-base outline-none text-gray-700 py-2 px-4 leading-8 transition-colors duration-200 ease-in-out shadow-sm">
+                </div>
+                <div class="absolute z-10 w-full bg-white rounded-b-lg shadow-lg border border-t-0 border-gray-200 mt-[-1px]"
+                     id="search-results"></div>
+                <div id="existing-searches" class="flex flex-wrap gap-2 mt-4">
+                    <div class="mt-8 bg-white rounded-lg shadow-md p-6">
+                        <h2 class="text-xl font-semibold mb-4 font-heading">Recipes</h2>
+                        <div id="active-search" class="space-y-3"></div>
+                    </div>
                 </div>
             </div>
-            <div class="absolute" id="search-results"></div>
-            <div id="existing-searches"></div>
-            <div id="active-search"></div>
         </div>
     </section>
 </main>

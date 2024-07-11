@@ -35,7 +35,7 @@ func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 	headers := map[string]string{"Content-Type": "text/html", "Access-Control-Allow-Origin": "https://recipes.skran.app"}
 	response := "<div></div>"
 	if len(ingredient) > 0 {
-		response = fmt.Sprintf("<div><input type=\"text\" name=\"find\" hx-trigger=\"load\" hx-include=\"[name='find']\" hx-get=\"/v1/search\" hx-target=\"#active-search\" value=\"%s\" readonly /><button name=\"remove\" hx-include=\"[name='find']\" hx-get=\"/v1/search\" value=\"%s\" hx-target=\"#active-search\" hx-on:click=\"this.parentNode.remove()\">X</button></div>", ingredient, ingredient)
+		response = fmt.Sprintf("<div><input type=\"text\" name=\"find\" hx-trigger=\"load\" hx-include=\"[name='find']\" hx-get=\"/v1/search\" hx-target=\"#active-search\" value=\"%s\" class=\"bg-transparent text-sm\" readonly /><button class=\"ml-2 text-gray-500 hover:text-gray-700\" name=\"remove\" hx-include=\"[name='find']\" hx-get=\"/v1/search\" value=\"%s\" hx-target=\"#active-search\" hx-on:click=\"this.parentNode.remove()\">X</button></div>", ingredient, ingredient)
 	}
 	if len(query) > 2 && len(query) < 20 {
 		dynamoValue := Queries{value: query}
@@ -46,7 +46,7 @@ func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 		uniqueItems := dedupeSearch(result)
 		html := make([]string, len(uniqueItems))
 		for i, item := range uniqueItems {
-			html[i] = fmt.Sprintf("<button hx-get=\"/v1/search\" name=\"ingredient\" hx-target=\"#existing-searches\" hx-swap=\"beforeend\" value=\"%s\" hx-on:click=\"const search = document.getElementById('ingredient');search.value = '';search.dispatchEvent(new Event('keyup'));\">%s</button>", item.Title, item.Title)
+			html[i] = fmt.Sprintf("<button class=\"w-full text-left px-4 py-2 hover:bg-gray-100\" hx-get=\"/v1/search\" name=\"ingredient\" hx-target=\"#existing-searches\" hx-swap=\"beforeend\" value=\"%s\" hx-on:click=\"const search = document.getElementById('ingredient');search.value = '';search.dispatchEvent(new Event('keyup'));\">%s</button>", item.Title, item.Title)
 		}
 		response = strings.Join(html, "\n")
 	}
