@@ -158,6 +158,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		DistributionPaths: &[]*string{
 			jsii.String("/*"),
 		},
+		Prune: jsii.Bool(false),
 	})
 
 	templates := s3.NewBucket(stack, jsii.String("skran-app-ssr-templates"), &s3.BucketProps{
