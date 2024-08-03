@@ -223,11 +223,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		},
 	})
 
-	ssr.Root().AddMethod(jsii.String("GET"), apigateway.NewLambdaIntegration(ssrHandler, &apigateway.LambdaIntegrationOptions{}), &apigateway.MethodOptions{
-		RequestParameters: &map[string]*bool{
-			"method.request.querystring.q": jsii.Bool(true),
-		},
-	})
+	ssr.Root().AddMethod(jsii.String("GET"), apigateway.NewLambdaIntegration(ssrHandler, &apigateway.LambdaIntegrationOptions{}), &apigateway.MethodOptions{})
 
 	v1 := ssr.Root().AddResource(jsii.String("v1"), &apigateway.ResourceOptions{})
 	search := v1.AddResource(jsii.String("search"), &apigateway.ResourceOptions{
@@ -238,7 +234,9 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		},
 	})
 
-	search.AddMethod(jsii.String("GET"), apigateway.NewLambdaIntegration(searchHandler, &apigateway.LambdaIntegrationOptions{}), &apigateway.MethodOptions{})
+	search.AddMethod(jsii.String("GET"), apigateway.NewLambdaIntegration(searchHandler, &apigateway.LambdaIntegrationOptions{
+		CacheKeyParameters: &[]*string{jsii.String("q")},
+	}), &apigateway.MethodOptions{})
 
 	trigger := lambda.NewGoFunction(stack, jsii.String("skran-ssr-app-trigger"), &lambda.GoFunctionProps{
 		FunctionName: jsii.String("skran-app-ssr-trigger"),
