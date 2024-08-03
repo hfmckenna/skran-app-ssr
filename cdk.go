@@ -236,9 +236,6 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 
 	search.AddMethod(jsii.String("GET"), apigateway.NewLambdaIntegration(searchHandler, &apigateway.LambdaIntegrationOptions{
 		CacheKeyParameters: &[]*string{jsii.String("q")},
-		RequestParameters: &map[string]*string{
-			"integration.request.querystring.q": jsii.String("false"),
-		},
 	}), &apigateway.MethodOptions{
 		RequestParameters: &map[string]*bool{
 			"method.request.querystring.q": jsii.Bool(false),
