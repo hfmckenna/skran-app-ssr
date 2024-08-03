@@ -223,7 +223,11 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		},
 	})
 
-	ssr.Root().AddMethod(jsii.String("GET"), apigateway.NewLambdaIntegration(ssrHandler, &apigateway.LambdaIntegrationOptions{}), &apigateway.MethodOptions{})
+	ssr.Root().AddMethod(jsii.String("GET"), apigateway.NewLambdaIntegration(ssrHandler, &apigateway.LambdaIntegrationOptions{}), &apigateway.MethodOptions{
+		RequestParameters: &map[string]*bool{
+			"method.request.querystring.q": jsii.Bool(true),
+		},
+	})
 
 	v1 := ssr.Root().AddResource(jsii.String("v1"), &apigateway.ResourceOptions{})
 	search := v1.AddResource(jsii.String("search"), &apigateway.ResourceOptions{
