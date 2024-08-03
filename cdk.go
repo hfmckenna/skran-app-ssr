@@ -241,7 +241,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		},
 	}), &apigateway.MethodOptions{
 		RequestParameters: &map[string]*bool{
-			"integration.request.querystring.q": jsii.Bool(false),
+			"method.request.querystring.q": jsii.Bool(false),
 		},
 	})
 
