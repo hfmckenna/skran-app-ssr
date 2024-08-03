@@ -236,6 +236,9 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 
 	search.AddMethod(jsii.String("GET"), apigateway.NewLambdaIntegration(searchHandler, &apigateway.LambdaIntegrationOptions{
 		CacheKeyParameters: &[]*string{jsii.String("q")},
+		RequestParameters: &map[string]*string{
+			"integration.request.querystring.q": jsii.String("false"),
+		},
 	}), &apigateway.MethodOptions{})
 
 	trigger := lambda.NewGoFunction(stack, jsii.String("skran-ssr-app-trigger"), &lambda.GoFunctionProps{
