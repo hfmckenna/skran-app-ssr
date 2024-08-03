@@ -74,6 +74,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		BucketName:        jsii.String("skran-app-ssr-assets"),
 		BlockPublicAccess: s3.BlockPublicAccess_BLOCK_ALL(),
 		PublicReadAccess:  jsii.Bool(false),
+		RemovalPolicy:     awscdk.RemovalPolicy_DESTROY,
 	})
 
 	// Adds a policy to the S3 Bucket that allows the OAI to get objects
@@ -235,7 +236,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 	})
 
 	search.AddMethod(jsii.String("GET"), apigateway.NewLambdaIntegration(searchHandler, &apigateway.LambdaIntegrationOptions{
-		CacheKeyParameters: &[]*string{jsii.String("q")},
+		CacheKeyParameters: &[]*string{jsii.String("method.request.querystring.q")},
 	}), &apigateway.MethodOptions{
 		RequestParameters: &map[string]*bool{
 			"method.request.querystring.q": jsii.Bool(false),
@@ -261,6 +262,7 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		Stream:        dynamodb.StreamViewType_NEW_AND_OLD_IMAGES,
 		WriteCapacity: jsii.Number(1),
 		ReadCapacity:  jsii.Number(2),
+		RemovalPolicy: awscdk.RemovalPolicy_DESTROY,
 	})
 
 	trigger.AddEventSource(awslambdaeventsources.NewDynamoEventSource(table, &awslambdaeventsources.DynamoEventSourceProps{
