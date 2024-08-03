@@ -187,25 +187,23 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 	})
 
 	ssrHandler := lambda.NewGoFunction(stack, jsii.String("skran-app-ssr-home"), &lambda.GoFunctionProps{
-		FunctionName:                 jsii.String("skran-app-ssr-home"),
-		Runtime:                      awslambda.Runtime_PROVIDED_AL2(),
-		Architecture:                 awslambda.Architecture_ARM_64(),
-		MemorySize:                   jsii.Number(256),
-		ReservedConcurrentExecutions: jsii.Number(3),
-		Entry:                        jsii.String("./src"),
-		Environment:                  &map[string]*string{"TEMPLATES": templates.BucketName(), "ASSETS_DOMAIN": jsii.String("https://recipes.skran.app"), "TEMPLATE_DIR": jsii.String("/tmp")},
+		FunctionName: jsii.String("skran-app-ssr-home"),
+		Runtime:      awslambda.Runtime_PROVIDED_AL2(),
+		Architecture: awslambda.Architecture_ARM_64(),
+		MemorySize:   jsii.Number(256),
+		Entry:        jsii.String("./src"),
+		Environment:  &map[string]*string{"TEMPLATES": templates.BucketName(), "ASSETS_DOMAIN": jsii.String("https://recipes.skran.app"), "TEMPLATE_DIR": jsii.String("/tmp")},
 		Bundling: &lambda.BundlingOptions{
 			GoBuildFlags: jsii.Strings(`-ldflags "-s -w"`),
 		},
 	})
 
 	searchHandler := lambda.NewGoFunction(stack, jsii.String("skran-app-search"), &lambda.GoFunctionProps{
-		FunctionName:                 jsii.String("skran-app-search"),
-		Runtime:                      awslambda.Runtime_PROVIDED_AL2(),
-		Architecture:                 awslambda.Architecture_ARM_64(),
-		MemorySize:                   jsii.Number(256),
-		ReservedConcurrentExecutions: jsii.Number(3),
-		Entry:                        jsii.String("./api"),
+		FunctionName: jsii.String("skran-app-search"),
+		Runtime:      awslambda.Runtime_PROVIDED_AL2(),
+		Architecture: awslambda.Architecture_ARM_64(),
+		MemorySize:   jsii.Number(256),
+		Entry:        jsii.String("./api"),
 		Bundling: &lambda.BundlingOptions{
 			GoBuildFlags: jsii.Strings(`-ldflags "-s -w"`),
 		},
