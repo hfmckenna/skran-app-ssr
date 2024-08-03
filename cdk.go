@@ -256,10 +256,12 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 	})
 
 	table := dynamodb.NewTable(stack, jsii.String("skran-ssr-app-table"), &dynamodb.TableProps{
-		PartitionKey: &dynamodb.Attribute{Name: jsii.String("Primary"), Type: dynamodb.AttributeType_STRING},
-		SortKey:      &dynamodb.Attribute{Name: jsii.String("Sort"), Type: dynamodb.AttributeType_STRING},
-		TableName:    jsii.String("SkranAppTable"),
-		Stream:       dynamodb.StreamViewType_NEW_AND_OLD_IMAGES,
+		PartitionKey:  &dynamodb.Attribute{Name: jsii.String("Primary"), Type: dynamodb.AttributeType_STRING},
+		SortKey:       &dynamodb.Attribute{Name: jsii.String("Sort"), Type: dynamodb.AttributeType_STRING},
+		TableName:     jsii.String("SkranAppTable"),
+		Stream:        dynamodb.StreamViewType_NEW_AND_OLD_IMAGES,
+		WriteCapacity: jsii.Number(1),
+		ReadCapacity:  jsii.Number(2),
 	})
 
 	trigger.AddEventSource(awslambdaeventsources.NewDynamoEventSource(table, &awslambdaeventsources.DynamoEventSourceProps{
