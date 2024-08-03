@@ -217,6 +217,12 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 			DomainName:  jsii.String(siteDomain),
 			Certificate: siteCert,
 		},
+		DeployOptions: &apigateway.StageOptions{
+			ThrottlingBurstLimit: jsii.Number(50),
+			ThrottlingRateLimit:  jsii.Number(500),
+			CacheClusterEnabled:  jsii.Bool(true),
+			CacheClusterSize:     jsii.String("0.5"),
+		},
 	})
 
 	ssr.Root().AddMethod(jsii.String("GET"), apigateway.NewLambdaIntegration(ssrHandler, &apigateway.LambdaIntegrationOptions{}), &apigateway.MethodOptions{})
