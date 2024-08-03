@@ -239,7 +239,11 @@ func SkranAppSsrStack(scope constructs.Construct, id string, props *SkranAppSsrS
 		RequestParameters: &map[string]*string{
 			"integration.request.querystring.q": jsii.String("false"),
 		},
-	}), &apigateway.MethodOptions{})
+	}), &apigateway.MethodOptions{
+		RequestParameters: &map[string]*bool{
+			"integration.request.querystring.q": jsii.Bool(false),
+		},
+	})
 
 	trigger := lambda.NewGoFunction(stack, jsii.String("skran-ssr-app-trigger"), &lambda.GoFunctionProps{
 		FunctionName: jsii.String("skran-app-ssr-trigger"),
