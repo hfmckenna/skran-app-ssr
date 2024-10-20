@@ -1,8 +1,0 @@
-### Root
-GET https://www.skran.app
-Accept: text/html
-
-### Recipes
-GET https://recipes.skran.app/1234.html
-Accept: text/html
-

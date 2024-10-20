@@ -35,7 +35,7 @@ func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 	headers := map[string]string{"Content-Type": "text/html", "Access-Control-Allow-Origin": "https://recipes.skran.app"}
 	response := "<div></div>"
 	if len(ingredient) > 0 {
-		response = fmt.Sprintf("<div><input type=\"text\" name=\"find\" hx-trigger=\"load\" hx-include=\"[name='find']\" hx-get=\"/v1/search\" hx-target=\"#active-search\" value=\"%s\" class=\"bg-transparent text-base lg:text-sm\" readonly /><button class=\"ml-2 text-gray-500 hover:text-gray-700\" name=\"remove\" hx-include=\"[name='find']\" hx-get=\"/v1/search\" value=\"%s\" hx-target=\"#active-search\" hx-on:click=\"this.parentNode.remove()\">X</button></div>", ingredient, ingredient)
+		response = fmt.Sprintf("<div><input type=\"text\" name=\"find\" hx-trigger=\"load\" hx-include=\"[name='find']\" hx-get=\"/v1/search\" hx-target=\"#active-search\" value=\"%s\" class=\"bg-transparent text-xl lg:text-sm\" readonly /><button class=\"ml-2 text-gray-500 hover:text-gray-700\" name=\"remove\" hx-include=\"[name='find']\" hx-get=\"/v1/search\" value=\"%s\" hx-target=\"#active-search\" hx-on:click=\"this.parentNode.remove()\">X</button></div>", ingredient, ingredient)
 	}
 	if len(query) > 2 && len(query) < 20 {
 		dynamoValue := Queries{value: query}

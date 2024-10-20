@@ -39,7 +39,7 @@
                         {{ range .Ingredients }}
                             <div class="bg-gray-100 p-3 rounded-md">
                                 <h3 class="font-medium text-lg sm:text-2xl mb-1">{{ .Title }}</h3>
-                                <div class="text-gray-600 text-lg sm:text-base">{{ .Value }} {{ .Measurement }}</div>
+                                <div class="text-gray-600 text-lg lg:text-base">{{ .Value }} {{ .Measurement }}</div>
                             </div>
                         {{ end }}
                     </div>
@@ -47,10 +47,10 @@
             {{ end }}
             <div class="mt-8">
                 <h2 class="lg:text-2xl text-4xl font-semibold mb-4 font-heading text-gray-800">Instructions</h2>
-                <div class="prose max-w-none sm:text-lg">{{ .Recipe.Instructions }}</div>
+                <div class="prose max-w-none text-lg">{{ .Recipe.Instructions }}</div>
             </div>
             <div class="mt-6 text-gray-600">
-                <span class="font-medium text-lg sm:text-base">Total Time:</span> {{ .Recipe.Time }} minutes
+                <span class="font-medium text-lg lg:text-base">Total Time:</span> {{ .Recipe.Time }} minutes
             </div>
         </div>
     </div>
