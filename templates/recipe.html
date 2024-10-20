@@ -26,7 +26,7 @@
     </svg>
 </div>
 <div class="relative z-10">
-    <div class="container mx-auto px-4 py-8 max-w-3xl">
+    <div class="lg:container mx-auto px-4 py-8 lg:max-w-3xl">
         <h1 class="text-4xl font-bold mb-6 text-gray-900 font-heading">
             {{- /*gotype: skran-app-ssr/models.RecipeTemplate*/ -}}
             {{ .Recipe.Title }}
@@ -34,23 +34,23 @@
         <div class="bg-white rounded-lg shadow-md p-6">
             {{ range .Recipe.Components }}
                 <div class="mb-6">
-                    <h2 class="text-2xl font-semibold mb-4 font-heading text-gray-800">{{ .Title }}</h2>
+                    <h2 class="text-2xl sm:text-4xl font-semibold mb-4 font-heading text-gray-800">{{ .Title }}</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {{ range .Ingredients }}
                             <div class="bg-gray-100 p-3 rounded-md">
-                                <h3 class="font-medium text-lg mb-1">{{ .Title }}</h3>
-                                <div class="text-gray-600">{{ .Value }} {{ .Measurement }}</div>
+                                <h3 class="font-medium text-lg sm:text-2xl mb-1">{{ .Title }}</h3>
+                                <div class="text-gray-600 sm:text-lg">{{ .Value }} {{ .Measurement }}</div>
                             </div>
                         {{ end }}
                     </div>
                 </div>
             {{ end }}
             <div class="mt-8">
-                <h2 class="text-2xl font-semibold mb-4 font-heading text-gray-800">Instructions</h2>
-                <div class="prose max-w-none">{{ .Recipe.Instructions }}</div>
+                <h2 class="text-2xl sm:text-4xl font-semibold mb-4 font-heading text-gray-800">Instructions</h2>
+                <div class="prose max-w-none sm:text-lg">{{ .Recipe.Instructions }}</div>
             </div>
             <div class="mt-6 text-gray-600">
-                <span class="font-medium">Total Time:</span> {{ .Recipe.Time }} minutes
+                <span class="font-medium sm:text-lg">Total Time:</span> {{ .Recipe.Time }} minutes
             </div>
         </div>
     </div>
